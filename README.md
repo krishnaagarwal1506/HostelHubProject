@@ -1,1 +1,1 @@
-# HostelHub-dashboard-
+# HostelHub-dashboard
