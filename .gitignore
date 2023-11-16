@@ -1,0 +1,11 @@
+logs
+*.log
+npm-debug.log*
+
+node_modules
+dist
+
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+
