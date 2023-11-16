@@ -10,7 +10,16 @@
     "preview": "vite preview",
     "prepare": "husky install",
     "test": "vitest",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "test:no-watch": "vitest --run"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "npm run lint",
+      "prettier --write",
+      "npm run test:no-watch"
+    ],
+    "*.{css,html,json}": "prettier --write"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -29,6 +38,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "husky": "^8.0.3",
     "jsdom": "^22.1.0",
+    "lint-staged": "^15.0.2",
     "prettier": "3.0.3",
     "typescript": "^5.0.2",
     "vite": "^4.4.5",
