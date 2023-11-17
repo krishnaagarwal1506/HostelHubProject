@@ -16,8 +16,7 @@
   "lint-staged": {
     "*.{ts,tsx}": [
       "npm run lint",
-      "prettier --write",
-      "npm run test:no-watch"
+      "prettier --write"
     ],
     "*.{css,html,json}": "prettier --write"
   },
