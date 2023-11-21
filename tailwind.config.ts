@@ -6,7 +6,15 @@ export default {
   important: "#root",
   theme: {
     extend: {
-      colors: colors,
+      colors: {
+        ...colors,
+      },
+      height: {
+        "70": "70%",
+      },
+      width: {
+        "48": "48%",
+      },
     },
   },
   plugins: [],
