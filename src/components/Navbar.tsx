@@ -28,6 +28,13 @@ const Navbar = ({ toogleSideBar }: navbarPropsTypes) => {
     setAnchorElUser(null);
   };
 
+  const positioning: {
+    vertical: number | "top" | "center" | "bottom";
+    horizontal: number | "center" | "right" | "left";
+  } = {
+    vertical: "top",
+    horizontal: "right",
+  };
   return (
     <Box className="h-20 bg-background-default" position="static">
       <Toolbar className="h-20">
@@ -54,15 +61,9 @@ const Navbar = ({ toogleSideBar }: navbarPropsTypes) => {
             className="mt-11"
             id="menu-appbar"
             anchorEl={anchorElUser}
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
+            anchorOrigin={positioning}
             keepMounted
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
+            transformOrigin={positioning}
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
           >
