@@ -17,7 +17,10 @@ const colors = {
     main: "#FE8024",
   },
   success: {
-    main: "#1BD084",
+    main: "#2e7d32",
+    light: "#4caf50",
+    dark: "#1b5e20",
+    contrastText: "#fff",
   },
   common: {
     black: "#000",
