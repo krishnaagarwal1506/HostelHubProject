@@ -1,16 +1,29 @@
 const colors = {
   primary: {
     main: "#40189D",
-    dark: "#0a0418",
+    dark: "#2e1171",
     light: "rgba(64, 24, 157, 0.6)",
   },
-  secondry: {
+  secondary: {
     main: "#8BC740",
     light: "#cfe8b0",
   },
-  colors: {
+  error: {
+    main: "#d32f2f",
+    light: "#ef5350",
+    dark: "#c62828",
+  },
+  warning: {
+    main: "#FE8024",
+  },
+  success: {
+    main: "#1BD084",
+  },
+  common: {
+    black: "#000",
+    white: "#fff",
     lightBlue: "#48A9F8",
-    lightGreen: "#1BD084",
+    lightGray: "#babbbf",
   },
   background: {
     paper: "#fff",

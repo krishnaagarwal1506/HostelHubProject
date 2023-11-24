@@ -9,11 +9,15 @@ export default {
       colors: {
         ...colors,
       },
-      height: {
-        "70": "70%",
+      keyframes: {
+        slide: {
+          "0%": { transform: "translate(-100%)" },
+          "100%": { transform: "translate(0px)" },
+        },
       },
-      width: {
-        "48": "48%",
+      animation: {
+        slidein: "slide 0.3s ease-out",
+        slideOut: "slide 0.3s ease-in reverse",
       },
     },
   },
