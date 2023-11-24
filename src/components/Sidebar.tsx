@@ -20,13 +20,12 @@ type sidebarPropType = {
 
 const Sidebar = ({ isSidebarOpen, sidebarFields }: sidebarPropType) => {
   const location = useLocation();
+
   const locationPath: string = location.pathname.slice(
     location.pathname.lastIndexOf("/") + 1
   );
   const navigate = useNavigate();
-  const sidebarboxCss = isSidebarOpen
-    ? "lg:min-w-[200px] lg:w-1/4"
-    : "lg:w-24 hidden";
+  const sidebarboxCss = isSidebarOpen ? " lg:w-1/4" : "lg:w-24 hidden";
   const logoHeadingCss = isSidebarOpen ? "lg:block " : "lg:hidden";
 
   return (

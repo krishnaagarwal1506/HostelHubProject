@@ -48,7 +48,7 @@ const Navbar = ({ toogleSideBar }: navbarPropsTypes) => {
         >
           <SegmentIcon className="text-3xl" />
         </IconButton>
-        <Typography className="grow font-extrabold text-3xl" variant="h5">
+        <Typography className="grow font-bold text-3xl" variant="h5">
           DashBoard
         </Typography>
         <Box className="grow-0">
