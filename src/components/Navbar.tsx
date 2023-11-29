@@ -20,11 +20,11 @@ type navbarPropsTypes = {
 const Navbar = ({ toogleSideBar }: navbarPropsTypes) => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
-  const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
+  const handleOpen = (event: React.MouseEvent<HTMLElement>): void => {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCLose = () => {
+  const handleCLose = (): void => {
     setAnchorElUser(null);
   };
 
