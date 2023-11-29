@@ -20,11 +20,11 @@ type navbarPropsTypes = {
 const Navbar = ({ toogleSideBar }: navbarPropsTypes) => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>): void => {
+  const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseUserMenu = (): void => {
+  const handleCLose = () => {
     setAnchorElUser(null);
   };
 
@@ -53,7 +53,7 @@ const Navbar = ({ toogleSideBar }: navbarPropsTypes) => {
         </Typography>
         <Box className="grow-0">
           <Tooltip title="Open settings">
-            <IconButton className="p-0" onClick={handleOpenUserMenu}>
+            <IconButton className="p-0" onClick={handleOpen}>
               <Avatar className="bg-primary-main" alt="Profile Logo" />
             </IconButton>
           </Tooltip>
@@ -65,7 +65,7 @@ const Navbar = ({ toogleSideBar }: navbarPropsTypes) => {
             keepMounted
             transformOrigin={positioning}
             open={Boolean(anchorElUser)}
-            onClose={handleCloseUserMenu}
+            onClose={handleCLose}
           >
             {SETTINGS.map((setting: string) => (
               <MenuItem key={setting}>
