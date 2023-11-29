@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, ChangeEvent, MouseEvent } from "react";
 import {
   Paper,
   IconButton,
@@ -12,6 +12,7 @@ import { EditOutlined, DeleteOutlineOutlined } from "@mui/icons-material";
 import TableComponent from "@src/components/Table";
 import AlertComponent from "@components/Alert";
 import ConfirmationModal from "@components/ConfirmationModal";
+import StudentProfile from "./StudentProfile";
 
 import useDialog from "@src/hooks/useDialog";
 import useAlert from "@src/hooks/useAlert";
@@ -35,6 +36,34 @@ const handleDelete = async (
       throw new Error(`Server error: ${deleteResponse.statusText}`);
     } else {
       handleAlertOpen("Student data deleted", "success");
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      handleAlertOpen(error.message, "error");
+    } else {
+      handleAlertOpen("An error occurred", "error");
+    }
+  }
+};
+
+const saveStudentData = async (
+  studentInfo: StudentInfoType,
+  handleAlertOpen: (message: string, serverity: SeverityType) => void
+) => {
+  const { id } = studentInfo;
+  const url = `${STUDENT_INFO_URL}/${id}`;
+  try {
+    const putData = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(studentInfo),
+    });
+    if (putData.ok) {
+      handleAlertOpen("Student data saved", "success");
+    } else {
+      throw new Error("Not updated");
     }
   } catch (error) {
     if (error instanceof Error) {
@@ -161,6 +190,38 @@ const StudentInfo = () => {
       console.log(error);
     }
   }
+  const handleModalOpen = (
+    event: MouseEvent<Element>,
+    studentInfo: StudentInfoType,
+    isEditable: boolean
+  ) => {
+    event.stopPropagation();
+    setSelectedStudent({
+      studentInfo,
+      isEditable,
+      isStudentInfoModalOpen: true,
+    });
+  };
+
+  const handleModalClose = () => setSelectedStudent(null);
+
+  const handleChange = (event: ChangeEvent<HTMLTextAreaElement>): void => {
+    const { name, value }: { name: string; value: string } = event.target;
+    setSelectedStudent({
+      ...seletedStudent!,
+      studentInfo: {
+        ...seletedStudent!.studentInfo,
+        [name]: value,
+      },
+    });
+  };
+
+  const handleSubmit = (studentInfo: StudentInfoType) => {
+    saveStudentData(studentInfo, handleAlertOpen);
+    handleModalClose();
+    setSelectedStudent(null);
+    getStudentInfoData(true, paginationModel.page);
+  };
 
   return (
     <Paper className="w-[95%] h-[85vh] md:h-full my-4 xl:my-8 mx-auto overflow-hidden rounded-xl">
@@ -196,6 +257,16 @@ const StudentInfo = () => {
           severity={alert.severity}
           message={alert.message}
           handleClose={handleAlertClose}
+        />
+      )}
+
+      {seletedStudent && (
+        <StudentProfile
+          open={seletedStudent.isStudentInfoModalOpen}
+          seletetedStudentState={seletedStudent!}
+          handleClose={handleModalClose}
+          handleSubmit={handleSubmit}
+          handleChange={handleChange}
         />
       )}
     </Paper>
