@@ -17,11 +17,13 @@ import {
   getNotices,
   getRoomStatusData,
   getComplaintsStats,
+  getStaffList,
 } from "@utils/index";
 import {
   AdminDashboardDataTypes,
   NoticeDataType,
   graphDataType,
+  StaffMembersType,
 } from "@ts/types";
 import { ADMIN_DASHBOARD_DETAIL } from "@constant/index";
 import colors from "@src/themes/colors";
@@ -60,7 +62,7 @@ const lineChartOptions: ChartWrapperOptions["options"] = {
   legend: { position: "bottom" },
   chartArea: { top: 30, width: "75%", height: "75%" },
   fontSize: 14,
-  colors: [colors.success.main, colors.error.main],
+  colors: [colors.error.main, colors.success.main],
   hAxis: {
     title: "Year",
   },
@@ -107,6 +109,7 @@ const LineChartSkeleton = () => {
     />
   );
 };
+
 const AdminHome = () => {
   const [dashboardData, setDashboardData] =
     useState<AdminDashboardDataTypes | null>(null);
@@ -118,6 +121,11 @@ const AdminHome = () => {
   const [complaintsStats, setCompliaintsStats] = useState<graphDataType | null>(
     null
   );
+  const [staffList, setStaffList] = useState<StaffMembersType[] | null>(null);
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 10,
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -148,7 +156,6 @@ const AdminHome = () => {
     };
     getComplaintsData();
     getDashboardDetails();
-
     getRoomStatusDataForChart();
   }, []);
   useEffect(() => {
@@ -162,6 +169,23 @@ const AdminHome = () => {
     };
     getNoticesData();
   }, [updateNoticeCheck]);
+
+  const getStaffListData = async (
+    pagination: boolean,
+    page?: number
+  ): Promise<void> => {
+    try {
+      const response = await getStaffList();
+      if (!pagination) setStaffList(response);
+      else {
+        const start = page! * 10;
+        const end = start + 10;
+        setStaffList(response.slice(start, end));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleChartSelect = (chartWrapper: GoogleChartWrapper) => {
     const chart = chartWrapper.getChart();
@@ -216,7 +240,12 @@ const AdminHome = () => {
         </Paper>
       </Box>
       <Box className="gap-4 mt-4 py-4 flex-grow flex-wrap h-screen flex justify-around lg:py-0 lg:flex-nowrap xl:gap-8 md:min-h-[66%] lg:min-h-[75%]  xl:mt-8">
-        <StaffTable />
+        <StaffTable
+          staffList={staffList}
+          getData={getStaffListData}
+          paginationModel={paginationModel}
+          setPaginationModel={setPaginationModel}
+        />
         <Paper className="dashboard-paper">
           <Typography className="mx-8 mt-4 mb-0 text-2xl font-medium self-start">
             Complaints Statistics
