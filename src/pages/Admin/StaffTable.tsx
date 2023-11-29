@@ -1,8 +1,15 @@
 import { Paper, Typography } from "@mui/material";
-import { GridColDef } from "@mui/x-data-grid";
+import { GridColDef, GridColumnHeaderParams } from "@mui/x-data-grid";
 
 import TableComponent from "@src/components/Table";
 import { StaffMembersType } from "@src/ts/types";
+
+const commonOptions = {
+  sortable: false,
+  renderHeader({ colDef: { headerName } }: GridColumnHeaderParams) {
+    return <Typography className="font-semibold">{headerName}</Typography>;
+  },
+};
 
 type StaffTablePropsTypes = {
   staffList: StaffMembersType[] | null;
@@ -22,34 +29,23 @@ const columns: GridColDef[] = [
     field: "name",
     headerName: "Staff Name",
     minWidth: 170,
-    sortable: false,
-    headerClassName: "font-semibold",
     flex: 2,
-    renderHeader: () => (
-      <Typography className="font-semibold text-sm">Staff Name</Typography>
-    ),
+    ...commonOptions,
   },
   {
     field: "position",
     headerName: "Position",
     minWidth: 100,
-    sortable: false,
-    headerClassName: "font-semibold",
     flex: 2,
-    renderHeader: () => (
-      <Typography className="font-semibold text-sm">Position</Typography>
-    ),
+    ...commonOptions,
   },
   {
     field: "status",
     headerName: "Status",
     minWidth: 100,
-    sortable: false,
     flex: 1,
     headerAlign: "center",
-    renderHeader: () => (
-      <Typography className="font-semibold text-sm">Status</Typography>
-    ),
+    ...commonOptions,
     renderCell: ({ value }) => (
       <Typography
         className={`${
