@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const UseDialog = (onSubmit: () => void) => {
+const useDialog = (onSubmit: () => void) => {
   const [open, setOpen] = useState<boolean>(false);
   const handleDialogOpen = (): void => setOpen(true);
 
@@ -13,4 +13,4 @@ const UseDialog = (onSubmit: () => void) => {
   return { open, handleDialogOpen, handleDialogClose, handleDialogSubmit };
 };
 
-export default UseDialog;
+export default useDialog;
