@@ -20,6 +20,9 @@ type ReusableDialogProps = {
   children: ReactNode;
   actions?: ReactNode;
   TitleIcon?: FC<SvgIconProps>;
+  className?: string;
+  dialogTitleClassName?: string;
+  dialogActionClassName?: string;
 };
 
 const DialogModal = ({
@@ -31,13 +34,24 @@ const DialogModal = ({
   children,
   actions,
   TitleIcon,
+  className = "",
+  dialogTitleClassName = "",
+  dialogActionClassName = "",
 }: ReusableDialogProps) => {
   return (
-    <Dialog fullWidth maxWidth={dialogSize} open={isOpen} onClose={handleClose}>
-      <DialogTitle className="padding-b-0 ">
+    <Dialog
+      fullWidth
+      maxWidth={dialogSize}
+      open={isOpen}
+      onClose={handleClose}
+      PaperProps={{
+        className: `rounded-xl ${className}`,
+      }}
+    >
+      <DialogTitle className={`padding-b-0 ${dialogTitleClassName}`}>
         <Box className="flex-row justiy-content-sp align-items-center">
           <Box className="flex-row align-items-center flex-gap-1">
-            {TitleIcon && <TitleIcon color="primary" />}
+            {TitleIcon && <TitleIcon fontSize="large" color="primary" />}
             <Typography className="color-primary" variant="h5">
               {title}
             </Typography>
@@ -54,13 +68,7 @@ const DialogModal = ({
       </DialogTitle>
       <DialogContent>{children}</DialogContent>
       {actions && (
-        <DialogActions
-          sx={{
-            paddingRight: 3,
-            paddingBottom: 2.5,
-            gap: 1,
-          }}
-        >
+        <DialogActions className={`pb-5 pr-6 gap-2 ${dialogActionClassName}`}>
           {actions}
         </DialogActions>
       )}

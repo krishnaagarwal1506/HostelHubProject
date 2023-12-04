@@ -4,6 +4,7 @@ import { DialogContent, Button, TextField, Typography } from "@mui/material";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 
 import DialogModal from "@components/DialogModal";
+import LoadingButton from "@src/components/LoadingButton";
 import { NoticeStateProps, NoticeDataType } from "@ts/types";
 
 type NoticePropsTypes = {
@@ -32,22 +33,17 @@ const NoticeModal = ({
     "& .MuiOutlinedInput-root": { padding: isReadOnly ? 0 : "default" },
     "& fieldset": { border: isReadOnly ? "none" : "default" },
   };
-  const contentMinHeight: string = isReadOnly
-    ? "min-height-200"
-    : "min-height-200";
 
   const actions = (isEditable || addNewNotice) && (
     <>
       <Button variant="outlined" size="large" onClick={handleClose}>
         Cancel
       </Button>
-      <Button
-        variant="contained"
-        size="large"
-        onClick={() => handleSubmit(selectedNotice.notice)}
-      >
-        Save
-      </Button>
+      <LoadingButton
+        buttonText="Save"
+        onSubmit={() => handleSubmit(selectedNotice.notice)}
+        disabled={!title || !content}
+      />
     </>
   );
 
@@ -99,7 +95,7 @@ const NoticeModal = ({
           required
           inputProps={{
             readOnly: isReadOnly,
-            className: contentMinHeight,
+            className: "min-height-200",
           }}
           autoFocus={!isReadOnly}
           placeholder="Add Content"
