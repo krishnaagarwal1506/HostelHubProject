@@ -35,8 +35,8 @@ const PieChart = ({
       data={data}
       options={options}
       chartEvents={chartEvents}
-      width={"95%"}
-      height={"95%"}
+      width={"90%"}
+      height={"90%"}
     />
   );
 };
