@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -11,7 +12,7 @@ import {
 } from "@mui/material";
 import SegmentIcon from "@mui/icons-material/Segment";
 
-import { SETTINGS } from "@constant/index";
+import { SETTINGS, NAVBAR_TITLE } from "@constant/index";
 
 type navbarPropsTypes = {
   toogleSideBar: () => void;
@@ -19,14 +20,16 @@ type navbarPropsTypes = {
 
 const Navbar = ({ toogleSideBar }: navbarPropsTypes) => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const location = useLocation();
 
-  const handleOpen = (event: React.MouseEvent<HTMLElement>): void => {
+  const locationPath: string = location.pathname.slice(
+    location.pathname.lastIndexOf("/") + 1
+  );
+
+  const handleOpen = (event: React.MouseEvent<HTMLElement>): void =>
     setAnchorElUser(event.currentTarget);
-  };
 
-  const handleCLose = (): void => {
-    setAnchorElUser(null);
-  };
+  const handleCLose = (): void => setAnchorElUser(null);
 
   const positioning: {
     vertical: number | "top" | "center" | "bottom";
@@ -49,7 +52,7 @@ const Navbar = ({ toogleSideBar }: navbarPropsTypes) => {
           <SegmentIcon className="text-3xl" />
         </IconButton>
         <Typography className="grow font-bold text-3xl" variant="h5">
-          DashBoard
+          {NAVBAR_TITLE[locationPath]}
         </Typography>
         <Box className="grow-0">
           <Tooltip title="Open settings">
