@@ -1,6 +1,7 @@
 import { Button } from "@mui/material";
 
 import DialogModal from "./DialogModal";
+import LoadingButton from "./LoadingButton";
 
 type DialogModalPropsTypes = {
   isOpen: boolean;
@@ -26,18 +27,13 @@ const ConfirmationModal = ({
       <Button variant="outlined" size="large" onClick={handleClose}>
         Cancel
       </Button>
-      <Button
-        className="rounded-xl"
-        variant="contained"
-        size="large"
+      <LoadingButton
+        buttonText={buttontext}
+        onSubmit={handleSubmit}
         color={buttonType === "delete" ? "error" : "primary"}
-        onClick={handleSubmit}
-      >
-        {buttontext}
-      </Button>
+      />
     </>
   );
-
   return (
     <DialogModal
       dialogSize="xs"

@@ -37,6 +37,14 @@ export const ADMIN_SIDEBAR: SidebarValueType[] = [
   },
 ];
 
+export const NAVBAR_TITLE: { [key: string]: string } = {
+  dashboard: "Dashboard",
+  students: "Student Info.",
+  complaints: "Complaints",
+  canteenMenu: "Canteen Menu",
+  rooms: "Rooms",
+};
+
 export const STUDENT_SIDEBAR: SidebarValueType[] = [
   {
     field: "Dashboard",
