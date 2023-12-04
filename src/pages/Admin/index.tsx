@@ -1,16 +1,18 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Paper, Typography, Skeleton } from "@mui/material";
-
-import DashboardDetail from "./DashboardDetail";
-import NoticeList from "@src/pages/Admin/notice/NoticeList";
-import StaffTable from "./StaffTable";
-import Chart from "@components/Chart";
 import {
   ChartWrapperOptions,
   GoogleChartWrapper,
   ReactGoogleChartProps,
 } from "react-google-charts";
+
+import DashboardDetail from "./DashboardDetail";
+import NoticeList from "@src/pages/Admin/notice/NoticeList";
+import StaffTable from "./StaffTable";
+import Chart from "@components/Chart";
+import ErrorComponent from "@components/ErrorComponent";
+import ErrorBoundary from "@components/ErrorBoundry";
 
 import {
   getAdminDashboardDetails,
@@ -24,6 +26,7 @@ import {
   NoticeDataType,
   graphDataType,
   StaffMembersType,
+  ErrorType,
 } from "@ts/types";
 import { ADMIN_DASHBOARD_DETAIL } from "@constant/index";
 import colors from "@src/themes/colors";
@@ -33,7 +36,7 @@ const pieChartOption: ChartWrapperOptions["options"] = {
     position: "bottom",
     textStyle: {
       fontName: "Lato",
-      fontSize: 14,
+      fontSize: 12,
       bold: false,
     },
     animation: {
@@ -49,7 +52,7 @@ const pieChartOption: ChartWrapperOptions["options"] = {
     colors.common.lightGray,
   ],
   chartArea: { top: 20, width: "70%", height: "70%" },
-  fontSize: 14,
+  fontSize: 12,
   animation: {
     startup: true,
     easing: "out",
@@ -60,7 +63,7 @@ const pieChartOption: ChartWrapperOptions["options"] = {
 const lineChartOptions: ChartWrapperOptions["options"] = {
   curveType: "function",
   legend: { position: "bottom" },
-  chartArea: { top: 30, width: "75%", height: "75%" },
+  chartArea: { top: 30, width: "80%", height: "80%" },
   fontSize: 14,
   colors: [colors.error.main, colors.success.main],
   hAxis: {
@@ -113,62 +116,89 @@ const LineChartSkeleton = () => {
 const AdminHome = () => {
   const [dashboardData, setDashboardData] =
     useState<AdminDashboardDataTypes | null>(null);
+  const [dashboardDataError, setDashboardDataError] = useState<ErrorType>({
+    isError: false,
+    message: "",
+  });
   const [notices, setNotices] = useState<NoticeDataType[] | null>(null);
+  const [noticeError, setNoticeError] = useState<ErrorType>({
+    isError: false,
+    message: "",
+  });
   const [updateNoticeCheck, setupdateNoticeCheck] = useState<boolean>(false);
   const [roomStatusData, setRoomStatusData] = useState<graphDataType | null>(
     null
   );
+  const [roomStatusDataError, setRoomStatusDataError] = useState<ErrorType>({
+    isError: false,
+    message: "",
+  });
   const [complaintsStats, setCompliaintsStats] = useState<graphDataType | null>(
     null
   );
+  const [complaintsStatsError, setCompliaintsStatsError] = useState<ErrorType>({
+    isError: false,
+    message: "",
+  });
   const [staffList, setStaffList] = useState<StaffMembersType[] | null>(null);
+  const [staffListError, setStaffListError] = useState<ErrorType>({
+    isError: false,
+    message: "",
+  });
+
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 10,
   });
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    const getDashboardDetails = async (): Promise<void> => {
-      try {
-        const data = await getAdminDashboardDetails();
-        setDashboardData(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    const getRoomStatusDataForChart = async (): Promise<void> => {
-      try {
-        const reponse = await getRoomStatusData();
-        setRoomStatusData(reponse);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    const getComplaintsData = async (): Promise<void> => {
-      try {
-        const reponse = await getComplaintsStats();
-        setCompliaintsStats(reponse);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     getComplaintsData();
     getDashboardDetails();
     getRoomStatusDataForChart();
   }, []);
   useEffect(() => {
-    const getNoticesData = async (): Promise<void> => {
-      try {
-        const reponse = await getNotices();
-        setNotices(reponse);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     getNoticesData();
   }, [updateNoticeCheck]);
+
+  const getDashboardDetails = async (): Promise<void> => {
+    try {
+      const data = await getAdminDashboardDetails();
+      setDashboardData(data);
+      setDashboardDataError({ isError: false, message: "" });
+    } catch (error) {
+      setDashboardDataError({ isError: true, message: error as string });
+    }
+  };
+
+  const getRoomStatusDataForChart = async (): Promise<void> => {
+    try {
+      const reponse = await getRoomStatusData();
+      setRoomStatusData(reponse);
+      setRoomStatusDataError({ isError: false, message: "" });
+    } catch (error) {
+      setRoomStatusDataError({ isError: true, message: error as string });
+    }
+  };
+  const getComplaintsData = async (): Promise<void> => {
+    try {
+      const reponse = await getComplaintsStats();
+      setCompliaintsStats(reponse);
+      setCompliaintsStatsError({ isError: false, message: "" });
+    } catch (error) {
+      setCompliaintsStatsError({ isError: true, message: error as string });
+    }
+  };
+  const getNoticesData = async (): Promise<void> => {
+    try {
+      const reponse = await getNotices();
+      setNotices(reponse);
+      setNoticeError({ isError: false, message: "" });
+    } catch (error) {
+      setNoticeError({ isError: true, message: error as string });
+    }
+  };
 
   const getStaffListData = async (
     pagination: boolean,
@@ -182,8 +212,9 @@ const AdminHome = () => {
         const end = start + 10;
         setStaffList(response.slice(start, end));
       }
+      setStaffListError({ isError: false, message: "" });
     } catch (error) {
-      console.log(error);
+      setStaffListError({ isError: true, message: error as string });
     }
   };
 
@@ -209,54 +240,115 @@ const AdminHome = () => {
 
   return (
     <Box className="p-4 w-full xl:p-8 flex flex-col  min-h-20 flex-grow-0 md:flex-grow md:min-h-1/2 overflow-scroll">
-      <Box className="gap-4 flex-wrap flex w-full lg:flex-nowrap justify-center lg:justify-around xl:gap-8">
-        {ADMIN_DASHBOARD_DETAIL.map((value) => {
-          return (
-            <DashboardDetail
-              key={value.label}
-              dashboardData={dashboardData}
-              detail={value}
-            />
-          );
-        })}
-      </Box>
-      <Box className="gap-4 mt-4  flex-grow flex-wrap h-screen flex justify-around lg:flex-nowrap xl:gap-8 md:min-h-[66%] lg:min-h-[75%]  xl:mt-8">
-        <NoticeList
-          notices={notices}
-          setupdateNoticeCheck={setupdateNoticeCheck}
-        />
-        <Paper className="dashboard-paper">
-          <Typography className="mx-8 mt-4 mb-0 text-2xl font-medium self-start">
-            Rooms Status
-          </Typography>
-          <Chart
-            data={roomStatusData}
-            graphType="PieChart"
-            options={pieChartOption}
-            className="m-auto"
-            Skeleton={PieChartSkeleton}
-            chartEvents={chartEvents}
+      <ErrorBoundary
+        error={dashboardDataError.isError}
+        ErrorComponent={
+          <ErrorComponent
+            className="w-full"
+            boxClassName="h-40"
+            onSubmit={getDashboardDetails}
+            message="Error in fetching data"
           />
+        }
+      >
+        <Box className="gap-4 flex-wrap flex w-full lg:flex-nowrap justify-center lg:justify-around xl:gap-8">
+          {ADMIN_DASHBOARD_DETAIL.map((value) => {
+            return (
+              <DashboardDetail
+                key={value.label}
+                dashboardData={dashboardData}
+                detail={value}
+              />
+            );
+          })}
+        </Box>
+      </ErrorBoundary>
+
+      <Box className="gap-4 mt-4  flex-grow flex-wrap h-screen flex justify-around lg:flex-nowrap xl:gap-8 md:min-h-[66%] lg:min-h-[75%]  xl:mt-8">
+        <ErrorBoundary
+          error={noticeError.isError}
+          ErrorComponent={
+            <Paper className="dashboard-paper ">
+              <ErrorComponent
+                className="w-full h-full"
+                onSubmit={() => getNoticesData()}
+                message="Error in fetching data"
+              />
+            </Paper>
+          }
+        >
+          <NoticeList
+            notices={notices}
+            setupdateNoticeCheck={setupdateNoticeCheck}
+          />
+        </ErrorBoundary>
+        <Paper className="dashboard-paper ">
+          <ErrorBoundary
+            error={roomStatusDataError.isError}
+            ErrorComponent={
+              <ErrorComponent
+                className="w-full h-full"
+                onSubmit={getRoomStatusDataForChart}
+                message="Error in fetching data"
+              />
+            }
+          >
+            <Typography className="mx-8 mt-4 mb-0 text-2xl font-medium self-start">
+              Rooms Status
+            </Typography>
+            <Chart
+              data={roomStatusData}
+              graphType="PieChart"
+              options={pieChartOption}
+              className="m-auto"
+              Skeleton={PieChartSkeleton}
+              chartEvents={chartEvents}
+            />
+          </ErrorBoundary>
         </Paper>
       </Box>
       <Box className="gap-4 mt-4 py-4 flex-grow flex-wrap h-screen flex justify-around lg:py-0 lg:flex-nowrap xl:gap-8 md:min-h-[66%] lg:min-h-[75%]  xl:mt-8">
-        <StaffTable
-          staffList={staffList}
-          getData={getStaffListData}
-          paginationModel={paginationModel}
-          setPaginationModel={setPaginationModel}
-        />
-        <Paper className="dashboard-paper">
-          <Typography className="mx-8 mt-4 mb-0 text-2xl font-medium self-start">
-            Complaints Statistics
-          </Typography>
-          <Chart
-            data={complaintsStats}
-            graphType="LineChart"
-            options={lineChartOptions}
-            className="m-auto ml-8"
-            Skeleton={LineChartSkeleton}
+        <ErrorBoundary
+          error={staffListError.isError}
+          ErrorComponent={
+            <Paper className="dashboard-paper ">
+              <ErrorComponent
+                className="w-full h-full"
+                onSubmit={() => getStaffListData(false)}
+                message="Error in fetching data"
+              />
+            </Paper>
+          }
+        >
+          <StaffTable
+            staffList={staffList}
+            getData={getStaffListData}
+            paginationModel={paginationModel}
+            setPaginationModel={setPaginationModel}
           />
+        </ErrorBoundary>
+        <Paper className="dashboard-paper ">
+          <ErrorBoundary
+            error={complaintsStatsError.isError}
+            ErrorComponent={
+              <ErrorComponent
+                className="w-full h-full"
+                onSubmit={getComplaintsData}
+                message="Error in fetching data"
+              />
+            }
+          >
+            <Typography className="mx-8 mt-4 mb-0 text-2xl font-medium self-start">
+              Complaints Statistics
+            </Typography>
+            <Chart
+              data={complaintsStats}
+              graphType="LineChart"
+              options={lineChartOptions}
+              className="m-auto mr-4"
+              Skeleton={LineChartSkeleton}
+            />
+          </ErrorBoundary>
         </Paper>
       </Box>
     </Box>
