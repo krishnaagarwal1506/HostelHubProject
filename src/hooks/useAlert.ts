@@ -9,12 +9,12 @@ const useAlert = () => {
   }>({
     isOpen: false,
     message: "",
-    severity: "error",
+    severity: "",
   });
   const handleAlert = (
     isOpen: boolean = false,
     message: string = "",
-    severity: SeverityType = "error"
+    severity: SeverityType = ""
   ): void => {
     setAlert({
       isOpen,
