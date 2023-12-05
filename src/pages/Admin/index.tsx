@@ -7,12 +7,12 @@ import {
   ReactGoogleChartProps,
 } from "react-google-charts";
 
-import DashboardDetail from "./DashboardDetail";
-import NoticeList from "@src/pages/Admin/notice/NoticeList";
-import StaffTable from "./StaffTable";
 import Chart from "@components/Chart";
 import ErrorComponent from "@components/ErrorComponent";
 import ErrorBoundary from "@components/ErrorBoundry";
+import DashboardDetail from "./DashboardDetail";
+import NoticeList from "./notice/NoticeList";
+import StaffTable from "./StaffTable";
 
 import { fetchData } from "@utils/index";
 import {
