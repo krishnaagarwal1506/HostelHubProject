@@ -88,6 +88,7 @@ const NoticeList = ({ notices, setupdateNoticeCheck }: NoticesProps) => {
   });
   const [deleteNoticeId, setDeleteNoticeId] = useState<number | null>(null);
   const { alert, handleAlert } = useAlert();
+  const { isOpen, message, severity } = alert;
 
   const handleDialog = () => {
     deleteNotice(deleteNoticeId, handleAlert);
@@ -207,10 +208,10 @@ const NoticeList = ({ notices, setupdateNoticeCheck }: NoticesProps) => {
           This notice will be deleted
         </DialogContent>
       </ConfirmationModal>
-      {alert.isOpen && (
+      {isOpen && (
         <AlertComponent
-          severity={alert.severity}
-          message={alert.message}
+          severity={severity}
+          message={message}
           handleClose={() => handleAlert(false)}
         />
       )}
