@@ -18,7 +18,7 @@ import ConfirmationModal from "@components/ConfirmationModal";
 
 import useDialog from "@src/hooks/useDialog.ts";
 import useAlert from "@src/hooks/useAlert.ts";
-import { sendData, deleteData } from "@utils/index";
+import { sendData, deleteData, catchErrorMessage } from "@utils/index";
 import { NoticeDataType, NoticeStateProps, SeverityType } from "@ts/types";
 import { NOTICES_URL } from "@constant/index";
 
@@ -34,13 +34,11 @@ const saveNotice = async (
     const method = notice.id ? "PUT" : "POST";
     const url = notice.id ? `${NOTICES_URL}/${notice.id}` : NOTICES_URL;
     const isDataSent = await sendData(url, method, notice);
-    isDataSent
-      ? handleAlert(true, "Notice saved", "success")
-      : handleAlert(true, "Notice not saved", "error");
+    const message = isDataSent ? "Notice updated" : "Notice added";
+    const severity = isDataSent ? "success" : "error";
+    handleAlert(true, message, severity);
   } catch (error) {
-    error instanceof Error
-      ? handleAlert(true, error.message, "error")
-      : handleAlert(true, "An error occurred", "error");
+    handleAlert(true, catchErrorMessage(error), "error");
   }
 };
 
@@ -58,13 +56,13 @@ const deleteNotice = async (
     }
     const url = `${NOTICES_URL}/${id}`;
     const isDataDeleted = await deleteData(url);
-    isDataDeleted
-      ? handleAlert(true, "Notice deleted", "success")
-      : handleAlert(true, "Error, Notice not deleted", "error");
+    const message = isDataDeleted
+      ? "Notice deleted"
+      : "Error, Notice not deleted";
+    const severity = isDataDeleted ? "success" : "error";
+    handleAlert(true, message, severity);
   } catch (error) {
-    error instanceof Error
-      ? handleAlert(true, error.message, "error")
-      : handleAlert(true, "An error occurred", "error");
+    handleAlert(true, catchErrorMessage(error), "error");
   }
 };
 
