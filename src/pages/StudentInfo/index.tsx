@@ -20,7 +20,7 @@ import {
   Add,
 } from "@mui/icons-material";
 
-import TableComponent from "@src/components/Table";
+import TableComponent from "@components/Table";
 import AlertComponent from "@components/Alert";
 import ConfirmationModal from "@components/ConfirmationModal";
 import StudentProfile from "./StudentProfile";
@@ -28,7 +28,7 @@ import AddStudent from "./addStudent";
 
 import useDialog from "@src/hooks/useDialog";
 import useAlert from "@src/hooks/useAlert";
-import { sendData, deleteData } from "@utils/index";
+import { sendData, deleteData, catchErrorMessage } from "@utils/index";
 import { checkEmailExists } from "@utils/index";
 import { STUDENT_INFO_URL } from "@src/constant";
 import {
@@ -52,13 +52,13 @@ const handleDelete = async (
       throw new Error("Student do not exist");
     }
     const isDataDeleted = await deleteData(`${STUDENT_INFO_URL}/${id}`);
-    isDataDeleted
-      ? handleAlert(true, "Student data deleted", "success")
-      : handleAlert(true, "Error, data not deleted", "error");
+    const message = isDataDeleted
+      ? "Student data deleted"
+      : "Error, data not deleted";
+    const severity = isDataDeleted ? "success" : "error";
+    handleAlert(true, message, severity);
   } catch (error) {
-    error instanceof Error
-      ? handleAlert(true, error.message, "error")
-      : handleAlert(true, "An error occurred", "error");
+    handleAlert(true, catchErrorMessage(error), "error");
   }
 };
 
@@ -74,13 +74,13 @@ const saveStudentData = async (
   const url = `${STUDENT_INFO_URL}/${id}`;
   try {
     const isDataUpdated = await sendData(url, "PUT", studentInfo);
-    isDataUpdated
-      ? handleAlert(true, "Data updated successfully", "success")
-      : handleAlert(true, "Data not updated", "error");
+    const message = isDataUpdated
+      ? "Data updated successfully"
+      : "Data not updated";
+    const severity = isDataUpdated ? "success" : "error";
+    handleAlert(true, message, severity);
   } catch (error) {
-    error instanceof Error
-      ? handleAlert(true, error.message, "error")
-      : handleAlert(true, "An error occurred", "error");
+    handleAlert(true, catchErrorMessage(error), "error");
   }
 };
 
@@ -94,13 +94,11 @@ const addStudentData = async (
 ) => {
   try {
     const isDataSent = await sendData(STUDENT_INFO_URL, "POST", studentData);
-    isDataSent
-      ? handleAlert(true, "Data saved successfully", "success")
-      : handleAlert(true, "Data not saved", "error");
+    const message = isDataSent ? "Data saved successfully" : "Data not saved";
+    const severity = isDataSent ? "success" : "error";
+    handleAlert(true, message, severity);
   } catch (error) {
-    error instanceof Error
-      ? handleAlert(true, error.message, "error")
-      : handleAlert(true, "An error occurred", "error");
+    handleAlert(true, catchErrorMessage(error), "error");
   }
 };
 
