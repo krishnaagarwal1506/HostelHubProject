@@ -29,6 +29,7 @@ import AddStudent from "./addStudent";
 
 import useDialog from "@src/hooks/useDialog";
 import useAlert from "@src/hooks/useAlert";
+import { sendData, deleteData } from "@utils/index";
 import { checkEmailExists } from "@utils/index";
 import { STUDENT_INFO_URL } from "@src/constant";
 import {
@@ -51,20 +52,14 @@ const handleDelete = async (
     if (!id) {
       throw new Error("Student do not exist");
     }
-    const deleteResponse = await fetch(`${STUDENT_INFO_URL}/${id}`, {
-      method: "DELETE",
-    });
-    if (!deleteResponse.ok) {
-      throw new Error(`Server error: ${deleteResponse.statusText}`);
-    } else {
-      handleAlert(true, "Student data deleted", "success");
-    }
+    const isDataDeleted = await deleteData(`${STUDENT_INFO_URL}/${id}`);
+    isDataDeleted
+      ? handleAlert(true, "Student data deleted", "success")
+      : handleAlert(true, "Error, data not deleted", "error");
   } catch (error) {
-    if (error instanceof Error) {
-      handleAlert(true, error.message, "error");
-    } else {
-      handleAlert(true, "An error occurred", "error");
-    }
+    error instanceof Error
+      ? handleAlert(true, error.message, "error")
+      : handleAlert(true, "An error occurred", "error");
   }
 };
 
@@ -79,24 +74,14 @@ const saveStudentData = async (
   const { id } = studentInfo;
   const url = `${STUDENT_INFO_URL}/${id}`;
   try {
-    const putData = await fetch(url, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(studentInfo),
-    });
-    if (putData.ok) {
-      handleAlert(true, "Data saved Successfully", "success");
-    } else {
-      throw new Error("Not updated");
-    }
+    const isDataUpdated = await sendData(url, "PUT", studentInfo);
+    isDataUpdated
+      ? handleAlert(true, "Data updated successfully", "success")
+      : handleAlert(true, "Data not updated", "error");
   } catch (error) {
-    if (error instanceof Error) {
-      handleAlert(true, error.message, "error");
-    } else {
-      handleAlert(true, "An error occurred", "error");
-    }
+    error instanceof Error
+      ? handleAlert(true, error.message, "error")
+      : handleAlert(true, "An error occurred", "error");
   }
 };
 
@@ -109,24 +94,14 @@ const addStudentData = async (
   ) => void
 ) => {
   try {
-    const postData = await fetch(STUDENT_INFO_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(studentData),
-    });
-    if (postData.ok) {
-      handleAlert(true, "Data saved Successfully", "success");
-    } else {
-      throw new Error("Not updated");
-    }
+    const isDataSent = await sendData(STUDENT_INFO_URL, "POST", studentData);
+    isDataSent
+      ? handleAlert(true, "Data saved successfully", "success")
+      : handleAlert(true, "Data not saved", "error");
   } catch (error) {
-    if (error instanceof Error) {
-      handleAlert(true, error.message, "error");
-    } else {
-      handleAlert(true, "An error occurred", "error");
-    }
+    error instanceof Error
+      ? handleAlert(true, error.message, "error")
+      : handleAlert(true, "An error occurred", "error");
   }
 };
 
