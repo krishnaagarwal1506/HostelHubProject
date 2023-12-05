@@ -29,7 +29,6 @@ const NoticeListItem = ({
   handleOpenConfirmationDialog,
   setDeleteNoticeId,
 }: NoticeListItemProps) => {
-  //console.log({ noticeData });
   return (
     <ListItem
       className="px-8 cursor-pointer py-1hover:bg-gray-100"
