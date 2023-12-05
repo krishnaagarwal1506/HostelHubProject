@@ -101,7 +101,7 @@ const saveStudentData = async (
 };
 
 const addStudentData = async (
-  { confirmPassword, ...studentData }: AddStudentStateType, // eslint-disable-line
+  { confirmPassword, ...studentData }: AddStudentStateType, //eslint-disable-line
   handleAlert: (
     isOpen: boolean,
     message: string,
@@ -170,7 +170,8 @@ const StudentInfo = () => {
 
   useEffect(() => {
     const getData = setTimeout(() => {
-      getStudentInfoData(true, paginationModel.page, searchText);
+      setPaginationModel({ ...paginationModel, page: 0 });
+      getStudentInfoData(true, 0, searchText);
     }, 300);
     return () => clearTimeout(getData);
   }, [searchText]);
@@ -228,6 +229,15 @@ const StudentInfo = () => {
       ...commonOptions,
     },
     {
+      field: "guardianName",
+      headerName: "Guardian Name",
+      minWidth: 170,
+
+      flex: 1,
+      cellClassName: "hover:cursor-pointer",
+      ...commonOptions,
+    },
+    {
       field: "Actions",
       headerName: "Actions",
       minWidth: 170,
@@ -275,18 +285,17 @@ const StudentInfo = () => {
       setLoading(true);
       const response = await fetch(`${STUDENT_INFO_URL}`);
       const data = await response.json();
-      setRowCount(data.length);
 
       const filteredData = searchText
         ? data.filter((student: StudentInfoType) =>
             student.studentName.toLowerCase().includes(searchText.toLowerCase())
           )
         : data;
-
       if (!pagination) setStudentsData(filteredData);
       else {
         setStudentsData(filteredData.slice(page! * 10, page! * 10 + 10));
       }
+      setRowCount(filteredData.length);
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -364,7 +373,7 @@ const StudentInfo = () => {
           Add
         </Button>
       </Box>
-      <Box className="w-[96%] h-[85vh] md:h-full my-4 xl:my-8 mx-auto overflow-hidden rounded-xl">
+      <Box className="w-[96%] h-[85vh] md:h-full my-4 xl:my-6 mx-auto overflow-hidden rounded-xl">
         <TableComponent
           columns={columns}
           isLoading={loading}
@@ -378,6 +387,7 @@ const StudentInfo = () => {
           onRowClick={(event, row) =>
             handleModalOpen(event, row as StudentInfoType, false)
           }
+          searchText={searchText}
         />
         <ConfirmationModal
           isOpen={open}

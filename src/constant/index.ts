@@ -85,6 +85,8 @@ export const COMPLAINTS_STATS_URL =
 
 export const STUDENT_INFO_URL = "http://localhost:3001/studentInfo";
 
+export const COMPLAINTS_URL = "http://localhost:3001/complaints";
+
 export const ADMIN_DASHBOARD_DETAIL: AdminDashboardDetailsTypes[] = [
   {
     label: "Students",
@@ -116,3 +118,51 @@ export const ADMIN_DASHBOARD_DETAIL: AdminDashboardDetailsTypes[] = [
     path: "",
   },
 ];
+
+export const STUDENT_NAME_INPUT = {
+  label: "Student Name",
+  name: "studentName",
+  type: "text",
+};
+
+export const STUDENT_EMAIL_INPUT = {
+  label: "Student Email",
+  name: "email",
+  type: "email",
+};
+
+export const STUDENT_PHONE_INPUT = {
+  label: "Mobile Number",
+  name: "mobileNumber",
+  type: "tel",
+};
+
+export const GUARDIAN_NAME_INPUT = {
+  label: "Guardian Name",
+  name: "guardianName",
+  type: "text",
+};
+
+export const GUARDIAN_PHONE_INPUT = {
+  label: "Guardian Phone no.",
+  name: "guardianPhoneNumber",
+  type: "tel",
+};
+
+export const ADDRESS_INPUT = {
+  label: "Address",
+  name: "address",
+  type: "text",
+};
+
+export const PASSWORD_INPUT = {
+  label: "Password",
+  name: "password",
+  type: "password",
+};
+
+export const CONFIRM_PASSWORD_INPUT = {
+  label: "Confirm Password",
+  name: "confirmPassword",
+  type: "password",
+};
