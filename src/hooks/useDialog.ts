@@ -2,15 +2,13 @@ import { useState } from "react";
 
 const useDialog = (onSubmit: () => void) => {
   const [open, setOpen] = useState<boolean>(false);
-  const handleDialogOpen = (): void => setOpen(true);
-
-  const handleDialogClose = (): void => setOpen(false);
+  const handleDialogClick = (state: boolean): void => setOpen(state);
 
   const handleDialogSubmit = (): void => {
     onSubmit();
-    handleDialogClose();
+    handleDialogClick(false);
   };
-  return { open, handleDialogOpen, handleDialogClose, handleDialogSubmit };
+  return { open, handleDialogClick, handleDialogSubmit };
 };
 
 export default useDialog;
