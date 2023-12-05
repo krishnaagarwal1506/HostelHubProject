@@ -34,7 +34,6 @@ const ConfirmationModal = ({
       />
     </>
   );
-
   return (
     <DialogModal
       dialogSize="xs"
