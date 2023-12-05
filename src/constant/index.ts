@@ -12,7 +12,7 @@ export const ADMIN_SIDEBAR: SidebarValueType[] = [
   {
     field: "Dashboard",
     icon: DashboardIcon,
-    path: "home",
+    path: "dashboard",
   },
   {
     field: "Student Info.",
@@ -40,7 +40,7 @@ export const STUDENT_SIDEBAR: SidebarValueType[] = [
   {
     field: "Dashboard",
     icon: DashboardIcon,
-    path: "home",
+    path: "dashboard",
   },
   {
     field: "Complaints",
@@ -55,3 +55,16 @@ export const STUDENT_SIDEBAR: SidebarValueType[] = [
 ];
 
 export const SETTINGS: string[] = ["Profile", "Logout"];
+
+export const DASHBOARD_ENDPOINT: string = "dashboard";
+
+export const USER_DATA_URL: string =
+  "https://api.npoint.io/de4471c76c2129b205d7";
+
+export const ADMIN_DASHBOARD_DETAIL_URL: string =
+  "https://api.npoint.io/afae6426adf49484df48";
+
+export const NOTICES_URL: string = "https://api.npoint.io/dedd459425f10436406b";
+
+export const ROOM_STATUS_DATA_URL: string =
+  "https://api.npoint.io/89bedc5ce0a4a2482847";
