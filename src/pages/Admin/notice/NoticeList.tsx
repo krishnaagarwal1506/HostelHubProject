@@ -18,44 +18,35 @@ import ConfirmationModal from "@components/ConfirmationModal";
 
 import useDialog from "@src/hooks/useDialog.ts";
 import useAlert from "@src/hooks/useAlert.ts";
+import { sendData, deleteData } from "@utils/index";
 import { NoticeDataType, NoticeStateProps, SeverityType } from "@ts/types";
 import { NOTICES_URL } from "@constant/index";
 
 const saveNotice = async (
   notice: NoticeDataType,
-  handleAlertOpen: (
+  handleAlert: (
     isOpen: boolean,
     message: string,
     serverity: SeverityType
   ) => void
 ) => {
   try {
-    const meathod = notice.id ? "PUT" : "POST";
+    const method = notice.id ? "PUT" : "POST";
     const url = notice.id ? `${NOTICES_URL}/${notice.id}` : NOTICES_URL;
-    const putData = await fetch(url, {
-      method: meathod,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(notice),
-    });
-    if (putData.ok) {
-      handleAlertOpen(true, "Notice saved", "success");
-    } else {
-      throw new Error("Not updated");
-    }
+    const isDataSent = await sendData(url, method, notice);
+    isDataSent
+      ? handleAlert(true, "Notice saved", "success")
+      : handleAlert(true, "Notice not saved", "error");
   } catch (error) {
-    if (error instanceof Error) {
-      handleAlertOpen(true, error.message, "error");
-    } else {
-      handleAlertOpen(true, "An error occurred", "error");
-    }
+    error instanceof Error
+      ? handleAlert(true, error.message, "error")
+      : handleAlert(true, "An error occurred", "error");
   }
 };
 
 const deleteNotice = async (
   id: number | null,
-  handleAlertOpen: (
+  handleAlert: (
     isOpen: boolean,
     message: string,
     serverity: SeverityType
@@ -65,20 +56,15 @@ const deleteNotice = async (
     if (!id) {
       throw new Error("notice do not exist");
     }
-    const deleteResponse = await fetch(`${NOTICES_URL}/${id}`, {
-      method: "DELETE",
-    });
-    if (!deleteResponse.ok) {
-      throw new Error(`Server error: ${deleteResponse.statusText}`);
-    } else {
-      handleAlertOpen(true, "Notice Deleted", "success");
-    }
+    const url = `${NOTICES_URL}/${id}`;
+    const isDataDeleted = await deleteData(url);
+    isDataDeleted
+      ? handleAlert(true, "Notice deleted", "success")
+      : handleAlert(true, "Error, Notice not deleted", "error");
   } catch (error) {
-    if (error instanceof Error) {
-      handleAlertOpen(true, error.message, "error");
-    } else {
-      handleAlertOpen(true, "An error occurred", "error");
-    }
+    error instanceof Error
+      ? handleAlert(true, error.message, "error")
+      : handleAlert(true, "An error occurred", "error");
   }
 };
 
@@ -100,7 +86,6 @@ const NoticeList = ({ notices, setupdateNoticeCheck }: NoticesProps) => {
     isEditable: false,
     addNewNotice: false,
   });
-
   const [deleteNoticeId, setDeleteNoticeId] = useState<number | null>(null);
   const { alert, handleAlert } = useAlert();
 
@@ -110,7 +95,6 @@ const NoticeList = ({ notices, setupdateNoticeCheck }: NoticesProps) => {
       return !val;
     });
   };
-
   const { open, handleDialogClick, handleDialogSubmit } =
     useDialog(handleDialog);
 
