@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { Button } from "@mui/material";
 
 import DialogModal from "./DialogModal";
@@ -22,7 +23,7 @@ const ConfirmationModal = ({
   handleClose,
   handleSubmit,
 }: DialogModalPropsTypes) => {
-  const actions: React.ReactNode = (
+  const actions: ReactNode = (
     <>
       <Button variant="outlined" size="large" onClick={handleClose}>
         Cancel
