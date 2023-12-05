@@ -146,12 +146,10 @@ const AdminHome = () => {
     isError: false,
     message: "",
   });
-
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 10,
   });
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -159,6 +157,7 @@ const AdminHome = () => {
     getDashboardDetails();
     getRoomStatusDataForChart();
   }, []);
+
   useEffect(() => {
     getNoticesData();
   }, [updateNoticeCheck]);
@@ -182,6 +181,7 @@ const AdminHome = () => {
       setRoomStatusDataError({ isError: true, message: error as string });
     }
   };
+
   const getComplaintsData = async (): Promise<void> => {
     try {
       const response = await fetchData(COMPLAINTS_STATS_URL);
@@ -191,6 +191,7 @@ const AdminHome = () => {
       setCompliaintsStatsError({ isError: true, message: error as string });
     }
   };
+
   const getNoticesData = async (): Promise<void> => {
     try {
       const response = await fetchData(NOTICES_URL);
@@ -231,6 +232,7 @@ const AdminHome = () => {
       navigate(`/rooms?area=${selectedLabel}`);
     }
   };
+
   const chartEvents: ReactGoogleChartProps["chartEvents"] = [
     {
       eventName: "select",
