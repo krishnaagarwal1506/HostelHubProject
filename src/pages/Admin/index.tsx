@@ -14,13 +14,7 @@ import Chart from "@components/Chart";
 import ErrorComponent from "@components/ErrorComponent";
 import ErrorBoundary from "@components/ErrorBoundry";
 
-import {
-  getAdminDashboardDetails,
-  getNotices,
-  getRoomStatusData,
-  getComplaintsStats,
-  getStaffList,
-} from "@utils/index";
+import { fetchData } from "@utils/index";
 import {
   AdminDashboardDataTypes,
   NoticeDataType,
@@ -28,7 +22,14 @@ import {
   StaffMembersType,
   ErrorType,
 } from "@ts/types";
-import { ADMIN_DASHBOARD_DETAIL } from "@constant/index";
+import {
+  ADMIN_DASHBOARD_DETAIL,
+  ADMIN_DASHBOARD_DETAIL_URL,
+  COMPLAINTS_STATS_URL,
+  NOTICES_URL,
+  ROOM_STATUS_DATA_URL,
+  STAFF_LIST_URL,
+} from "@constant/index";
 import colors from "@src/themes/colors";
 
 const pieChartOption: ChartWrapperOptions["options"] = {
@@ -164,7 +165,7 @@ const AdminHome = () => {
 
   const getDashboardDetails = async (): Promise<void> => {
     try {
-      const data = await getAdminDashboardDetails();
+      const data = await fetchData(ADMIN_DASHBOARD_DETAIL_URL);
       setDashboardData(data);
       setDashboardDataError({ isError: false, message: "" });
     } catch (error) {
@@ -174,8 +175,8 @@ const AdminHome = () => {
 
   const getRoomStatusDataForChart = async (): Promise<void> => {
     try {
-      const reponse = await getRoomStatusData();
-      setRoomStatusData(reponse);
+      const response = await fetchData(ROOM_STATUS_DATA_URL);
+      setRoomStatusData(response);
       setRoomStatusDataError({ isError: false, message: "" });
     } catch (error) {
       setRoomStatusDataError({ isError: true, message: error as string });
@@ -183,8 +184,8 @@ const AdminHome = () => {
   };
   const getComplaintsData = async (): Promise<void> => {
     try {
-      const reponse = await getComplaintsStats();
-      setCompliaintsStats(reponse);
+      const response = await fetchData(COMPLAINTS_STATS_URL);
+      setCompliaintsStats(response);
       setCompliaintsStatsError({ isError: false, message: "" });
     } catch (error) {
       setCompliaintsStatsError({ isError: true, message: error as string });
@@ -192,8 +193,8 @@ const AdminHome = () => {
   };
   const getNoticesData = async (): Promise<void> => {
     try {
-      const reponse = await getNotices();
-      setNotices(reponse);
+      const response = await fetchData(NOTICES_URL);
+      setNotices(response);
       setNoticeError({ isError: false, message: "" });
     } catch (error) {
       setNoticeError({ isError: true, message: error as string });
@@ -205,7 +206,7 @@ const AdminHome = () => {
     page?: number
   ): Promise<void> => {
     try {
-      const response = await getStaffList();
+      const response = await fetchData(STAFF_LIST_URL);
       if (!pagination) setStaffList(response);
       else {
         const start = page! * 10;
