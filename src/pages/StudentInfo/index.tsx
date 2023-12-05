@@ -156,8 +156,8 @@ const StudentInfo = () => {
     page: 0,
     pageSize: 10,
   });
-
   const { alert, handleAlert } = useAlert();
+  const { isOpen, message, severity } = alert;
   const { open, handleDialogClick, handleDialogSubmit } = useDialog(
     async () => {
       await handleDelete(seletedStudent!.studentInfo, handleAlert);
@@ -198,7 +198,6 @@ const StudentInfo = () => {
       field: "roomNumber",
       headerName: "Room number",
       minWidth: 150,
-
       cellClassName: "hover:cursor-pointer",
       ...commonOptions,
       renderCell: ({ row: { roomNumber } }) => {
@@ -213,7 +212,6 @@ const StudentInfo = () => {
     {
       field: "studentName",
       headerName: "Name",
-
       minWidth: 170,
       flex: 1,
       cellClassName: "hover:cursor-pointer",
@@ -223,7 +221,6 @@ const StudentInfo = () => {
       field: "mobileNumber",
       headerName: "Mobile Number",
       minWidth: 170,
-
       flex: 1,
       cellClassName: "hover:cursor-pointer",
       ...commonOptions,
@@ -232,7 +229,6 @@ const StudentInfo = () => {
       field: "guardianName",
       headerName: "Guardian Name",
       minWidth: 170,
-
       flex: 1,
       cellClassName: "hover:cursor-pointer",
       ...commonOptions,
@@ -402,10 +398,10 @@ const StudentInfo = () => {
           </DialogContent>
         </ConfirmationModal>
 
-        {alert.isOpen && (
+        {isOpen && (
           <AlertComponent
-            severity={alert.severity}
-            message={alert.message}
+            severity={severity}
+            message={message}
             handleClose={() => handleAlert(false)}
           />
         )}
