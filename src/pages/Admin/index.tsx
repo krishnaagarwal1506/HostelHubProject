@@ -264,7 +264,6 @@ const AdminHome = () => {
           })}
         </Box>
       </ErrorBoundary>
-
       <Box className="gap-4 mt-4  flex-grow flex-wrap h-screen flex justify-around lg:flex-nowrap xl:gap-8 md:min-h-[66%] lg:min-h-[75%]  xl:mt-8">
         <ErrorBoundary
           error={noticeError.isError}
