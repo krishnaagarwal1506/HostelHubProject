@@ -13,9 +13,9 @@ type NoticePropsTypes = {
   handleClose: () => void;
   handleChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
 };
-function getHeading(isEditable: boolean, addNewNotice: boolean): string {
+function getHeading(isEditable: boolean, add: boolean): string {
   if (isEditable) return "Edit Notice";
-  if (addNewNotice) return "Add New Notice";
+  if (add) return "Add New Notice";
   return "Notice";
 }
 
@@ -25,16 +25,16 @@ const NoticeModal = ({
   handleClose,
   handleChange,
 }: NoticePropsTypes) => {
-  const { isNoticeModalOpen, isEditable, addNewNotice } = selectedNotice;
+  const { isModalOpen, isEditable, add } = selectedNotice;
   const { title, content, date } = selectedNotice.notice;
-  const heading: string = getHeading(isEditable, addNewNotice);
-  const isReadOnly: boolean = !isEditable && !addNewNotice;
+  const heading: string = getHeading(isEditable, add);
+  const isReadOnly: boolean = !isEditable && !add;
   const textfieldSxValues = {
     "& .MuiOutlinedInput-root": { padding: isReadOnly ? 0 : "default" },
     "& fieldset": { border: isReadOnly ? "none" : "default" },
   };
 
-  const actions = (isEditable || addNewNotice) && (
+  const actions = (isEditable || add) && (
     <>
       <Button variant="outlined" size="large" onClick={handleClose}>
         Cancel
@@ -50,7 +50,7 @@ const NoticeModal = ({
   return (
     <DialogModal
       dialogSize="sm"
-      isOpen={isNoticeModalOpen}
+      isOpen={isModalOpen}
       title={heading}
       TitleIcon={AssignmentIcon}
       subtitle={isReadOnly && date}

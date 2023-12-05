@@ -80,9 +80,9 @@ const intitalNoticeState: NoticeDataType = {
 const NoticeList = ({ notices, setupdateNoticeCheck }: NoticesProps) => {
   const [selectedNotice, setSelectedNotice] = useState<NoticeStateProps>({
     notice: intitalNoticeState,
-    isNoticeModalOpen: false,
+    isModalOpen: false,
     isEditable: false,
-    addNewNotice: false,
+    add: false,
   });
   const [deleteNoticeId, setDeleteNoticeId] = useState<number | null>(null);
   const { alert, handleAlert } = useAlert();
@@ -104,21 +104,21 @@ const NoticeList = ({ notices, setupdateNoticeCheck }: NoticesProps) => {
   ) => {
     event.stopPropagation();
     const isEditable = state === "edit";
-    const addNewNotice = state === "addNewNotice";
+    const add = state === "add";
     setSelectedNotice({
       notice: noticeData,
       isEditable,
-      addNewNotice,
-      isNoticeModalOpen: true,
+      add,
+      isModalOpen: true,
     });
   };
 
   const handleClose = (): void => {
     setSelectedNotice({
       notice: intitalNoticeState,
-      isNoticeModalOpen: false,
+      isModalOpen: false,
       isEditable: false,
-      addNewNotice: false,
+      add: false,
     });
   };
 
@@ -151,7 +151,7 @@ const NoticeList = ({ notices, setupdateNoticeCheck }: NoticesProps) => {
             variant="contained"
             endIcon={<AddIcon />}
             onClick={(event) =>
-              handleOpenNotice(event, "addNewNotice", intitalNoticeState)
+              handleOpenNotice(event, "add", intitalNoticeState)
             }
           >
             Add
