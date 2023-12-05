@@ -5,9 +5,20 @@ import {
   Grid,
   Typography,
   DialogContent,
+  TextFieldProps,
 } from "@mui/material";
 import { Assessment as AssessmentIcon } from "@mui/icons-material";
 import DialogModal from "@components/DialogModal";
+import LoadingButton from "@components/LoadingButton";
+import {
+  STUDENT_NAME_INPUT,
+  STUDENT_EMAIL_INPUT,
+  STUDENT_PHONE_INPUT,
+  GUARDIAN_NAME_INPUT,
+  GUARDIAN_PHONE_INPUT,
+  ADDRESS_INPUT,
+  READ_ONLY_SX_VALUES,
+} from "@src/constant";
 import { StudentInfoStateType, StudentInfoType } from "@src/ts/types";
 import { validateEmail, validatePhone, validateText } from "@utils/validation";
 
@@ -47,14 +58,7 @@ const StudentProfile = ({
 }: StudentProfileProps) => {
   const [isError, setIsError] = useState(false);
   const { studentInfo, isEditable } = seletetedStudentState;
-  const {
-    studentName,
-    mobileNumber,
-    email,
-    guardianName,
-    guardianPhoneNumber,
-    address,
-  } = studentInfo;
+
   useEffect(() => {
     setIsError(!validateForm(studentInfo));
   }, [seletetedStudentState, studentInfo]);
@@ -64,17 +68,43 @@ const StudentProfile = ({
       <Button variant="outlined" size="large" onClick={handleClose}>
         Cancel
       </Button>
-      <Button
-        variant="contained"
-        size="large"
+      <LoadingButton
         disabled={isError}
-        onClick={() => handleSubmit(studentInfo)}
-      >
-        Save
-      </Button>
+        onSubmit={() => handleSubmit(studentInfo)}
+        buttonText="Save"
+      />
     </>
   );
 
+  const textfieldSxValues = !isEditable ? READ_ONLY_SX_VALUES : null;
+  const {
+    studentName,
+    mobileNumber,
+    email,
+    guardianName,
+    guardianPhoneNumber,
+    address,
+    roomNumber,
+    govId,
+    govIdImage,
+  } = studentInfo;
+  const textColor = isEditable ? "inherit" : "text-gray-500";
+  const commonProps: {
+    sx: TextFieldProps["sx"];
+    required: TextFieldProps["required"];
+    fullWidth: TextFieldProps["fullWidth"];
+    margin: TextFieldProps["margin"];
+    InputProps: TextFieldProps["InputProps"];
+  } = {
+    sx: { ...textfieldSxValues },
+    required: isEditable,
+    fullWidth: true,
+    margin: "normal",
+    InputProps: {
+      readOnly: !isEditable,
+      className: textColor,
+    },
+  };
   return (
     <DialogModal
       title="Student Profile"
@@ -88,107 +118,95 @@ const StudentProfile = ({
           <Grid item xs={12}>
             <Typography variant="h6">Student Information</Typography>
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={6} className="pt-0">
             <TextField
-              required
-              label="Name"
-              name="studentName"
+              {...STUDENT_NAME_INPUT}
               value={studentName}
               onChange={handleChange}
-              fullWidth
-              margin="normal"
               error={!validateText(studentName)}
               helperText={!validateText(studentName) && "Invalid Name"}
-              InputProps={{
-                readOnly: !isEditable,
-              }}
+              {...commonProps}
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={6} className="pt-0">
             <TextField
-              required
-              label="Mobile Number"
-              name="mobileNumber"
+              {...STUDENT_PHONE_INPUT}
               value={mobileNumber}
               onChange={handleChange}
-              fullWidth
-              margin="normal"
               error={!validatePhone(mobileNumber)}
               helperText={
                 !validatePhone(mobileNumber) && "Invalid Phone Number"
               }
-              InputProps={{
-                readOnly: !isEditable,
-              }}
+              {...commonProps}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} sm={6} className="pt-0">
             <TextField
-              required
-              label="Email"
-              name="email"
+              {...STUDENT_EMAIL_INPUT}
               value={email}
               onChange={handleChange}
-              fullWidth
-              margin="normal"
               error={!validateEmail(email)}
               helperText={!validateEmail(email) && "Invalid Email"}
+              {...commonProps}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} className="pt-0">
+            <TextField
+              label="Room Number"
+              value={roomNumber || "---"}
+              margin="normal"
+              fullWidth
               InputProps={{
-                readOnly: !isEditable,
+                readOnly: true,
+                className: "text-gray-500",
               }}
+              sx={READ_ONLY_SX_VALUES}
             />
           </Grid>
           <Grid item xs={12}>
             <Typography variant="h6">Guardian Information</Typography>
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={6} className="pt-0">
             <TextField
-              required
-              label="Guardian Name"
-              name="guardianName"
+              {...GUARDIAN_NAME_INPUT}
               value={guardianName}
               onChange={handleChange}
-              fullWidth
-              margin="normal"
               error={!validateText(guardianName)}
               helperText={!validateText(guardianName) && "Invalid Name"}
-              InputProps={{
-                readOnly: !isEditable,
-              }}
+              {...commonProps}
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={6} className="pt-0">
             <TextField
-              required
-              label="Guardian Number"
-              name="guardianPhoneNumber"
+              {...GUARDIAN_PHONE_INPUT}
               value={guardianPhoneNumber}
               onChange={handleChange}
-              fullWidth
-              margin="normal"
               error={!validatePhone(guardianPhoneNumber)}
               helperText={
                 !validatePhone(guardianPhoneNumber) && "Invalid Phone Number"
               }
-              InputProps={{
-                readOnly: !isEditable,
-              }}
+              {...commonProps}
+            />
+          </Grid>
+          <Grid item xs={12} className="pt-0">
+            <TextField
+              {...ADDRESS_INPUT}
+              value={address}
+              onChange={handleChange}
+              error={address === ""}
+              helperText={address === "" && "Invalid Address"}
+              {...commonProps}
             />
           </Grid>
           <Grid item xs={12}>
-            <TextField
-              required
-              label="Address"
-              name="address"
-              value={address}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              error={address === ""}
-              helperText={address === "" && "Invalid Address"}
-              InputProps={{
-                readOnly: !isEditable,
-              }}
+            <Typography variant="h6">{govId}</Typography>
+          </Grid>
+
+          <Grid item xs={12}>
+            <img
+              className={"w-auto h-44 m-auto"}
+              src={govIdImage}
+              alt="gov-id-img"
             />
           </Grid>
         </Grid>
