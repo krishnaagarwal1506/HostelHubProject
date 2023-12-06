@@ -1,4 +1,4 @@
-import { ChangeEvent, useState, useEffect, MouseEvent, ReactNode } from "react";
+import { ChangeEvent, useState, useEffect, MouseEvent } from "react";
 import {
   Box,
   Stepper,
@@ -7,10 +7,12 @@ import {
   Button,
   Grid,
   Typography,
+  useMediaQuery,
+  Theme,
 } from "@mui/material";
 import DialogModal from "@components/DialogModal";
-import LoadingButton from "@components/LoadingButton";
 import AlertComponent from "@components/Alert";
+import LoadingButton from "@components/LoadingButton";
 import PersonalInfoForm from "./PersonalInfoForm";
 import GuardianInfoForm from "./GuardianInfoForm";
 import PasswordForm from "./PasswordForm";
@@ -91,6 +93,9 @@ const AddStudent = ({ handleClose, handleSubmit }: AddStudentPropsType) => {
   const { alert, handleAlert } = useAlert();
   const ActiveComponent = stepComponents[activeStep];
   const { email } = student;
+  const isSmallScreen = useMediaQuery((theme: Theme) =>
+    theme.breakpoints.down("md")
+  );
 
   useEffect(() => {
     const isDisabled = !isNextButtonDisabled(activeStep, student);
@@ -193,24 +198,32 @@ const AddStudent = ({ handleClose, handleSubmit }: AddStudentPropsType) => {
       className="h-[70vh] w-[800px]"
     >
       <Grid container spacing={1} className="h-full">
-        <Grid item xs={3} className="h-full">
+        <Grid item xs={12} md={3}>
           <Box className="h-full">
-            <Stepper activeStep={activeStep} orientation="vertical">
+            <Stepper
+              activeStep={activeStep}
+              orientation={isSmallScreen ? "horizontal" : "vertical"}
+              className="flex-row mb-2 md:mb-0 md:flex-col"
+            >
               {STEPPER_FORM_STEPS_NAME.map((label) => {
-                const stepProps: { completed?: boolean } = {};
-                const labelProps: {
-                  optional?: ReactNode;
-                } = {};
                 return (
-                  <Step key={label} {...stepProps}>
-                    <StepLabel {...labelProps}>{label}</StepLabel>
+                  <Step key={label}>
+                    <StepLabel
+                      sx={{
+                        "& .MuiStepLabel-label": {
+                          display: { xs: "none", sm: "block" },
+                        },
+                      }}
+                    >
+                      {label}
+                    </StepLabel>
                   </Step>
                 );
               })}
             </Stepper>
           </Box>
         </Grid>
-        <Grid item xs={9} className="h-full">
+        <Grid item xs={12} md={9} className="md:h-full">
           <Typography variant="h6" className="font-semibold">
             {STEPPER_FORM_STEPS_NAME[activeStep]}
           </Typography>
