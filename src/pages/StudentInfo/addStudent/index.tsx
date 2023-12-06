@@ -9,12 +9,12 @@ import {
   Typography,
 } from "@mui/material";
 import DialogModal from "@components/DialogModal";
+import LoadingButton from "@components/LoadingButton";
+import AlertComponent from "@components/Alert";
 import PersonalInfoForm from "./PersonalInfoForm";
 import GuardianInfoForm from "./GuardianInfoForm";
 import PasswordForm from "./PasswordForm";
 import GovermentIdForm from "./GovermentIdForm";
-import AlertComponent from "@components/Alert";
-import LoadingButton from "@src/components/LoadingButton";
 
 import useAlert from "@src/hooks/useAlert";
 import {

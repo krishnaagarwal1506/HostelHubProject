@@ -1,5 +1,4 @@
 import StepperForm from "./StepperForm";
-
 import {
   GUARDIAN_NAME_INPUT,
   GUARDIAN_PHONE_INPUT,
