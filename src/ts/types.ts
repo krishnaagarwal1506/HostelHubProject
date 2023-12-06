@@ -1,5 +1,10 @@
-import { FC } from "react";
+import { FC, ChangeEvent, MouseEventHandler } from "react";
 import { SvgIconProps } from "@mui/material/SvgIcon";
+
+export type ErrorType = {
+  isError: boolean;
+  message: string;
+};
 
 export type SidebarValueType = {
   field: string;
@@ -7,7 +12,7 @@ export type SidebarValueType = {
   path: string;
 };
 
-export type UserDetialsType = {
+export type UserDetailsType = {
   name: string;
   email: string;
   role: string;
@@ -36,9 +41,9 @@ export type NoticeDataType = {
 
 export type NoticeStateProps = {
   notice: NoticeDataType;
-  isNoticeModalOpen: boolean;
+  isModalOpen: boolean;
   isEditable: boolean;
-  addNewNotice: boolean;
+  add: boolean;
 };
 
 export type graphDataType =
@@ -53,15 +58,20 @@ export type StaffMembersType = {
 };
 
 export type StudentInfoType = {
-  id: number;
+  id?: number;
   studentName: string;
-  roomNumber: number;
+  roomNumber: number | null;
   mobileNumber: string;
   guardianName: string;
   guardianPhoneNumber: string;
   address: string;
-  aadharCardNumber: string;
   email: string;
+  password: string;
+  govId: string;
+  govIdImage: string;
+};
+export type AddStudentStateType = StudentInfoType & {
+  confirmPassword: string;
 };
 
 export type StudentInfoStateType = {
@@ -70,4 +80,31 @@ export type StudentInfoStateType = {
   isEditable: boolean;
 };
 
-export type SeverityType = "error" | "info" | "success" | "warning";
+export type SeverityType = "error" | "info" | "success" | "warning" | "";
+
+export type StepperFormType = {
+  student: AddStudentStateType;
+  validateError: (value: string, type: string) => boolean;
+  getHelperText: (
+    value: string,
+    type: string,
+    confirmPassword?: string
+  ) => string;
+  handleChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  handleClick: MouseEventHandler<HTMLDivElement>;
+};
+
+export type ComplaintStatusType = "pending" | "resolved" | "invalid";
+
+export type ComplaintType = {
+  id: number;
+  date: string;
+  type: string;
+  description: string;
+  status: "pending" | "resolved" | "invalid";
+};
+
+export type ComplaintStateType = {
+  complaint: ComplaintType;
+  isModalOpen: boolean;
+};

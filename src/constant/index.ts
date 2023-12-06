@@ -166,3 +166,29 @@ export const CONFIRM_PASSWORD_INPUT = {
   name: "confirmPassword",
   type: "password",
 };
+
+export const READ_ONLY_SX_VALUES = {
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "inherit",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "inherit",
+      borderWidth: 1,
+    },
+    "&:hover fieldset": {
+      borderColor: "inherit",
+    },
+  },
+};
+
+export const COMPLAINT_STATUS = ["all", "pending", "resolved", "invalid"];
+
+export const ID_TYPE = ["Aadhar Card", "Pan Card", "Institute Card"];
+
+export const STEPPER_FORM_STEPS_NAME = [
+  "Personal Info",
+  "Guardian Info",
+  "Password",
+  "Goverment Id.",
+];
