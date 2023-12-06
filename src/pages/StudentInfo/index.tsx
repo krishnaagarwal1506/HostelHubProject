@@ -1,28 +1,22 @@
 import { useState, ChangeEvent, MouseEvent, useEffect } from "react";
 import {
-  Paper,
   IconButton,
   Box,
   Typography,
   DialogContent,
   Button,
-  InputBase,
 } from "@mui/material";
 import {
   GridColDef,
   GridColumnHeaderParams,
   GridAlignment,
 } from "@mui/x-data-grid";
-import {
-  EditOutlined,
-  DeleteOutlineOutlined,
-  Search,
-  Add,
-} from "@mui/icons-material";
+import { EditOutlined, DeleteOutlineOutlined, Add } from "@mui/icons-material";
 
 import TableComponent from "@components/Table";
 import AlertComponent from "@components/Alert";
 import ConfirmationModal from "@components/ConfirmationModal";
+import SearchBar from "@components/SearchBar";
 import StudentProfile from "./StudentProfile";
 import AddStudent from "./addStudent";
 
@@ -317,20 +311,11 @@ const StudentInfo = () => {
   return (
     <>
       <Box className="flex w-[96%] shrink flex-wrap mx-auto justify-between gap-y-3 ">
-        <Paper
-          className="px-[2px] py-[4px] flex w-full md:w-[40%] lg:w-1/4 rounded-3xl"
-          component="form"
-        >
-          <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
-            <Search />
-          </IconButton>
-          <InputBase
-            sx={{ ml: 1, flex: 1 }}
-            placeholder="Search Student Name"
-            value={searchText}
-            onChange={handleSeachTextChange}
-          />
-        </Paper>
+        <SearchBar
+          value={searchText}
+          onChange={handleSeachTextChange}
+          className="px-[2px] py-[4px] flex w-full md:w-[40%] lg:w-1/4 rounded-3xl bg-primary-main bg-opacity-10 focus-within:ring-2 focus-within:ring-primary-main"
+        />
         <Button
           size="large"
           className="w-[6rem]"
