@@ -44,7 +44,9 @@ const GovermentIdForm = ({
               onClick={handleCardClick}
             >
               <Box className="w-full h-full m-auto text-center flex justify-center items-center">
-                <Typography className="font-semibold">{innerText}</Typography>
+                <Typography className="text-xs md:text-base font-semibold">
+                  {innerText}
+                </Typography>
               </Box>
             </Grid>
           );
