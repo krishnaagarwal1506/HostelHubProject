@@ -5,6 +5,10 @@ import {
   RestaurantMenu as RestaurantMenuIcon,
   BedroomParent as BedroomParentIcon,
   AssignmentIndRounded as AssignmentIndRoundedIcon,
+  PendingActions,
+  DoneAll,
+  Dangerous,
+  ViewList,
 } from "@mui/icons-material";
 
 import { SidebarValueType, AdminDashboardDetailsTypes } from "@ts/types";
@@ -65,23 +69,31 @@ export const STUDENT_SIDEBAR: SidebarValueType[] = [
 
 export const SETTINGS: string[] = ["Profile", "Logout"];
 
+export const METHOD = {
+  GET: "GET" as const,
+  POST: "POST" as const,
+  PUT: "PUT" as const,
+  DELETE: "DELETE" as const,
+};
+
 export const DASHBOARD_ENDPOINT: string = "dashboard";
+
+export const BASE_URL: string = "http://localhost:1337";
 
 export const USER_DATA_URL: string =
   "https://api.npoint.io/de4471c76c2129b205d7";
 
 export const ADMIN_DASHBOARD_DETAIL_URL: string =
-  "https://api.npoint.io/afae6426adf49484df48";
+  BASE_URL + "/api/dashboard-detail";
 
-export const NOTICES_URL: string = "http://localhost:3001/notice";
+export const NOTICES_URL: string = BASE_URL + "/api/notices";
 
 export const ROOM_STATUS_DATA_URL: string =
-  "https://api.npoint.io/89bedc5ce0a4a2482847";
+  BASE_URL + "/api/room-status-graph-data";
 
-export const STAFF_LIST_URL = "https://api.npoint.io/a3ada2b77246b3d38e20";
+export const STAFF_LIST_URL = BASE_URL + "/api/staff-lists";
 
-export const COMPLAINTS_STATS_URL =
-  "https://api.npoint.io/34d932b8609356c8bd40";
+export const COMPLAINTS_STATS_URL = BASE_URL + "/api/complaint-stats";
 
 export const STUDENT_INFO_URL = "http://localhost:3001/studentInfo";
 
@@ -119,46 +131,52 @@ export const ADMIN_DASHBOARD_DETAIL: AdminDashboardDetailsTypes[] = [
   },
 ];
 
-export const STUDENT_NAME_INPUT = {
-  label: "Student Name",
-  name: "studentName",
-  type: "text",
-};
-
-export const STUDENT_EMAIL_INPUT = {
-  label: "Student Email",
-  name: "email",
-  type: "email",
-};
-
-export const STUDENT_PHONE_INPUT = {
-  label: "Mobile Number",
-  name: "mobileNumber",
-  type: "tel",
-};
-
-export const GUARDIAN_NAME_INPUT = {
-  label: "Guardian Name",
-  name: "guardianName",
-  type: "text",
-};
-
-export const GUARDIAN_PHONE_INPUT = {
-  label: "Guardian Phone no.",
-  name: "guardianPhoneNumber",
-  type: "tel",
-};
-
-export const ADDRESS_INPUT = {
-  label: "Address",
-  name: "address",
-  type: "text",
-};
-
-export const PASSWORD_INPUT = {
-  label: "Password",
-  name: "password",
-  type: "password",
+export const STUDENT_INFO_INPUTS = {
+  studentNameInput: {
+    label: "Student Name",
+    name: "studentName",
+    type: "text",
+  },
+  roomNumberInput: {
+    label: "Room Number",
+    name: "roomNumber",
+    type: "number",
+  },
+  mobileNumberInput: {
+    label: "Mobile Number",
+    name: "mobileNumber",
+    type: "tel",
+  },
+  guardianNameInput: {
+    label: "Guardian Name",
+    name: "guardianName",
+    type: "text",
+  },
+  guardianPhoneNumberInput: {
+    label: "Guardian Phone no.",
+    name: "guardianPhoneNumber",
+    type: "tel",
+  },
+  addressInput: {
+    label: "Address",
+    name: "address",
+    type: "text",
+  },
+  emailInput: {
+    label: "Student Email",
+    name: "email",
+    type: "email",
+  },
+  passwordInput: {
+    label: "Password",
+    name: "password",
+    type: "password",
+  },
+  confirmPasswordInput: {
+    label: "Confirm Password",
+    name: "confirmPassword",
+    type: "password",
+  },
 };
 
 export const CONFIRM_PASSWORD_INPUT = {
@@ -166,3 +184,46 @@ export const CONFIRM_PASSWORD_INPUT = {
   name: "confirmPassword",
   type: "password",
 };
+
+export const READ_ONLY_SX_VALUES = {
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "inherit",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "inherit",
+      borderWidth: 1,
+    },
+    "&:hover fieldset": {
+      borderColor: "inherit",
+    },
+  },
+};
+
+export const COMPLAINT_STATUS = [
+  {
+    status: "all",
+    icon: ViewList,
+  },
+  {
+    status: "pending",
+    icon: PendingActions,
+  },
+  {
+    status: "resolved",
+    icon: DoneAll,
+  },
+  {
+    status: "invalid",
+    icon: Dangerous,
+  },
+];
+
+export const ID_TYPE = ["Aadhar Card", "Pan Card", "Institute Card"];
+
+export const STEPPER_FORM_STEPS_NAME = [
+  "Personal Info",
+  "Guardian Info",
+  "Password",
+  "Goverment Id.",
+];
