@@ -20,7 +20,7 @@ import useDialog from "@src/hooks/useDialog.ts";
 import useAlert from "@src/hooks/useAlert.ts";
 import { sendData, deleteData, catchErrorMessage } from "@utils/index";
 import { NoticeDataType, NoticeStateProps, SeverityType } from "@ts/types";
-import { NOTICES_URL, METHOD } from "@constant/index";
+import { NOTICES_URL, METHOD, SUCCESS, ERROR } from "@constant/index";
 
 const saveNotice = async (
   notice: NoticeDataType,
@@ -36,7 +36,7 @@ const saveNotice = async (
     const url = notice.id ? `${NOTICES_URL}/${notice.id}` : NOTICES_URL;
     const isDataSent = await sendData(url, method, notice);
     const message = isDataSent ? "Notice updated" : "Notice added";
-    const severity = isDataSent ? "success" : "error";
+    const severity = isDataSent ? SUCCESS : ERROR;
     handleAlert(true, message, severity);
   } catch (error) {
     handleAlert(true, catchErrorMessage(error), "error");
@@ -60,10 +60,10 @@ const deleteNotice = async (
     const message = isDataDeleted
       ? "Notice deleted"
       : "Error, Notice not deleted";
-    const severity = isDataDeleted ? "success" : "error";
+    const severity = isDataDeleted ? SUCCESS : ERROR;
     handleAlert(true, message, severity);
   } catch (error) {
-    handleAlert(true, catchErrorMessage(error), "error");
+    handleAlert(true, catchErrorMessage(error), ERROR);
   }
 };
 
