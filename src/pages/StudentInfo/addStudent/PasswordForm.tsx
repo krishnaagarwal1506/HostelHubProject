@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import StepperForm from "./StepperForm";
 import { StepperFormType } from "@ts/types";
-import { PASSWORD_INPUT, CONFIRM_PASSWORD_INPUT } from "@src/constant";
+import { STUDENT_INFO_INPUTS } from "@src/constant";
 import { IconButton } from "@mui/material";
 
 const GuardianInfoForm = ({
@@ -15,10 +15,10 @@ const GuardianInfoForm = ({
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
   const { password, confirmPassword } = student;
-
+  const { passwordInput, confirmPasswordInput } = STUDENT_INFO_INPUTS;
   const formDetails = [
     {
-      ...PASSWORD_INPUT,
+      ...passwordInput,
       value: password,
       required: true,
       error: validateError(password, "password"),
@@ -31,7 +31,7 @@ const GuardianInfoForm = ({
       ),
     },
     {
-      ...CONFIRM_PASSWORD_INPUT,
+      ...confirmPasswordInput,
       value: confirmPassword,
       required: true,
       error:
