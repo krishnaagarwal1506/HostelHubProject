@@ -14,7 +14,7 @@ import DashboardDetail from "./DashboardDetail";
 import NoticeList from "./notice/NoticeList";
 import StaffTable from "./StaffTable";
 
-import { fetchData } from "@utils/index";
+import { fetchData, dateFormat, extractArrayFromApiData } from "@utils/index";
 import {
   AdminDashboardDataTypes,
   NoticeDataType,
@@ -164,8 +164,12 @@ const AdminHome = () => {
 
   const getDashboardDetails = async (): Promise<void> => {
     try {
-      const data = await fetchData(ADMIN_DASHBOARD_DETAIL_URL);
-      setDashboardData(data);
+      const {
+        data: {
+          attributes: { details },
+        },
+      } = await fetchData(ADMIN_DASHBOARD_DETAIL_URL);
+      setDashboardData(details);
       setDashboardDataError({ isError: false, message: "" });
     } catch (error) {
       setDashboardDataError({ isError: true, message: error as string });
@@ -174,8 +178,12 @@ const AdminHome = () => {
 
   const getRoomStatusDataForChart = async (): Promise<void> => {
     try {
-      const response = await fetchData(ROOM_STATUS_DATA_URL);
-      setRoomStatusData(response);
+      const {
+        data: {
+          attributes: { graphData },
+        },
+      } = await fetchData(ROOM_STATUS_DATA_URL);
+      setRoomStatusData(graphData);
       setRoomStatusDataError({ isError: false, message: "" });
     } catch (error) {
       setRoomStatusDataError({ isError: true, message: error as string });
@@ -184,8 +192,12 @@ const AdminHome = () => {
 
   const getComplaintsData = async (): Promise<void> => {
     try {
-      const response = await fetchData(COMPLAINTS_STATS_URL);
-      setCompliaintsStats(response);
+      const {
+        data: {
+          attributes: { graphData },
+        },
+      } = await fetchData(COMPLAINTS_STATS_URL);
+      setCompliaintsStats(graphData);
       setCompliaintsStatsError({ isError: false, message: "" });
     } catch (error) {
       setCompliaintsStatsError({ isError: true, message: error as string });
@@ -195,7 +207,14 @@ const AdminHome = () => {
   const getNoticesData = async (): Promise<void> => {
     try {
       const response = await fetchData(NOTICES_URL);
-      setNotices(response);
+      const data = extractArrayFromApiData(response.data);
+      const formatedData = data.map((value: NoticeDataType) => {
+        return {
+          ...value,
+          date: dateFormat(value.date),
+        };
+      });
+      setNotices(formatedData);
       setNoticeError({ isError: false, message: "" });
     } catch (error) {
       setNoticeError({ isError: true, message: error as string });
@@ -208,7 +227,8 @@ const AdminHome = () => {
   ): Promise<void> => {
     try {
       const response = await fetchData(STAFF_LIST_URL);
-      if (!pagination) setStaffList(response);
+      const data = extractArrayFromApiData(response.data);
+      if (!pagination) setStaffList(data);
       else {
         const start = page! * 10;
         const end = start + 10;
