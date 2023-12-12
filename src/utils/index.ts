@@ -5,18 +5,17 @@ import { STUDENT_INFO_URL } from "@constant/index";
 export const fetchData = async (url: string) => {
   try {
     const response = await axios.get(url);
-    const data = response.data;
-    return data;
+    return response.data;
   } catch (error) {
-    throw new Error(`Error in retrieving data from ${url}`);
+    throw new Error(`Error in retrieving data`);
   }
 };
 
-export const sendData = async (
+export async function sendData<Type>(
   url: string,
   method: "POST" | "PUT",
-  content: any //eslint-disable-line
-): Promise<boolean> => {
+  content: Type
+): Promise<boolean> {
   const apiData = {
     data: content,
   };
@@ -33,14 +32,14 @@ export const sendData = async (
   } catch (error) {
     throw new Error(`Error in sending data`);
   }
-};
+}
 
 export const deleteData = async (url: string): Promise<boolean> => {
   try {
     await axios.delete(url);
     return true;
   } catch (error) {
-    throw new Error(`Error in deleting data from ${url}`);
+    throw new Error(`Error in deleting data`);
   }
 };
 //eslint-disable-next-line
