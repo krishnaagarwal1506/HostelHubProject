@@ -20,7 +20,7 @@ import useDialog from "@src/hooks/useDialog.ts";
 import useAlert from "@src/hooks/useAlert.ts";
 import { sendData, deleteData, catchErrorMessage } from "@utils/index";
 import { NoticeDataType, NoticeStateProps, SeverityType } from "@ts/types";
-import { NOTICES_URL } from "@constant/index";
+import { NOTICES_URL, METHOD } from "@constant/index";
 
 const saveNotice = async (
   notice: NoticeDataType,
@@ -31,7 +31,8 @@ const saveNotice = async (
   ) => void
 ) => {
   try {
-    const method = notice.id ? "PUT" : "POST";
+    const { PUT, POST } = METHOD;
+    const method = notice.id ? PUT : POST;
     const url = notice.id ? `${NOTICES_URL}/${notice.id}` : NOTICES_URL;
     const isDataSent = await sendData(url, method, notice);
     const message = isDataSent ? "Notice updated" : "Notice added";
@@ -114,20 +115,20 @@ const NoticeList = ({ notices, setupdateNoticeCheck }: NoticesProps) => {
   };
 
   const handleClose = (): void => {
-    setSelectedNotice({
-      notice: intitalNoticeState,
-      isModalOpen: false,
-      isEditable: false,
-      add: false,
+    setSelectedNotice((prevState) => {
+      return {
+        ...prevState,
+        isModalOpen: false,
+      };
     });
   };
 
   const handleSubmit = (notice: NoticeDataType): void => {
     saveNotice(notice, handleAlert);
-    handleClose();
     setupdateNoticeCheck((val) => {
       return !val;
     });
+    handleClose();
   };
 
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>): void => {

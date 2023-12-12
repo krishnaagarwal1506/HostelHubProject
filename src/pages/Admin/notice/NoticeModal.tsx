@@ -33,17 +33,20 @@ const NoticeModal = ({
     "& .MuiOutlinedInput-root": { padding: isReadOnly ? 0 : "default" },
     "& fieldset": { border: isReadOnly ? "none" : "default" },
   };
+  const minHeight = isReadOnly ? "min-h-[100px]" : "min-h-[200px]";
 
-  const actions = (isEditable || add) && (
+  const actions = (
     <>
       <Button variant="outlined" size="large" onClick={handleClose}>
         Cancel
       </Button>
-      <LoadingButton
-        buttonText="Save"
-        onSubmit={() => handleSubmit(selectedNotice.notice)}
-        disabled={!title || !content}
-      />
+      {(isEditable || add) && (
+        <LoadingButton
+          buttonText="Save"
+          onSubmit={() => handleSubmit(selectedNotice.notice)}
+          disabled={!title || !content}
+        />
+      )}
     </>
   );
 
@@ -53,7 +56,6 @@ const NoticeModal = ({
       isOpen={isModalOpen}
       title={heading}
       TitleIcon={AssignmentIcon}
-      subtitle={isReadOnly && date}
       handleClose={handleClose}
       actions={actions}
     >
@@ -80,6 +82,9 @@ const NoticeModal = ({
             },
           }}
         />
+        {isReadOnly && (
+          <Typography className="text-gray-500 text-xs">{date}</Typography>
+        )}
         {!isReadOnly && (
           <Typography variant="h6" className="padding-t-2">
             Notice Content
@@ -95,7 +100,7 @@ const NoticeModal = ({
           required
           inputProps={{
             readOnly: isReadOnly,
-            className: "min-height-200",
+            className: minHeight,
           }}
           autoFocus={!isReadOnly}
           placeholder="Add Content"

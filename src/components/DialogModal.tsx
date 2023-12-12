@@ -23,6 +23,7 @@ type ReusableDialogProps = {
   className?: string;
   dialogTitleClassName?: string;
   dialogActionClassName?: string;
+  iconButtonClasses?: string;
 };
 
 const DialogModal = ({
@@ -37,6 +38,7 @@ const DialogModal = ({
   className = "",
   dialogTitleClassName = "",
   dialogActionClassName = "",
+  iconButtonClasses = "",
 }: ReusableDialogProps) => {
   return (
     <Dialog
@@ -52,7 +54,7 @@ const DialogModal = ({
         <Box className="flex-row justiy-content-sp align-items-center">
           <Box className="flex-row align-items-center flex-gap-1">
             {TitleIcon && <TitleIcon fontSize="large" color="primary" />}
-            <Typography className="color-primary" variant="h5">
+            <Typography className="inherit" variant="h5">
               {title}
             </Typography>
             {subtitle && (
@@ -61,7 +63,7 @@ const DialogModal = ({
               </Typography>
             )}
           </Box>
-          <IconButton onClick={handleClose}>
+          <IconButton className={iconButtonClasses} onClick={handleClose}>
             <CloseIcon />
           </IconButton>
         </Box>
