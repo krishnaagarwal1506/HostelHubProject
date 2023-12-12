@@ -114,6 +114,24 @@ const LineChartSkeleton = () => {
   );
 };
 
+async function fetchDataAndUpdateState<T>(
+  url: string,
+  attribute: string,
+  setData: React.Dispatch<React.SetStateAction<T>>,
+  setError: React.Dispatch<
+    React.SetStateAction<{ isError: boolean; message: string }>
+  >
+): Promise<void> {
+  try {
+    const response = await fetchData(url);
+    const data = response.data.attributes[attribute];
+    setData(data);
+    setError({ isError: false, message: "" });
+  } catch (error) {
+    setError({ isError: true, message: error as string });
+  }
+}
+
 const AdminHome = () => {
   const [dashboardData, setDashboardData] =
     useState<AdminDashboardDataTypes | null>(null);
@@ -162,46 +180,31 @@ const AdminHome = () => {
     getNoticesData();
   }, [updateNoticeCheck]);
 
-  const getDashboardDetails = async (): Promise<void> => {
-    try {
-      const {
-        data: {
-          attributes: { details },
-        },
-      } = await fetchData(ADMIN_DASHBOARD_DETAIL_URL);
-      setDashboardData(details);
-      setDashboardDataError({ isError: false, message: "" });
-    } catch (error) {
-      setDashboardDataError({ isError: true, message: error as string });
-    }
+  const getDashboardDetails = (): Promise<void> => {
+    return fetchDataAndUpdateState<AdminDashboardDataTypes | null>(
+      ADMIN_DASHBOARD_DETAIL_URL,
+      "details",
+      setDashboardData,
+      setDashboardDataError
+    );
   };
 
-  const getRoomStatusDataForChart = async (): Promise<void> => {
-    try {
-      const {
-        data: {
-          attributes: { graphData },
-        },
-      } = await fetchData(ROOM_STATUS_DATA_URL);
-      setRoomStatusData(graphData);
-      setRoomStatusDataError({ isError: false, message: "" });
-    } catch (error) {
-      setRoomStatusDataError({ isError: true, message: error as string });
-    }
+  const getRoomStatusDataForChart = (): Promise<void> => {
+    return fetchDataAndUpdateState<graphDataType | null>(
+      ROOM_STATUS_DATA_URL,
+      "graphData",
+      setRoomStatusData,
+      setRoomStatusDataError
+    );
   };
 
-  const getComplaintsData = async (): Promise<void> => {
-    try {
-      const {
-        data: {
-          attributes: { graphData },
-        },
-      } = await fetchData(COMPLAINTS_STATS_URL);
-      setCompliaintsStats(graphData);
-      setCompliaintsStatsError({ isError: false, message: "" });
-    } catch (error) {
-      setCompliaintsStatsError({ isError: true, message: error as string });
-    }
+  const getComplaintsData = (): Promise<void> => {
+    return fetchDataAndUpdateState<graphDataType | null>(
+      COMPLAINTS_STATS_URL,
+      "graphData",
+      setCompliaintsStats,
+      setCompliaintsStatsError
+    );
   };
 
   const getNoticesData = async (): Promise<void> => {
@@ -221,19 +224,11 @@ const AdminHome = () => {
     }
   };
 
-  const getStaffListData = async (
-    pagination: boolean,
-    page?: number
-  ): Promise<void> => {
+  const getStaffListData = async (): Promise<void> => {
     try {
       const response = await fetchData(STAFF_LIST_URL);
       const data = extractArrayFromApiData(response.data);
-      if (!pagination) setStaffList(data);
-      else {
-        const start = page! * 10;
-        const end = start + 10;
-        setStaffList(response.slice(start, end));
-      }
+      setStaffList(data);
       setStaffListError({ isError: false, message: "" });
     } catch (error) {
       setStaffListError({ isError: true, message: error as string });
@@ -336,7 +331,7 @@ const AdminHome = () => {
             <Paper className="dashboard-paper ">
               <ErrorComponent
                 className="w-full h-full"
-                onSubmit={() => getStaffListData(false)}
+                onSubmit={() => getStaffListData}
                 message="Error in fetching data"
               />
             </Paper>
