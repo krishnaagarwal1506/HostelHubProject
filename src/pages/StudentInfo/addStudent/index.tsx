@@ -11,8 +11,8 @@ import {
   Theme,
 } from "@mui/material";
 import DialogModal from "@components/DialogModal";
-import AlertComponent from "@components/Alert";
 import LoadingButton from "@components/LoadingButton";
+import AlertComponent from "@components/Alert";
 import PersonalInfoForm from "./PersonalInfoForm";
 import GuardianInfoForm from "./GuardianInfoForm";
 import PasswordForm from "./PasswordForm";
@@ -28,7 +28,7 @@ import {
   validateError,
 } from "@src/utils/validation";
 import { AddStudentStateType } from "@ts/types";
-import { checkEmailExists } from "@utils/index";
+import { checkEmailExists, getLocalStorage } from "@utils/index";
 import { STEPPER_FORM_STEPS_NAME } from "@constant/index.ts";
 
 type AddStudentPropsType = {
@@ -98,6 +98,12 @@ const AddStudent = ({ handleClose, handleSubmit }: AddStudentPropsType) => {
   );
 
   useEffect(() => {
+    const storedStudentInfo = getLocalStorage("studentInfo");
+    if (storedStudentInfo) {
+      setStudent(JSON.parse(storedStudentInfo));
+    }
+  }, []);
+  useEffect(() => {
     const isDisabled = !isNextButtonDisabled(activeStep, student);
     setIsDisabled(isDisabled);
   }, [student, activeStep]);
@@ -110,7 +116,6 @@ const AddStudent = ({ handleClose, handleSubmit }: AddStudentPropsType) => {
       const reader = new FileReader();
       reader.onload = () => {
         const base64String = reader.result as string;
-        console.log(base64String);
         setStudent((student) => {
           return {
             ...student,
@@ -159,6 +164,11 @@ const AddStudent = ({ handleClose, handleSubmit }: AddStudentPropsType) => {
   const handleBack = () =>
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
 
+  const handleSaveAndClose = () => {
+    localStorage.setItem("studentInfo", JSON.stringify(student));
+    handleClose();
+  };
+
   const actions = (
     <>
       <Button
@@ -192,7 +202,7 @@ const AddStudent = ({ handleClose, handleSubmit }: AddStudentPropsType) => {
     <DialogModal
       isOpen={true}
       title="Add Student"
-      handleClose={handleClose}
+      handleClose={handleSaveAndClose}
       dialogSize="md"
       actions={actions}
       className="h-[70vh] w-[800px]"
