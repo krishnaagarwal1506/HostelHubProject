@@ -12,7 +12,8 @@ export type SidebarValueType = {
   path: string;
 };
 
-export type UserDetialsType = {
+export type UserDetailsType = {
+  id: number;
   name: string;
   email: string;
   role: string;
@@ -41,9 +42,9 @@ export type NoticeDataType = {
 
 export type NoticeStateProps = {
   notice: NoticeDataType;
-  isNoticeModalOpen: boolean;
+  isModalOpen: boolean;
   isEditable: boolean;
-  addNewNotice: boolean;
+  add: boolean;
 };
 
 export type graphDataType =
@@ -92,4 +93,26 @@ export type StepperFormType = {
   ) => string;
   handleChange: (event: ChangeEvent<HTMLInputElement>) => void;
   handleClick: MouseEventHandler<HTMLDivElement>;
+};
+
+export type ComplaintStatusType = "pending" | "resolved" | "invalid";
+
+export type ComplaintType = {
+  id: number;
+  date: string;
+  type: string;
+  description: string;
+  status: "pending" | "resolved" | "invalid";
+};
+
+export type ComplaintStateType = {
+  complaint: ComplaintType;
+  isModalOpen: boolean;
+};
+
+export const MeathodType = {
+  GET: "GET",
+  POST: "POST",
+  PUT: "PUT",
+  DELETE: "DELETE",
 };
