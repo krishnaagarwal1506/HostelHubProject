@@ -9,10 +9,13 @@ import {
   Typography,
   useMediaQuery,
   Theme,
+  Dialog,
+  IconButton,
 } from "@mui/material";
-import DialogModal from "@components/DialogModal";
-import LoadingButton from "@components/LoadingButton";
+import { Close } from "@mui/icons-material";
+
 import AlertComponent from "@components/Alert";
+import LoadingButton from "@components/LoadingButton";
 import PersonalInfoForm from "./PersonalInfoForm";
 import GuardianInfoForm from "./GuardianInfoForm";
 import PasswordForm from "./PasswordForm";
@@ -29,7 +32,11 @@ import {
 } from "@src/utils/validation";
 import { AddStudentStateType } from "@ts/types";
 import { checkEmailExists, getLocalStorage } from "@utils/index";
-import { STEPPER_FORM_STEPS_NAME } from "@constant/index.ts";
+import {
+  STEPPER_FORM_STEPS_NAME,
+  STEPPER_FORM_STEPS_DESCRIPTION,
+} from "@constant/index.ts";
+import bgImage from "@assets/bg-sidebar-desktop.svg";
 
 type AddStudentPropsType = {
   handleClose: () => void;
@@ -169,83 +176,142 @@ const AddStudent = ({ handleClose, handleSubmit }: AddStudentPropsType) => {
     handleClose();
   };
 
-  const actions = (
-    <>
-      <Button
-        disabled={activeStep === 0}
-        onClick={handleBack}
-        variant="outlined"
-        size="large"
-      >
-        Back
-      </Button>
-      {activeStep === STEPPER_FORM_STEPS_NAME.length - 1 ? (
-        <LoadingButton
-          buttonText="Submit"
-          onSubmit={() => handleSubmit(student)}
-          disabled={isDisabled}
-        />
-      ) : (
-        <Button
-          onClick={handleNext}
-          disabled={isDisabled}
-          variant="contained"
-          size="large"
-        >
-          Next
-        </Button>
-      )}
-    </>
-  );
-
   return (
-    <DialogModal
-      isOpen={true}
+    <Dialog
+      open={true}
       title="Add Student"
-      handleClose={handleSaveAndClose}
-      dialogSize="md"
-      actions={actions}
-      className="h-[70vh] w-[800px]"
+      onClose={handleSaveAndClose}
+      maxWidth="lg"
+      PaperProps={{
+        className: "rounded-xl w-[50rem] h-screen md:h-[65vh] p-3 pr-1",
+      }}
     >
-      <Grid container spacing={1} className="h-full">
-        <Grid item xs={12} md={3}>
-          <Box className="h-full">
-            <Stepper
-              activeStep={activeStep}
-              orientation={isSmallScreen ? "horizontal" : "vertical"}
-              className="flex-row mb-2 md:mb-0 md:flex-col"
-            >
-              {STEPPER_FORM_STEPS_NAME.map((label) => {
-                return (
-                  <Step key={label}>
-                    <StepLabel
-                      sx={{
-                        "& .MuiStepLabel-label": {
-                          display: { xs: "none", sm: "block" },
-                        },
-                      }}
-                    >
-                      {label}
-                    </StepLabel>
-                  </Step>
-                );
-              })}
-            </Stepper>
-          </Box>
+      <Box className="h-full w-full">
+        <Grid
+          container
+          className="h-full w-[98%] !ml-0"
+          columnSpacing={{ xs: 0, md: 2 }}
+        >
+          <Grid
+            item
+            xs={12}
+            md={4}
+            sx={{
+              backgroundImage: `url(${bgImage})`,
+            }}
+            className="bg-cover bg-no-repeat bg-center rounded-xl h-16 md:h-full"
+          >
+            <Box className="h-full rounded-xl pt-4 pl-8">
+              <Stepper
+                activeStep={activeStep}
+                orientation={isSmallScreen ? "horizontal" : "vertical"}
+                className="flex-row mb-2 md:mb-0 md:flex-col bg-pur"
+                sx={{
+                  "& .MuiStepConnector-line": {
+                    xs: {
+                      marginLeft: "3px",
+                    },
+                    md: { minHeight: "2rem" },
+                    borderColor: ({
+                      palette: {
+                        primary: { main },
+                      },
+                    }) => main,
+                  },
+                  "& .MuiStepConnector-root.Mui-completed .MuiStepConnector-line, .MuiStepConnector-root.Mui-active .MuiStepConnector-line":
+                    {
+                      borderLeftWidth: 2,
+                      borderColor: "white",
+                    },
+                  "& .MuiStepIcon-root.Mui-completed": {
+                    fill: "white",
+                  },
+                }}
+              >
+                {STEPPER_FORM_STEPS_NAME.map((label, index) => {
+                  return (
+                    <Step key={label}>
+                      <StepLabel
+                        sx={{
+                          "& .MuiStepLabel-label": {
+                            display: { xs: "none", md: "block" },
+                          },
+                          "& .MuiStepIcon-root": {
+                            border: "1px solid white",
+                            borderRadius: "50%",
+                            width: "2rem",
+                            height: "2rem",
+                            fill: "white",
+                          },
+                          "& .MuiStepIcon-text": {
+                            fill: "black",
+                          },
+                        }}
+                      >
+                        <Typography className="text-sm text-white">{`Step ${
+                          index + 1
+                        }`}</Typography>
+                        <Typography className="text-white text-lg">
+                          {label}
+                        </Typography>
+                      </StepLabel>
+                    </Step>
+                  );
+                })}
+              </Stepper>
+            </Box>
+          </Grid>
+          <Grid item xs={12} md={8} className="flex flex-col md:h-full pt-4">
+            <Box className="flex justify-between">
+              <Box>
+                <Typography variant="h6" className="font-semibold">
+                  {STEPPER_FORM_STEPS_NAME[activeStep]}
+                </Typography>
+                <Typography className="text-gray-400 ">
+                  {STEPPER_FORM_STEPS_DESCRIPTION[activeStep]}
+                </Typography>
+              </Box>
+              <IconButton
+                onClick={handleSaveAndClose}
+                className="hidden md:block  bottom-6 left-4 hover:bg-inherit"
+              >
+                <Close className="hover:bg-slate-100 rounded-full  w-10 h-10 p-2 " />
+              </IconButton>
+            </Box>
+            <ActiveComponent
+              student={student}
+              validateError={validateError}
+              getHelperText={getHelperText}
+              handleChange={handleChange}
+              handleClick={handleClick}
+            />
+            <Box className="flex gap-x-6 justify-end ">
+              {activeStep !== 0 && (
+                <Button onClick={handleBack} variant="outlined" size="large">
+                  Back
+                </Button>
+              )}
+              {activeStep === STEPPER_FORM_STEPS_NAME.length - 1 ? (
+                <LoadingButton
+                  buttonText="Submit"
+                  onSubmit={() => handleSubmit(student)}
+                  disabled={isDisabled}
+                  size="large"
+                />
+              ) : (
+                <Button
+                  onClick={handleNext}
+                  disabled={isDisabled}
+                  variant="contained"
+                  size="large"
+                >
+                  Next
+                </Button>
+              )}
+            </Box>
+          </Grid>
         </Grid>
-        <Grid item xs={12} md={9} className="md:h-full">
-          <Typography variant="h6" className="font-semibold">
-            {STEPPER_FORM_STEPS_NAME[activeStep]}
-          </Typography>
-          <ActiveComponent
-            student={student}
-            validateError={validateError}
-            getHelperText={getHelperText}
-            handleChange={handleChange}
-            handleClick={handleClick}
-          />
-        </Grid>
-      </Grid>
+      </Box>
       {alert.isOpen && (
         <AlertComponent
           severity={alert.severity}
@@ -253,7 +319,7 @@ const AddStudent = ({ handleClose, handleSubmit }: AddStudentPropsType) => {
           handleClose={() => handleAlert(false)}
         />
       )}
-    </DialogModal>
+    </Dialog>
   );
 };
 

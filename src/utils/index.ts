@@ -1,14 +1,14 @@
-import axios from "axios";
-import { StudentInfoType } from "@ts/types";
 import { STUDENT_INFO_URL } from "@constant/index";
+import axiosInstance from "@utils/axiosInstance";
+
+const instance = axiosInstance();
 
 export const fetchData = async (url: string) => {
-  try {
-    const response = await axios.get(url);
-    return response.data;
-  } catch (error) {
-    throw new Error(`Error in retrieving data`);
+  const response = await instance.get(url);
+  if (response.status !== 200) {
+    throw new Error(`HTTP error! status: ${response.status}`);
   }
+  return response.data;
 };
 
 export async function sendData<Type>(
@@ -20,7 +20,7 @@ export async function sendData<Type>(
     data: content,
   };
   try {
-    await axios({
+    await instance({
       url,
       method,
       headers: {
@@ -36,41 +36,37 @@ export async function sendData<Type>(
 
 export const deleteData = async (url: string): Promise<boolean> => {
   try {
-    await axios.delete(url);
+    await instance.delete(url);
     return true;
   } catch (error) {
     throw new Error(`Error in deleting data`);
   }
 };
-//eslint-disable-next-line
-export const extractArrayFromApiData = (data: any) => {
-  //eslint-disable-next-line
-  return data.map(({ id, attributes }: any) => {
+export function extractArrayFromApiData<Type>(
+  data: {
+    id: number;
+    attributes: Type;
+  }[]
+) {
+  return data.map(({ id, attributes }: { id: number; attributes: Type }) => {
     return {
       id,
       ...attributes,
     };
   });
-};
+}
 
 export const checkEmailExists = async (
   email: string,
   id?: number
 ): Promise<boolean> => {
   try {
-    const response = await fetchData(STUDENT_INFO_URL);
-    const data = extractArrayFromApiData(response.data);
-    if (id) {
-      const emailExists = data.some(
-        (student: StudentInfoType) =>
-          student.email === email && student.id !== id
-      );
-      return emailExists;
-    }
-    const emailExists = data.some(
-      (student: StudentInfoType) => student.email === email
-    );
-    return emailExists;
+    const url = `${STUDENT_INFO_URL}?filters[email][$eq]=${email}`;
+    const response = await fetchData(url);
+    const data = response.data;
+    if (data.length === 0 || (data.length === 1 && data[0].id === id))
+      return false;
+    return true;
   } catch (error) {
     throw error as string;
   }
@@ -143,4 +139,7 @@ export const getLocalStorage = (key: string) => {
 };
 export const deleteLocalStorage = (key: string) => {
   localStorage.removeItem(key);
+};
+export const setLocalStorage = (key: string, value: string) => {
+  localStorage.setItem(key, value);
 };

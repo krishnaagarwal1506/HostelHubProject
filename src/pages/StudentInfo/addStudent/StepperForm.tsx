@@ -17,17 +17,17 @@ type StepperFormType = {
 
 const StepperForm = ({ formFields, handleChange }: StepperFormType) => {
   return (
-    <Box className="flex flex-col mt-3 justify-between">
+    <Box className="flex flex-col md:gap-y-6 mt-3 flex-1">
       {formFields.map(
         ({ name, label, type, value, error, helperText, endAdorment }) => (
           <Box className="h-24 w-full" key={name}>
-            <Typography className="pb-1">
+            <Typography className="pb-2">
               {label}
               <span className="text-red-500">*</span>
             </Typography>
             <TextField
               inputProps={{
-                className: "py-[10px] px-[14px]",
+                className: "py-[0.85rem] px-[0.85rem]",
               }}
               FormHelperTextProps={{
                 className: "mx-1",
