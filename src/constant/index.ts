@@ -13,6 +13,9 @@ import {
 
 import { SidebarValueType, AdminDashboardDetailsTypes } from "@ts/types";
 
+export const ADMIN = "admin" as const;
+export const STUDENT = "student" as const;
+
 export const ADMIN_SIDEBAR: SidebarValueType[] = [
   {
     field: "Dashboard",
@@ -63,11 +66,11 @@ export const STUDENT_SIDEBAR: SidebarValueType[] = [
   {
     field: "Canteen Menu",
     icon: RestaurantMenuIcon,
-    path: "conteenMenu",
+    path: "canteenMenu",
   },
 ];
 
-export const SETTINGS: string[] = ["Profile", "Logout"];
+export const SETTINGS: string[] = ["Logout"]; //removed Profile from Settings
 
 export const METHOD = {
   GET: "GET" as const,
@@ -229,4 +232,11 @@ export const STEPPER_FORM_STEPS_NAME = [
   "Guardian Info",
   "Password",
   "Goverment Id.",
+];
+
+export const STEPPER_FORM_STEPS_DESCRIPTION = [
+  "Please provide Personal Information",
+  "Please provide Guardian Info.",
+  "Please provide password",
+  "Enter your goverment id details",
 ];

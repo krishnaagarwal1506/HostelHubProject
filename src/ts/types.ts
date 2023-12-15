@@ -13,6 +13,7 @@ export type SidebarValueType = {
 };
 
 export type UserDetailsType = {
+  id: number;
   name: string;
   email: string;
   role: string;
@@ -107,4 +108,11 @@ export type ComplaintType = {
 export type ComplaintStateType = {
   complaint: ComplaintType;
   isModalOpen: boolean;
+};
+
+export const MeathodType = {
+  GET: "GET",
+  POST: "POST",
+  PUT: "PUT",
+  DELETE: "DELETE",
 };

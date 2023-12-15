@@ -40,7 +40,7 @@ const LoadingButton = ({
       disabled={loading || disabled}
       onClick={handleClick}
       size={size}
-      startIcon={loading && <CircularProgress size={16} />}
+      endIcon={loading && <CircularProgress size={16} />}
     >
       {buttonText}
     </Button>

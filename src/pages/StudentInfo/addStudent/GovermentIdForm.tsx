@@ -12,11 +12,11 @@ const GovermentIdForm = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { govId, govIdImage } = student;
   const initalImage = govIdImage ? govIdImage : "";
-  const [selectedImage, setSelectedImage] = useState(initalImage);
+  const [selectedImage, setSelectedImage] = useState<string>(initalImage);
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) setSelectedImage(URL.createObjectURL(file));
+    file ? setSelectedImage(URL.createObjectURL(file)) : setSelectedImage("");
     handleChange(event);
   };
 
@@ -28,7 +28,7 @@ const GovermentIdForm = ({
   };
 
   return (
-    <Box className="flex flex-col mt-3 justify-between">
+    <Box className="flex flex-col mt-3 gap-y-8 flex-1">
       <Grid container className="justify-evenly">
         {ID_TYPE.map((innerText: string) => {
           const seletedClass =
@@ -40,7 +40,7 @@ const GovermentIdForm = ({
               key={innerText}
               item
               xs={3}
-              className={` h-12 cursor-pointer rounded-xl border-2 ${seletedClass}`}
+              className={`h-12 cursor-pointer rounded-xl border-2 ${seletedClass}`}
               onClick={handleCardClick}
             >
               <Box className="w-full h-full m-auto text-center flex justify-center items-center">
@@ -62,10 +62,10 @@ const GovermentIdForm = ({
         onChange={handleImageChange}
         required
       />
-      <Box className="h-72 mt-4 w-full flex justify-center items-center rounded-xl border-2 border-dashed border-primary-main">
+      <Box className="h-64 mt-4 w-full flex justify-center items-center rounded-xl border-2 border-dashed border-primary-main">
         <img
-          className={"w-auto h-64 m-auto rounded-xl"}
-          src={selectedImage ? selectedImage : noImageUploaded}
+          className={"w-auto h-56 m-auto rounded-xl"}
+          src={selectedImage || noImageUploaded}
           alt="gov-id-img"
         />
       </Box>
