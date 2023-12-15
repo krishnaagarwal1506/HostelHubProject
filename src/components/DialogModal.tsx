@@ -20,6 +20,10 @@ type ReusableDialogProps = {
   children: ReactNode;
   actions?: ReactNode;
   TitleIcon?: FC<SvgIconProps>;
+  className?: string;
+  dialogTitleClassName?: string;
+  dialogActionClassName?: string;
+  iconButtonClasses?: string;
 };
 
 const DialogModal = ({
@@ -31,14 +35,26 @@ const DialogModal = ({
   children,
   actions,
   TitleIcon,
+  className = "",
+  dialogTitleClassName = "",
+  dialogActionClassName = "",
+  iconButtonClasses = "",
 }: ReusableDialogProps) => {
   return (
-    <Dialog fullWidth maxWidth={dialogSize} open={isOpen} onClose={handleClose}>
-      <DialogTitle className="padding-b-0 ">
+    <Dialog
+      fullWidth
+      maxWidth={dialogSize}
+      open={isOpen}
+      onClose={handleClose}
+      PaperProps={{
+        className: `rounded-xl ${className}`,
+      }}
+    >
+      <DialogTitle className={`padding-b-0 ${dialogTitleClassName}`}>
         <Box className="flex-row justiy-content-sp align-items-center">
           <Box className="flex-row align-items-center flex-gap-1">
-            {TitleIcon && <TitleIcon color="primary" />}
-            <Typography className="color-primary" variant="h5">
+            {TitleIcon && <TitleIcon fontSize="large" color="primary" />}
+            <Typography className="inherit" variant="h5">
               {title}
             </Typography>
             {subtitle && (
@@ -47,20 +63,14 @@ const DialogModal = ({
               </Typography>
             )}
           </Box>
-          <IconButton onClick={handleClose}>
+          <IconButton className={iconButtonClasses} onClick={handleClose}>
             <CloseIcon />
           </IconButton>
         </Box>
       </DialogTitle>
       <DialogContent>{children}</DialogContent>
       {actions && (
-        <DialogActions
-          sx={{
-            paddingRight: 3,
-            paddingBottom: 2.5,
-            gap: 1,
-          }}
-        >
+        <DialogActions className={`pb-5 pr-6 gap-2 ${dialogActionClassName}`}>
           {actions}
         </DialogActions>
       )}

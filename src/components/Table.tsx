@@ -46,8 +46,7 @@ const TableComponent = ({
           outline: "none !important",
         },
       }}
-      onRowClick={(params, event) => {
-        const { row } = params;
+      onRowClick={({ row }, event) => {
         onRowClick!(event, row);
       }}
       loading={isLoading}

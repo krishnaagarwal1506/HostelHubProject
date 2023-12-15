@@ -4,6 +4,7 @@ import { DialogContent, Button, TextField, Typography } from "@mui/material";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 
 import DialogModal from "@components/DialogModal";
+import LoadingButton from "@src/components/LoadingButton";
 import { NoticeStateProps, NoticeDataType } from "@ts/types";
 
 type NoticePropsTypes = {
@@ -12,9 +13,9 @@ type NoticePropsTypes = {
   handleClose: () => void;
   handleChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
 };
-function getHeading(isEditable: boolean, addNewNotice: boolean): string {
+function getHeading(isEditable: boolean, add: boolean): string {
   if (isEditable) return "Edit Notice";
-  if (addNewNotice) return "Add New Notice";
+  if (add) return "Add New Notice";
   return "Notice";
 }
 
@@ -24,40 +25,37 @@ const NoticeModal = ({
   handleClose,
   handleChange,
 }: NoticePropsTypes) => {
-  const { isNoticeModalOpen, isEditable, addNewNotice } = selectedNotice;
+  const { isModalOpen, isEditable, add } = selectedNotice;
   const { title, content, date } = selectedNotice.notice;
-  const heading: string = getHeading(isEditable, addNewNotice);
-  const isReadOnly: boolean = !isEditable && !addNewNotice;
+  const heading: string = getHeading(isEditable, add);
+  const isReadOnly: boolean = !isEditable && !add;
   const textfieldSxValues = {
     "& .MuiOutlinedInput-root": { padding: isReadOnly ? 0 : "default" },
     "& fieldset": { border: isReadOnly ? "none" : "default" },
   };
-  const contentMinHeight: string = isReadOnly
-    ? "min-height-200"
-    : "min-height-200";
+  const minHeight = isReadOnly ? "min-h-[100px]" : "min-h-[200px]";
 
-  const actions = (isEditable || addNewNotice) && (
+  const actions = (
     <>
       <Button variant="outlined" size="large" onClick={handleClose}>
         Cancel
       </Button>
-      <Button
-        variant="contained"
-        size="large"
-        onClick={() => handleSubmit(selectedNotice.notice)}
-      >
-        Save
-      </Button>
+      {(isEditable || add) && (
+        <LoadingButton
+          buttonText="Save"
+          onSubmit={() => handleSubmit(selectedNotice.notice)}
+          disabled={!title || !content}
+        />
+      )}
     </>
   );
 
   return (
     <DialogModal
       dialogSize="sm"
-      isOpen={isNoticeModalOpen}
+      isOpen={isModalOpen}
       title={heading}
       TitleIcon={AssignmentIcon}
-      subtitle={isReadOnly && date}
       handleClose={handleClose}
       actions={actions}
     >
@@ -84,6 +82,9 @@ const NoticeModal = ({
             },
           }}
         />
+        {isReadOnly && (
+          <Typography className="text-gray-500 text-xs">{date}</Typography>
+        )}
         {!isReadOnly && (
           <Typography variant="h6" className="padding-t-2">
             Notice Content
@@ -99,7 +100,7 @@ const NoticeModal = ({
           required
           inputProps={{
             readOnly: isReadOnly,
-            className: contentMinHeight,
+            className: minHeight,
           }}
           autoFocus={!isReadOnly}
           placeholder="Add Content"

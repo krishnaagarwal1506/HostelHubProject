@@ -13,8 +13,7 @@ type DashboardPropsTypes = {
 
 const DashboardDetail = ({ dashboardData, detail }: DashboardPropsTypes) => {
   const naviate = useNavigate();
-  const { label, field, icon, color, path } = detail;
-  const IconComponent = icon;
+  const { label, field, icon: IconComponent, color, path } = detail;
 
   return (
     <Paper

@@ -7,11 +7,14 @@ import {
   AssignmentIndRounded as AssignmentIndRoundedIcon,
   PendingActions,
   DoneAll,
-  Dangerous,
+  Error,
   ViewList,
 } from "@mui/icons-material";
 
 import { SidebarValueType, AdminDashboardDetailsTypes } from "@ts/types";
+
+export const ADMIN = "admin" as const;
+export const STUDENT = "student" as const;
 
 export const ADMIN_SIDEBAR: SidebarValueType[] = [
   {
@@ -63,11 +66,11 @@ export const STUDENT_SIDEBAR: SidebarValueType[] = [
   {
     field: "Canteen Menu",
     icon: RestaurantMenuIcon,
-    path: "conteenMenu",
+    path: "canteenMenu",
   },
 ];
 
-export const SETTINGS: string[] = ["Profile", "Logout"];
+export const SETTINGS: string[] = ["Logout"]; //removed Profile from Settings
 
 export const METHOD = {
   GET: "GET" as const,
@@ -75,6 +78,9 @@ export const METHOD = {
   PUT: "PUT" as const,
   DELETE: "DELETE" as const,
 };
+
+export const SUCCESS = "success" as const;
+export const ERROR = "error" as const;
 
 export const DASHBOARD_ENDPOINT: string = "dashboard";
 
@@ -95,7 +101,7 @@ export const STAFF_LIST_URL = BASE_URL + "/api/staff-lists";
 
 export const COMPLAINTS_STATS_URL = BASE_URL + "/api/complaint-stats";
 
-export const STUDENT_INFO_URL = "http://localhost:3001/studentInfo";
+export const STUDENT_INFO_URL = BASE_URL + "/api/students";
 
 export const COMPLAINTS_URL = "http://localhost:3001/complaints";
 
@@ -215,7 +221,7 @@ export const COMPLAINT_STATUS = [
   },
   {
     status: "invalid",
-    icon: Dangerous,
+    icon: Error,
   },
 ];
 
@@ -226,4 +232,11 @@ export const STEPPER_FORM_STEPS_NAME = [
   "Guardian Info",
   "Password",
   "Goverment Id.",
+];
+
+export const STEPPER_FORM_STEPS_DESCRIPTION = [
+  "Please provide Personal Information",
+  "Please provide Guardian Info.",
+  "Please provide password",
+  "Enter your goverment id details",
 ];
