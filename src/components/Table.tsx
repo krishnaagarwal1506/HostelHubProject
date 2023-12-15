@@ -4,12 +4,12 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 type TablePropsTypes = {
   columns: GridColDef[];
   rows: {
-    [key: string]: string | number;
+    [key: string]: string | number | null;
   }[];
   tableClassName?: string;
   stickyHeader?: boolean;
   pagination?: boolean;
-  getData: (pagination: boolean, page?: number) => void;
+  getData: (pagination: boolean, page?: number, searchText?: string) => void;
   isLoading: boolean;
   rowCount?: number;
   paginationModel?: {
@@ -21,6 +21,7 @@ type TablePropsTypes = {
     pageSize: number;
   }) => void;
   onRowClick?: (event: MouseEvent<Element>, row: unknown) => void;
+  searchText?: string;
 };
 
 const TableComponent = ({
@@ -34,9 +35,10 @@ const TableComponent = ({
   paginationModel,
   setPaginationModel,
   onRowClick,
+  searchText = "",
 }: TablePropsTypes) => {
   useEffect(() => {
-    getData(pagination, paginationModel!.page);
+    getData(pagination, paginationModel!.page, searchText);
   }, [paginationModel!.page]);
 
   return (

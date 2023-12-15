@@ -1,34 +1,28 @@
 import { useState, ChangeEvent, MouseEvent, useEffect } from "react";
 import {
-  Paper,
   IconButton,
   Box,
   Typography,
   DialogContent,
   Button,
-  InputBase,
 } from "@mui/material";
-
 import {
   GridColDef,
   GridColumnHeaderParams,
   GridAlignment,
 } from "@mui/x-data-grid";
-import {
-  EditOutlined,
-  DeleteOutlineOutlined,
-  Search,
-  Add,
-} from "@mui/icons-material";
+import { EditOutlined, DeleteOutlineOutlined, Add } from "@mui/icons-material";
 
-import TableComponent from "@src/components/Table";
+import TableComponent from "@components/Table";
 import AlertComponent from "@components/Alert";
 import ConfirmationModal from "@components/ConfirmationModal";
+import SearchBar from "@components/SearchBar";
 import StudentProfile from "./StudentProfile";
 import AddStudent from "./addStudent";
 
 import useDialog from "@src/hooks/useDialog";
 import useAlert from "@src/hooks/useAlert";
+import { sendData, deleteData, catchErrorMessage } from "@utils/index";
 import { checkEmailExists } from "@utils/index";
 import { STUDENT_INFO_URL } from "@src/constant";
 import {
@@ -51,20 +45,14 @@ const handleDelete = async (
     if (!id) {
       throw new Error("Student do not exist");
     }
-    const deleteResponse = await fetch(`${STUDENT_INFO_URL}/${id}`, {
-      method: "DELETE",
-    });
-    if (!deleteResponse.ok) {
-      throw new Error(`Server error: ${deleteResponse.statusText}`);
-    } else {
-      handleAlert(true, "Student data deleted", "success");
-    }
+    const isDataDeleted = await deleteData(`${STUDENT_INFO_URL}/${id}`);
+    const message = isDataDeleted
+      ? "Student data deleted"
+      : "Error, data not deleted";
+    const severity = isDataDeleted ? "success" : "error";
+    handleAlert(true, message, severity);
   } catch (error) {
-    if (error instanceof Error) {
-      handleAlert(true, error.message, "error");
-    } else {
-      handleAlert(true, "An error occurred", "error");
-    }
+    handleAlert(true, catchErrorMessage(error), "error");
   }
 };
 
@@ -79,24 +67,14 @@ const saveStudentData = async (
   const { id } = studentInfo;
   const url = `${STUDENT_INFO_URL}/${id}`;
   try {
-    const putData = await fetch(url, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(studentInfo),
-    });
-    if (putData.ok) {
-      handleAlert(true, "Data saved Successfully", "success");
-    } else {
-      throw new Error("Not updated");
-    }
+    const isDataUpdated = await sendData(url, "PUT", studentInfo);
+    const message = isDataUpdated
+      ? "Data updated successfully"
+      : "Data not updated";
+    const severity = isDataUpdated ? "success" : "error";
+    handleAlert(true, message, severity);
   } catch (error) {
-    if (error instanceof Error) {
-      handleAlert(true, error.message, "error");
-    } else {
-      handleAlert(true, "An error occurred", "error");
-    }
+    handleAlert(true, catchErrorMessage(error), "error");
   }
 };
 
@@ -109,24 +87,12 @@ const addStudentData = async (
   ) => void
 ) => {
   try {
-    const postData = await fetch(STUDENT_INFO_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(studentData),
-    });
-    if (postData.ok) {
-      handleAlert(true, "Data saved Successfully", "success");
-    } else {
-      throw new Error("Not updated");
-    }
+    const isDataSent = await sendData(STUDENT_INFO_URL, "POST", studentData);
+    const message = isDataSent ? "Data saved successfully" : "Data not saved";
+    const severity = isDataSent ? "success" : "error";
+    handleAlert(true, message, severity);
   } catch (error) {
-    if (error instanceof Error) {
-      handleAlert(true, error.message, "error");
-    } else {
-      handleAlert(true, "An error occurred", "error");
-    }
+    handleAlert(true, catchErrorMessage(error), "error");
   }
 };
 
@@ -345,20 +311,11 @@ const StudentInfo = () => {
   return (
     <>
       <Box className="flex w-[96%] shrink flex-wrap mx-auto justify-between gap-y-3 ">
-        <Paper
-          className="px-[2px] py-[4px] flex w-full md:w-[40%] lg:w-1/4 rounded-3xl"
-          component="form"
-        >
-          <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
-            <Search />
-          </IconButton>
-          <InputBase
-            sx={{ ml: 1, flex: 1 }}
-            placeholder="Search Student Name"
-            value={searchText}
-            onChange={handleSeachTextChange}
-          />
-        </Paper>
+        <SearchBar
+          value={searchText}
+          onChange={handleSeachTextChange}
+          className="px-[2px] py-[4px] flex w-full md:w-[40%] lg:w-1/4 rounded-3xl bg-primary-main bg-opacity-10 focus-within:ring-2 focus-within:ring-primary-main"
+        />
         <Button
           size="large"
           className="w-[6rem]"
