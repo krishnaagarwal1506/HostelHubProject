@@ -6,7 +6,7 @@ import Loader from "@components/Loader";
 import AlertComponent from "@components/Alert";
 import useAlert from "@src/hooks/useAlert";
 import { setLocalStorage } from "@utils/index";
-import { BASE_URL } from "@src/constant";
+import { GOOGLE_LOGIN_CALLBACK } from "@src/constant";
 
 type PrivateRouteProps = {
   allowedRoles: string[];
@@ -28,9 +28,7 @@ const PrivateRoute = ({ allowedRoles }: PrivateRouteProps) => {
       try {
         const {
           data: { jwt },
-        } = await axios.get(
-          BASE_URL + `/api/auth/google/callback?id_token=${accessToken}`
-        );
+        } = await axios.get(GOOGLE_LOGIN_CALLBACK + `?id_token=${accessToken}`);
         if (jwt) {
           setLocalStorage("jwtToken", jwt);
           await getUser();
@@ -41,7 +39,7 @@ const PrivateRoute = ({ allowedRoles }: PrivateRouteProps) => {
         }
         setLoading(false);
       } catch (error) {
-        handleLogout();
+        handleLogout(false);
         handleAlert(true, "Login Failed", "error");
         setLoading(false);
       }
