@@ -13,7 +13,7 @@ import ChipComponent from "@components/Clip";
 import LoadingButton from "@components/LoadingButton";
 import { ComplaintStateType } from "@ts/types";
 import { getStatusColor } from "@utils/index";
-import { STATUS_ICONS } from "@constant/index";
+import { STATUS_ICONS, COMPLAINT_TYPES_OPTIONS } from "@constant/index";
 import { ChangeEvent } from "react";
 
 type ComplaintModalPropsType = {
@@ -23,18 +23,6 @@ type ComplaintModalPropsType = {
   handleAutoCompleteChange: (type: string | null) => void;
   handleAdd: () => void;
 };
-
-const complaintTypeOptions = [
-  "Facilities and Services",
-  "Internet and Connectivity",
-  "Safety and Security",
-  "Maintenance and Repairs",
-  "Cleanliness and Hygiene",
-  "Room Related",
-  "Food related",
-  "Hostel Staff",
-  "Others",
-];
 
 const ComplaintModal = ({
   complaintState,
@@ -81,7 +69,7 @@ const ComplaintModal = ({
             <Autocomplete
               className="width-100"
               id="complaint-type"
-              options={complaintTypeOptions.map((option) => option)}
+              options={COMPLAINT_TYPES_OPTIONS.map((option) => option)}
               renderInput={(params) => (
                 <TextField {...params} label="Add Type" />
               )}
