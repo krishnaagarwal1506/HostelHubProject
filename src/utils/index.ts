@@ -1,5 +1,26 @@
-import { STUDENT_INFO_URL } from "@constant/index";
+import {
+  STUDENT_INFO_URL,
+  PENDING,
+  RESOLVED,
+  INVALID,
+  FILLED,
+  ABSENT,
+  EMPTY,
+  PRESENT,
+  NOT_AVAILABLE,
+  PARTIAL_FILLED,
+} from "@constant/index";
 import axiosInstance from "@utils/axiosInstance";
+
+interface AxiosError extends Error {
+  response: {
+    data: {
+      error: {
+        message: string;
+      };
+    };
+  };
+}
 
 const instance = axiosInstance();
 
@@ -14,21 +35,23 @@ export const fetchData = async (url: string) => {
 export async function sendData<Type>(
   url: string,
   method: "POST" | "PUT",
-  content: Type
-): Promise<boolean> {
+  content: Type,
+  wrapper: boolean = true
+  //eslint-disable-next-line
+): Promise<any> {
   const apiData = {
     data: content,
   };
   try {
-    await instance({
+    const response = await instance({
       url,
       method,
       headers: {
         "Content-Type": "application/json",
       },
-      data: apiData,
+      data: wrapper ? apiData : content,
     });
-    return true;
+    return response;
   } catch (error) {
     throw new Error(`Error in sending data`);
   }
@@ -73,43 +96,45 @@ export const checkEmailExists = async (
 };
 
 export const catchErrorMessage = (error: unknown) => {
-  return error instanceof Error ? error.message : "An error occurred";
+  return (
+    (error as AxiosError).response?.data.error.message || "An error occurred"
+  );
 };
 
 export const getStatusColor = (status: string, isActive: boolean = true) => {
   const opacityClass = " bg-opacity-25 border-opacity-25";
   status = status.toLowerCase();
   switch (status) {
-    case "pending":
-    case "filled":
-    case "absent":
+    case PENDING:
+    case FILLED:
+    case ABSENT:
       return {
         boxClass: `border-error-light ${
           isActive ? `bg-error-light ${opacityClass}` : "bg-white"
         }`,
         textColor: "text-error-dark",
       };
-    case "resolved":
-    case "empty":
-    case "present":
+    case RESOLVED:
+    case EMPTY:
+    case PRESENT:
       return {
         boxClass: `border-success-light ${
           isActive ? `bg-success-light ${opacityClass}` : "bg-white"
         }`,
         textColor: "text-success-dark",
       };
-    case "invalid":
-    case "notAvalible":
+    case INVALID:
+    case NOT_AVAILABLE:
       return {
         boxClass: `border-gray-500 ${
           isActive ? `bg-gray-500 ${opacityClass}` : "bg-white"
         }`,
         textColor: "text-gray-600",
       };
-    case "partialFilled":
+    case PARTIAL_FILLED:
       return {
-        boxClass: `border-warning-light ${
-          isActive ? `bg-warning-light ${opacityClass}` : "bg-white"
+        boxClass: `border-warning-main ${
+          isActive ? `bg-warning-main ${opacityClass}` : "bg-white"
         }`,
         textColor: "text-warning-dark",
       };
@@ -142,4 +167,12 @@ export const deleteLocalStorage = (key: string) => {
 };
 export const setLocalStorage = (key: string, value: string) => {
   localStorage.setItem(key, value);
+};
+
+export const todayDate = () => {
+  return new Date().toISOString().split("T")[0];
+};
+
+export const capitalize = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 };
