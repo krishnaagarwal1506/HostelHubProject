@@ -41,6 +41,7 @@ import {
   SUCCESS,
   ERROR,
   STRAPI_USER_URL,
+  DELETE,
 } from "@src/constant";
 import {
   StudentInfoType,
@@ -457,8 +458,8 @@ const StudentInfo = () => {
           handleClose={() => handleDialogClick(false)}
           handleSubmit={handleDialogSubmit}
           title="Are You Sure ?"
-          buttontext="delete"
-          buttonType="delete"
+          buttontext={DELETE}
+          buttonType={DELETE}
         >
           <DialogContent className="padding-0">
             <span className="font-semibold">
