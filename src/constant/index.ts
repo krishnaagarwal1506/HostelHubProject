@@ -15,6 +15,16 @@ import { SidebarValueType, AdminDashboardDetailsTypes } from "@ts/types";
 
 export const ADMIN = "admin" as const;
 export const STUDENT = "student" as const;
+export const PENDING = "pending" as const;
+export const RESOLVED = "resolved" as const;
+export const INVALID = "invalid" as const;
+export const ALL = "all" as const;
+export const ABSENT = "absent" as const;
+export const PRESENT = "present" as const;
+export const EMPTY = "empty" as const;
+export const FILLED = "filled" as const;
+export const PARTIAL_FILLED = "partialfilled" as const;
+export const NOT_AVAILABLE = "notavailable" as const;
 
 export const ADMIN_SIDEBAR: SidebarValueType[] = [
   {
@@ -37,19 +47,24 @@ export const ADMIN_SIDEBAR: SidebarValueType[] = [
     icon: RestaurantMenuIcon,
     path: "canteenMenu",
   },
-  {
-    field: "Rooms",
-    icon: BedroomParentIcon,
-    path: "rooms",
-  },
+  // {
+  //   field: "Rooms",
+  //   icon: BedroomParentIcon,
+  //   path: "rooms",
+  // },
 ];
 
-export const NAVBAR_TITLE: { [key: string]: string } = {
+export const NAVBAR_TITLE_ADMIN: { [key: string]: string } = {
   dashboard: "Dashboard",
   students: "Student Info.",
   complaints: "Complaints",
   canteenMenu: "Canteen Menu",
   rooms: "Rooms",
+};
+export const NAVBAR_TITLE_STUDENT: { [key: string]: string } = {
+  dashboard: "My Dashboard",
+  complaints: "My Complaints",
+  canteenMenu: "Canteen Menu",
 };
 
 export const STUDENT_SIDEBAR: SidebarValueType[] = [
@@ -86,8 +101,7 @@ export const DASHBOARD_ENDPOINT: string = "dashboard";
 
 export const BASE_URL: string = "http://localhost:1337";
 
-export const USER_DATA_URL: string =
-  "https://api.npoint.io/de4471c76c2129b205d7";
+export const USER_DATA_URL: string = "/api/users/me";
 
 export const ADMIN_DASHBOARD_DETAIL_URL: string =
   BASE_URL + "/api/dashboard-detail";
@@ -103,7 +117,11 @@ export const COMPLAINTS_STATS_URL = BASE_URL + "/api/complaint-stats";
 
 export const STUDENT_INFO_URL = BASE_URL + "/api/students";
 
-export const COMPLAINTS_URL = "http://localhost:3001/complaints";
+export const COMPLAINTS_URL = BASE_URL + "/api/complaints";
+
+export const STRAPI_USER_URL = BASE_URL + "/api/users";
+
+export const GOOGLE_LOGIN_CALLBACK = BASE_URL + "/api/auth/google/callback";
 
 export const ADMIN_DASHBOARD_DETAIL: AdminDashboardDetailsTypes[] = [
   {
@@ -126,7 +144,7 @@ export const ADMIN_DASHBOARD_DETAIL: AdminDashboardDetailsTypes[] = [
     icon: BedroomParentIcon,
     field: "numberOfRooms",
     color: "bg-success-light",
-    path: "rooms",
+    path: "",
   },
   {
     label: "Staff",
@@ -204,23 +222,26 @@ export const READ_ONLY_SX_VALUES = {
       borderColor: "inherit",
     },
   },
+  "& .MuiFormLabel-root.Mui-focused": {
+    color: "rgba(0, 0, 0, 0.6)",
+  },
 };
 
 export const COMPLAINT_STATUS = [
   {
-    status: "all",
+    status: ALL,
     icon: ViewList,
   },
   {
-    status: "pending",
+    status: PENDING,
     icon: PendingActions,
   },
   {
-    status: "resolved",
+    status: RESOLVED,
     icon: DoneAll,
   },
   {
-    status: "invalid",
+    status: INVALID,
     icon: Error,
   },
 ];
@@ -239,4 +260,22 @@ export const STEPPER_FORM_STEPS_DESCRIPTION = [
   "Please provide Guardian Info.",
   "Please provide password",
   "Enter your goverment id details",
+];
+
+export const STATUS_ICONS = {
+  pending: PendingActions,
+  resolved: DoneAll,
+  invalid: Error,
+};
+
+export const COMPLAINT_TYPES_OPTIONS = [
+  "Facilities and Services",
+  "Internet and Connectivity",
+  "Safety and Security",
+  "Maintenance and Repairs",
+  "Cleanliness and Hygiene",
+  "Room Related",
+  "Food related",
+  "Hostel Staff",
+  "Others",
 ];

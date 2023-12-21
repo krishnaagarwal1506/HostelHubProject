@@ -16,7 +16,9 @@ const GovermentIdForm = ({
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    file ? setSelectedImage(URL.createObjectURL(file)) : setSelectedImage("");
+    file
+      ? setSelectedImage(URL.createObjectURL(file))
+      : setSelectedImage(noImageUploaded);
     handleChange(event);
   };
 
@@ -62,9 +64,9 @@ const GovermentIdForm = ({
         onChange={handleImageChange}
         required
       />
-      <Box className="h-64 mt-4 w-full flex justify-center items-center rounded-xl border-2 border-dashed border-primary-main">
+      <Box className="h-44 md:h-64 mt-4 w-full mb-4 md:mb:0 flex justify-center items-center rounded-xl border-2 border-dashed border-primary-main">
         <img
-          className={"w-auto h-56 m-auto rounded-xl"}
+          className={"w-auto h-36 md:h-56  m-auto rounded-xl"}
           src={selectedImage || noImageUploaded}
           alt="gov-id-img"
         />
