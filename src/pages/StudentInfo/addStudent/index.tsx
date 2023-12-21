@@ -12,14 +12,14 @@ import {
   Dialog,
   IconButton,
 } from "@mui/material";
-import { Close } from "@mui/icons-material";
+import { Close, ArrowBack, ArrowForward } from "@mui/icons-material";
 
-import AlertComponent from "@components/Alert";
-import LoadingButton from "@components/LoadingButton";
 import PersonalInfoForm from "./PersonalInfoForm";
 import GuardianInfoForm from "./GuardianInfoForm";
 import PasswordForm from "./PasswordForm";
 import GovermentIdForm from "./GovermentIdForm";
+import AlertComponent from "@components/Alert";
+import LoadingButton from "@src/components/LoadingButton";
 
 import useAlert from "@src/hooks/useAlert";
 import {
@@ -31,10 +31,15 @@ import {
   validateError,
 } from "@src/utils/validation";
 import { AddStudentStateType } from "@ts/types";
-import { checkEmailExists, getLocalStorage } from "@utils/index";
+import {
+  checkEmailExists,
+  getLocalStorage,
+  setLocalStorage,
+} from "@utils/index";
 import {
   STEPPER_FORM_STEPS_NAME,
   STEPPER_FORM_STEPS_DESCRIPTION,
+  ERROR,
 } from "@constant/index.ts";
 import bgImage from "@assets/bg-sidebar-desktop.svg";
 
@@ -65,7 +70,7 @@ const isNextButtonDisabled = (
       return (
         validateText(student.guardianName) &&
         validatePhone(student.guardianPhoneNumber) &&
-        student.address !== ""
+        student.address.trim() !== ""
       );
     case 2:
       return (
@@ -119,18 +124,27 @@ const AddStudent = ({ handleClose, handleSubmit }: AddStudentPropsType) => {
     target: { name, value, files, type },
   }: ChangeEvent<HTMLInputElement>) => {
     if (type === "file" && files) {
-      const file = files![0];
-      const reader = new FileReader();
-      reader.onload = () => {
-        const base64String = reader.result as string;
+      const file = files[0] || null;
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const base64String = reader.result as string;
+          setStudent((student) => {
+            return {
+              ...student,
+              govIdImage: base64String,
+            };
+          });
+        };
+        reader.readAsDataURL(file);
+      } else {
         setStudent((student) => {
           return {
             ...student,
-            govIdImage: base64String,
+            govIdImage: "",
           };
         });
-      };
-      reader.readAsDataURL(file);
+      }
     } else {
       setStudent((student) => {
         return {
@@ -157,11 +171,11 @@ const AddStudent = ({ handleClose, handleSubmit }: AddStudentPropsType) => {
       try {
         const emailExists = await checkEmailExists(email);
         if (emailExists) {
-          handleAlert(true, "Email already exists", "error");
+          handleAlert(true, "Email already exists", ERROR);
           return;
         }
       } catch (err) {
-        handleAlert(true, "Something went wrong", "error");
+        handleAlert(true, "Something went wrong", ERROR);
         return;
       }
     }
@@ -172,7 +186,7 @@ const AddStudent = ({ handleClose, handleSubmit }: AddStudentPropsType) => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
 
   const handleSaveAndClose = () => {
-    localStorage.setItem("studentInfo", JSON.stringify(student));
+    setLocalStorage("studentInfo", JSON.stringify(student));
     handleClose();
   };
 
@@ -183,7 +197,7 @@ const AddStudent = ({ handleClose, handleSubmit }: AddStudentPropsType) => {
       onClose={handleSaveAndClose}
       maxWidth="lg"
       PaperProps={{
-        className: "rounded-xl w-[50rem] h-screen md:h-[65vh] p-3 pr-1",
+        className: "rounded-xl w-[50rem] h-[75vh] md:h-[65vh] p-3 pr-1",
       }}
     >
       <Box className="h-full w-full">
@@ -201,17 +215,20 @@ const AddStudent = ({ handleClose, handleSubmit }: AddStudentPropsType) => {
             }}
             className="bg-cover bg-no-repeat bg-center rounded-xl h-16 md:h-full"
           >
-            <Box className="h-full rounded-xl pt-4 pl-8">
+            <Box className="h-full rounded-xl pt-4 md:pl-8">
               <Stepper
                 activeStep={activeStep}
                 orientation={isSmallScreen ? "horizontal" : "vertical"}
-                className="flex-row mb-2 md:mb-0 md:flex-col bg-pur"
+                className="flex-row mb-2 md:mt-4 md:mb-0 md:flex-col"
                 sx={{
+                  "& .MuiStepLabel-root": {
+                    height: "32px",
+                  },
                   "& .MuiStepConnector-line": {
                     xs: {
                       marginLeft: "3px",
                     },
-                    md: { minHeight: "2rem" },
+                    md: { minHeight: "3.5rem" },
                     borderColor: ({
                       palette: {
                         primary: { main },
@@ -242,6 +259,7 @@ const AddStudent = ({ handleClose, handleSubmit }: AddStudentPropsType) => {
                             width: "2rem",
                             height: "2rem",
                             fill: "white",
+                            marginLeft: { xs: "6px", md: "0px" },
                           },
                           "& .MuiStepIcon-text": {
                             fill: "black",
@@ -287,7 +305,12 @@ const AddStudent = ({ handleClose, handleSubmit }: AddStudentPropsType) => {
             />
             <Box className="flex gap-x-6 justify-end ">
               {activeStep !== 0 && (
-                <Button onClick={handleBack} variant="outlined" size="large">
+                <Button
+                  onClick={handleBack}
+                  variant="outlined"
+                  size="medium"
+                  startIcon={<ArrowBack />}
+                >
                   Back
                 </Button>
               )}
@@ -296,14 +319,15 @@ const AddStudent = ({ handleClose, handleSubmit }: AddStudentPropsType) => {
                   buttonText="Submit"
                   onSubmit={() => handleSubmit(student)}
                   disabled={isDisabled}
-                  size="large"
+                  size="medium"
                 />
               ) : (
                 <Button
                   onClick={handleNext}
                   disabled={isDisabled}
                   variant="contained"
-                  size="large"
+                  size="medium"
+                  endIcon={<ArrowForward />}
                 >
                   Next
                 </Button>
