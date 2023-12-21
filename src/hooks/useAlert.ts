@@ -9,23 +9,20 @@ const useAlert = () => {
   }>({
     isOpen: false,
     message: "",
-    severity: "error",
+    severity: "",
   });
-  const handleAlertOpen = (message: string, severity: SeverityType): void =>
+  const handleAlert = (
+    isOpen: boolean = false,
+    message: string = "",
+    severity: SeverityType = ""
+  ): void => {
     setAlert({
-      isOpen: true,
+      isOpen,
       message,
       severity,
     });
-
-  const handleAlertClose = (): void =>
-    setAlert({
-      isOpen: false,
-      message: "",
-      severity: "error",
-    });
-
-  return { alert, handleAlertOpen, handleAlertClose };
+  };
+  return { alert, handleAlert };
 };
 
 export default useAlert;

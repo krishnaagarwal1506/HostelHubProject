@@ -9,68 +9,61 @@ import {
   Skeleton,
   DialogContent,
 } from "@mui/material";
-
 import { Add as AddIcon } from "@mui/icons-material";
-
-import UseDialog from "@src/hooks/UseDialog";
 
 import NoticeListItem from "./NoticeListItem";
 import NoticeModal from "./NoticeModal";
-import ActionAlerts from "@components/Alert";
+import AlertComponent from "@components/Alert";
+import ConfirmationModal from "@components/ConfirmationModal";
 
-import { NoticeDataType, NoticeStateProps } from "@ts/types";
-import ConfirmationModal from "@src/components/ConfirmationModal";
-import { NOTICES_URL } from "@constant/index";
+import useDialog from "@src/hooks/useDialog.ts";
+import useAlert from "@src/hooks/useAlert.ts";
+import { sendData, deleteData, catchErrorMessage } from "@utils/index";
+import { NoticeDataType, NoticeStateProps, SeverityType } from "@ts/types";
+import { NOTICES_URL, METHOD, SUCCESS, ERROR } from "@constant/index";
 
-type SetAlert = React.Dispatch<
-  React.SetStateAction<{
-    open: boolean;
-    message: string;
-  }>
->;
-
-const saveNotice = async (notice: NoticeDataType, setAlert: SetAlert) => {
+const saveNotice = async (
+  notice: NoticeDataType,
+  handleAlert: (
+    isOpen: boolean,
+    message: string,
+    serverity: SeverityType
+  ) => void
+) => {
   try {
-    const meathod = notice.id ? "PUT" : "POST";
+    const { PUT, POST } = METHOD;
+    const method = notice.id ? PUT : POST;
     const url = notice.id ? `${NOTICES_URL}/${notice.id}` : NOTICES_URL;
-    const putData = await fetch(url, {
-      method: meathod,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(notice),
-    });
-    if (putData.ok) {
-      console.log("done");
-    } else {
-      throw new Error("Not updated");
-    }
+    const isDataSent = await sendData(url, method, notice);
+    const message = isDataSent ? "Notice updated" : "Notice added";
+    const severity = isDataSent ? SUCCESS : ERROR;
+    handleAlert(true, message, severity);
   } catch (error) {
-    if (error instanceof Error) {
-      setAlert({ open: true, message: error.message });
-    } else {
-      setAlert({ open: true, message: "An error occurred" });
-    }
+    handleAlert(true, catchErrorMessage(error), "error");
   }
 };
 
-const deleteNotice = async (id: number | null, setAlert: SetAlert) => {
+const deleteNotice = async (
+  id: number | null,
+  handleAlert: (
+    isOpen: boolean,
+    message: string,
+    serverity: SeverityType
+  ) => void
+) => {
   try {
     if (!id) {
       throw new Error("notice do not exist");
     }
-    const deleteResponse = await fetch(`${NOTICES_URL}/${id}`, {
-      method: "DELETE",
-    });
-    if (!deleteResponse.ok) {
-      throw new Error(`Server error: ${deleteResponse.statusText}`);
-    }
+    const url = `${NOTICES_URL}/${id}`;
+    const isDataDeleted = await deleteData(url);
+    const message = isDataDeleted
+      ? "Notice deleted"
+      : "Error, Notice not deleted";
+    const severity = isDataDeleted ? SUCCESS : ERROR;
+    handleAlert(true, message, severity);
   } catch (error) {
-    if (error instanceof Error) {
-      setAlert({ open: true, message: error.message });
-    } else {
-      setAlert({ open: true, message: "An error occurred" });
-    }
+    handleAlert(true, catchErrorMessage(error), ERROR);
   }
 };
 
@@ -84,27 +77,26 @@ const intitalNoticeState: NoticeDataType = {
   date: new Date().toLocaleDateString(),
   content: "",
 };
+
 const NoticeList = ({ notices, setupdateNoticeCheck }: NoticesProps) => {
   const [selectedNotice, setSelectedNotice] = useState<NoticeStateProps>({
     notice: intitalNoticeState,
-    isNoticeModalOpen: false,
+    isModalOpen: false,
     isEditable: false,
-    addNewNotice: false,
+    add: false,
   });
-  const [alert, setAlert] = useState({ open: false, message: "" });
   const [deleteNoticeId, setDeleteNoticeId] = useState<number | null>(null);
+  const { alert, handleAlert } = useAlert();
+  const { isOpen, message, severity } = alert;
 
   const handleDialog = () => {
-    deleteNotice(deleteNoticeId, setAlert);
+    deleteNotice(deleteNoticeId, handleAlert);
     setupdateNoticeCheck((val) => {
       return !val;
     });
   };
-
-  const { open, handleDialogOpen, handleDialogClose, handleDialogSubmit } =
-    UseDialog(handleDialog);
-
-  const handleAlertClose = () => setAlert({ open: false, message: "" });
+  const { open, handleDialogClick, handleDialogSubmit } =
+    useDialog(handleDialog);
 
   const handleOpenNotice = (
     event: MouseEvent<Element>,
@@ -113,30 +105,30 @@ const NoticeList = ({ notices, setupdateNoticeCheck }: NoticesProps) => {
   ) => {
     event.stopPropagation();
     const isEditable = state === "edit";
-    const addNewNotice = state === "addNewNotice";
+    const add = state === "add";
     setSelectedNotice({
       notice: noticeData,
       isEditable,
-      addNewNotice,
-      isNoticeModalOpen: true,
+      add,
+      isModalOpen: true,
     });
   };
 
   const handleClose = (): void => {
-    setSelectedNotice({
-      notice: intitalNoticeState,
-      isNoticeModalOpen: false,
-      isEditable: false,
-      addNewNotice: false,
+    setSelectedNotice((prevState) => {
+      return {
+        ...prevState,
+        isModalOpen: false,
+      };
     });
   };
 
   const handleSubmit = (notice: NoticeDataType): void => {
-    saveNotice(notice, setAlert);
-    handleClose();
+    saveNotice(notice, handleAlert);
     setupdateNoticeCheck((val) => {
       return !val;
     });
+    handleClose();
   };
 
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>): void => {
@@ -156,11 +148,11 @@ const NoticeList = ({ notices, setupdateNoticeCheck }: NoticesProps) => {
         <Box className="mx-8 my-4 mb-2.5 flex justify-between">
           <Typography className="text-2xl font-medium">Notice</Typography>
           <Button
-            className="hover:bg-primary-dark"
+            className="hover:bg-primary-dark "
             variant="contained"
             endIcon={<AddIcon />}
             onClick={(event) =>
-              handleOpenNotice(event, "addNewNotice", intitalNoticeState)
+              handleOpenNotice(event, "add", intitalNoticeState)
             }
           >
             Add
@@ -175,7 +167,7 @@ const NoticeList = ({ notices, setupdateNoticeCheck }: NoticesProps) => {
                     noticeNumber={index}
                     noticeData={notice}
                     handleOpenNotice={handleOpenNotice}
-                    handleOpenConfirmationDialog={handleDialogOpen}
+                    handleOpenConfirmationDialog={() => handleDialogClick(true)}
                     setDeleteNoticeId={setDeleteNoticeId}
                   />
                   {index < notices.length - 1 && <Divider className="mx-8" />}
@@ -205,7 +197,7 @@ const NoticeList = ({ notices, setupdateNoticeCheck }: NoticesProps) => {
       />
       <ConfirmationModal
         isOpen={open}
-        handleClose={handleDialogClose}
+        handleClose={() => handleDialogClick(false)}
         handleSubmit={handleDialogSubmit}
         title="Are You Sure ?"
         buttontext="delete"
@@ -215,11 +207,11 @@ const NoticeList = ({ notices, setupdateNoticeCheck }: NoticesProps) => {
           This notice will be deleted
         </DialogContent>
       </ConfirmationModal>
-      {alert.open && (
-        <ActionAlerts
-          severity="error"
-          message={alert.message}
-          handleClose={handleAlertClose}
+      {isOpen && (
+        <AlertComponent
+          severity={severity}
+          message={message}
+          handleClose={() => handleAlert(false)}
         />
       )}
     </>

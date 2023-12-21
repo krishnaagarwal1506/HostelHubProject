@@ -1,9 +1,5 @@
 import StepperForm from "./StepperForm";
-import {
-  GUARDIAN_NAME_INPUT,
-  GUARDIAN_PHONE_INPUT,
-  ADDRESS_INPUT,
-} from "@src/constant";
+import { STUDENT_INFO_INPUTS } from "@src/constant";
 import { StepperFormType } from "@ts/types";
 
 const GuardianInfoForm = ({
@@ -13,23 +9,25 @@ const GuardianInfoForm = ({
   handleChange,
 }: StepperFormType) => {
   const { guardianName, guardianPhoneNumber, address } = student;
+  const { guardianNameInput, guardianPhoneNumberInput, addressInput } =
+    STUDENT_INFO_INPUTS;
   const formFields = [
     {
-      ...GUARDIAN_NAME_INPUT,
+      ...guardianNameInput,
       value: guardianName,
       required: true,
       error: validateError(guardianName, "text"),
       helperText: getHelperText(guardianName, "text"),
     },
     {
-      ...GUARDIAN_PHONE_INPUT,
+      ...guardianPhoneNumberInput,
       value: guardianPhoneNumber,
       required: true,
       error: validateError(guardianPhoneNumber, "tel"),
       helperText: getHelperText(guardianPhoneNumber, "tel"),
     },
     {
-      ...ADDRESS_INPUT,
+      ...addressInput,
       value: address,
       required: true,
     },

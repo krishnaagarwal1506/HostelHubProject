@@ -1,4 +1,5 @@
 import Alert from "@mui/material/Alert";
+import { useEffect } from "react";
 
 type AlertProps = {
   severity: "success" | "info" | "warning" | "error";
@@ -13,10 +14,12 @@ const closeAlertAfterDelay = (handleClose: () => void) => {
 };
 
 const AlertComponent = ({ severity, message, handleClose }: AlertProps) => {
-  closeAlertAfterDelay(handleClose);
+  useEffect(() => {
+    closeAlertAfterDelay(handleClose);
+  }, []);
   return (
     <Alert
-      className="w-3/4 md:w-1/3 lg:w-1/4 py-4 text-md absolute top-10 right-5 animate-slideinRight align-middle rounded-xl"
+      className="w-3/4 md:w-1/3 lg:w-1/4 py-4 text-md absolute top-10 right-5 animate-slideinRight align-middle rounded-xl z-30"
       variant="filled"
       severity={severity}
       onClose={handleClose}

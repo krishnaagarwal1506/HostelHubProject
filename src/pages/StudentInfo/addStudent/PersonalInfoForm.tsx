@@ -1,9 +1,5 @@
 import StepperForm from "./StepperForm";
-import {
-  STUDENT_NAME_INPUT,
-  STUDENT_EMAIL_INPUT,
-  STUDENT_PHONE_INPUT,
-} from "@src/constant";
+import { STUDENT_INFO_INPUTS } from "@src/constant";
 import { StepperFormType } from "@ts/types";
 
 const PersonalInfoForm = ({
@@ -13,21 +9,23 @@ const PersonalInfoForm = ({
   handleChange,
 }: StepperFormType) => {
   const { studentName, email, mobileNumber } = student;
+  const { studentNameInput, emailInput, mobileNumberInput } =
+    STUDENT_INFO_INPUTS;
   const formFields = [
     {
-      ...STUDENT_NAME_INPUT,
+      ...studentNameInput,
       value: studentName,
       error: validateError(studentName, "text"),
       helperText: getHelperText(studentName, "text"),
     },
     {
-      ...STUDENT_EMAIL_INPUT,
+      ...emailInput,
       value: email,
       error: validateError(email, "email"),
       helperText: getHelperText(email, "email"),
     },
     {
-      ...STUDENT_PHONE_INPUT,
+      ...mobileNumberInput,
       value: mobileNumber,
       error: validateError(mobileNumber, "tel"),
       helperText: getHelperText(mobileNumber, "tel"),

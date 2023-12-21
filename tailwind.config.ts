@@ -6,7 +6,19 @@ export default {
   important: "#root",
   theme: {
     extend: {
-      colors: colors,
+      colors: {
+        ...colors,
+      },
+      keyframes: {
+        slide: {
+          "0%": { transform: "translate(-100%)" },
+          "100%": { transform: "translate(0px)" },
+        },
+      },
+      animation: {
+        slidein: "slide 0.3s ease-out",
+        slideOut: "slide 0.3s ease-in reverse",
+      },
     },
   },
   plugins: [],
