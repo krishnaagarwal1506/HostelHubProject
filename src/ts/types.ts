@@ -98,21 +98,18 @@ export type StepperFormType = {
 export type ComplaintStatusType = "pending" | "resolved" | "invalid";
 
 export type ComplaintType = {
-  id: number;
+  id?: number;
   date: string;
   type: string;
   description: string;
-  status: "pending" | "resolved" | "invalid";
+  studentName: string;
+  status: ComplaintStatusType;
 };
 
 export type ComplaintStateType = {
   complaint: ComplaintType;
   isModalOpen: boolean;
+  isModalEditable: boolean;
 };
 
-export const MeathodType = {
-  GET: "GET",
-  POST: "POST",
-  PUT: "PUT",
-  DELETE: "DELETE",
-};
+export type StaffStatusType = "Present" | "Absent" | "All";
