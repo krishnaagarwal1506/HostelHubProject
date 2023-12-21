@@ -50,11 +50,16 @@ const DialogModal = ({
         className: `rounded-xl ${className}`,
       }}
     >
-      <DialogTitle className={`padding-b-0 ${dialogTitleClassName}`}>
+      <DialogTitle
+        className={`padding-b-0 mb-4 bg-primary-main ${dialogTitleClassName}`}
+      >
         <Box className="flex-row justiy-content-sp align-items-center">
           <Box className="flex-row align-items-center flex-gap-1">
-            {TitleIcon && <TitleIcon fontSize="large" color="primary" />}
-            <Typography className="inherit" variant="h5">
+            {TitleIcon && <TitleIcon fontSize="large" className="text-white" />}
+            <Typography
+              className="text-lg md:text-2xl text-white inherit"
+              variant="h5"
+            >
               {title}
             </Typography>
             {subtitle && (
@@ -64,7 +69,7 @@ const DialogModal = ({
             )}
           </Box>
           <IconButton className={iconButtonClasses} onClick={handleClose}>
-            <CloseIcon />
+            <CloseIcon className="text-white" />
           </IconButton>
         </Box>
       </DialogTitle>

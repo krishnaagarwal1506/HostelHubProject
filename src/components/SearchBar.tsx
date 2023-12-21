@@ -7,6 +7,8 @@ type SearchBarType = {
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   className?: string;
   inputClassName?: string;
+  placeHolder?: string;
+  placeholderColor?: string;
 };
 
 const SearchBar = ({
@@ -14,16 +16,28 @@ const SearchBar = ({
   onChange,
   className = "",
   inputClassName = "",
+  placeHolder = "",
+  placeholderColor = "primary.main",
 }: SearchBarType) => {
   return (
     <Paper className={className} component="form">
-      <IconButton type="button" className="px-2" aria-label="search">
+      <IconButton
+        type="button"
+        className="px-2 text-primary-main"
+        aria-label="search"
+      >
         <Search />
       </IconButton>
       <InputBase
         className={inputClassName}
-        sx={{ ml: 1, flex: 1 }}
-        placeholder="Search Student Name"
+        sx={{
+          ml: 1,
+          flex: 1,
+          "& input::placeholder": {
+            color: placeholderColor,
+          },
+        }}
+        placeholder={placeHolder}
         value={value}
         onChange={onChange}
       />
