@@ -1,9 +1,25 @@
-import { Paper, Typography } from "@mui/material";
+import { useState } from "react";
+import {
+  Paper,
+  SelectChangeEvent,
+  Typography,
+  Box,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import { GridColDef, GridColumnHeaderParams } from "@mui/x-data-grid";
 
-import TableComponent from "@src/components/Table";
-import { StaffMembersType } from "@src/ts/types";
+import TableComponent from "@components/Table";
+import ChipComponent from "@components/Chip";
+import { StaffMembersType, StaffStatusType } from "@src/ts/types";
+import { ABSENT, ALL, PRESENT } from "@src/constant";
+import { capitalize } from "@src/utils";
 
+const menuOptions = [
+  { value: capitalize(ALL) },
+  { value: capitalize(PRESENT) },
+  { value: capitalize(ABSENT) },
+];
 const commonOptions = {
   sortable: false,
   renderHeader({ colDef: { headerName } }: GridColumnHeaderParams) {
@@ -13,7 +29,7 @@ const commonOptions = {
 
 type StaffTablePropsTypes = {
   staffList: StaffMembersType[] | null;
-  getData: (pagination: boolean, page?: number) => void;
+  getData: () => void;
   paginationModel: {
     page: number;
     pageSize: number;
@@ -22,6 +38,7 @@ type StaffTablePropsTypes = {
     page: number;
     pageSize: number;
   }) => void;
+  handleFilter: (event: SelectChangeEvent<StaffStatusType>) => void;
 };
 
 const columns: GridColDef[] = [
@@ -47,15 +64,7 @@ const columns: GridColDef[] = [
     headerAlign: "center",
     ...commonOptions,
     renderCell: ({ value }) => (
-      <Typography
-        className={`${
-          value === "Present"
-            ? "bg-success-light bg-opacity-25 text-success-dark "
-            : "bg-error-light bg-opacity-25 text-error-dark "
-        }  font-bold rounded-full text-sm p-1 px-4 w-fit mx-auto`}
-      >
-        {value}
-      </Typography>
+      <ChipComponent className="w-[95%]" text={value} type={value} />
     ),
   },
 ];
@@ -64,17 +73,39 @@ export default function StaffTable({
   getData,
   paginationModel,
   setPaginationModel,
+  handleFilter,
 }: StaffTablePropsTypes) {
+  const [filter, setFilter] = useState<StaffStatusType>("All");
+
+  const handleChange = (event: SelectChangeEvent<StaffStatusType>) => {
+    setFilter(event.target.value as StaffStatusType);
+    handleFilter(event);
+  };
+
   return (
     <Paper className="w-full pb-8 md:w-[48%] lg:w-1/2 px-0 h-1/2 md:h-full flex-grow overflow-hidden rounded-xl">
-      <Typography className="mx-8 my-4 mb-2.5 text-2xl font-medium ">
-        Staff Members
-      </Typography>
+      <Box className="flex justify-between">
+        <Typography className="mx-8 my-4 mb-2.5 text-xl md:text-2xl font-medium ">
+          Staff Members
+        </Typography>
+        <Select
+          value={filter}
+          className="mx-8 my-4 w-28"
+          onChange={handleChange}
+          size="small"
+        >
+          {menuOptions.map(({ value }) => (
+            <MenuItem key={value} value={value}>
+              {value}
+            </MenuItem>
+          ))}
+        </Select>
+      </Box>
       <TableComponent
         columns={columns}
         isLoading={!staffList}
         rows={staffList || []}
-        tableClassName="px-4 pb-4 h-full border-0"
+        tableClassName="px-6 pb-4 h-full border-0"
         getData={getData}
         paginationModel={paginationModel}
         setPaginationModel={setPaginationModel}

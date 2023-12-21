@@ -14,12 +14,12 @@ type DashboardPropsTypes = {
 const DashboardDetail = ({ dashboardData, detail }: DashboardPropsTypes) => {
   const naviate = useNavigate();
   const { label, field, icon: IconComponent, color, path } = detail;
-
+  const clickableClass = path ? "cursor-pointer hover:brightness-90" : "";
   return (
     <Paper
       onClick={() => naviate(path)}
       key={label}
-      className={`w-2/5 px-4 md:w-[48%] lg:w-1/4 h-24 lg:h-32 flex flex-grow md:shrink-0 lg:shrink justify-between items-center rounded-xl cursor-pointer hover:brightness-90  ${color} `}
+      className={`w-2/5 px-4 md:w-[48%] lg:w-1/4 h-24 lg:h-32 flex flex-grow md:shrink-0 lg:shrink justify-between items-center rounded-xl ${clickableClass} ${color} `}
     >
       {dashboardData ? (
         <>
