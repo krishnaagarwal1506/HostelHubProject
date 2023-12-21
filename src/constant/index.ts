@@ -25,6 +25,9 @@ export const EMPTY = "empty" as const;
 export const FILLED = "filled" as const;
 export const PARTIAL_FILLED = "partialfilled" as const;
 export const NOT_AVAILABLE = "notavailable" as const;
+export const SUCCESS = "success" as const;
+export const ERROR = "error" as const;
+export const DELETE = "delete" as const;
 
 export const ADMIN_SIDEBAR: SidebarValueType[] = [
   {
@@ -94,9 +97,6 @@ export const METHOD = {
   DELETE: "DELETE" as const,
 };
 
-export const SUCCESS = "success" as const;
-export const ERROR = "error" as const;
-
 export const DASHBOARD_ENDPOINT: string = "dashboard";
 
 export const BASE_URL: string = "http://localhost:1337";
@@ -121,7 +121,19 @@ export const COMPLAINTS_URL = BASE_URL + "/api/complaints";
 
 export const STRAPI_USER_URL = BASE_URL + "/api/users";
 
+export const USER_LOGIN_URL = BASE_URL + "/api/auth/local";
+
 export const GOOGLE_LOGIN_CALLBACK = BASE_URL + "/api/auth/google/callback";
+
+export const GOOGLE_LOGIN_URL = BASE_URL + "/api/connect/google/";
+
+export const CANTEEN_MENU_URL = BASE_URL + "/api/menu-links/1";
+
+export const STRAPI_FILE_UPLOAD_URL = BASE_URL + "/api/upload";
+
+export const TODAY_MENU_URL = BASE_URL + "/api/todaymenu";
+
+export const ROOM_INFO_URL = BASE_URL + "/api/room-info";
 
 export const ADMIN_DASHBOARD_DETAIL: AdminDashboardDetailsTypes[] = [
   {
