@@ -48,7 +48,7 @@ const PrivateRoute = ({ allowedRoles }: PrivateRouteProps) => {
   }, [location]);
 
   if (loading) return <Loader />;
-  if (authContext === null || authContext.user === null) {
+  if (!authContext?.user) {
     return <Navigate to="/login" />;
   }
   const {
