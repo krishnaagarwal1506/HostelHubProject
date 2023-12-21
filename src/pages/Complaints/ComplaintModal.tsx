@@ -32,8 +32,7 @@ const ComplaintModal = ({
 }: ComplaintModalPropsType) => {
   const { complaint, isModalOpen, isModalEditable } = complaintState;
   const { date, type, description, status, studentName } = complaint;
-  const isSaveDisabled =
-    !type || !description || description.trim() === "" || type.trim() === "";
+  const isSaveDisabled = !(type?.trim() && description?.trim());
   const actions = (
     <>
       <Button variant="outlined" size="large" onClick={handleClose}>
