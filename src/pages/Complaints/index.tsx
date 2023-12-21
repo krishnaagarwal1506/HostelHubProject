@@ -8,25 +8,26 @@ import {
   SelectChangeEvent,
   IconButton,
   Button,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import {
   GridColDef,
   GridColumnHeaderParams,
   GridAlignment,
 } from "@mui/x-data-grid";
-import { DeleteOutlineOutlined } from "@mui/icons-material";
+import { DeleteOutlineOutlined, ArrowDropDown, Add } from "@mui/icons-material";
 
 import TableComponent from "@components/Table";
 import AlertComponent from "@components/Alert";
 import ConfirmationModal from "@components/ConfirmationModal";
-import ChipComponent from "@src/components/Clip";
+import ChipComponent from "@src/components/Chip";
 import ComplaintModal from "./ComplaintModal";
 
 import useDialog from "@src/hooks/useDialog";
 import useAlert from "@src/hooks/useAlert";
 import { AuthContext } from "@context/AuthContext";
 import {
-  getStatusColor,
   dateFormat,
   sendData,
   fetchData,
@@ -42,6 +43,11 @@ import {
   STUDENT,
   SUCCESS,
   STATUS_ICONS,
+  PENDING,
+  RESOLVED,
+  INVALID,
+  ALL,
+  METHOD,
 } from "@src/constant";
 import {
   ComplaintType,
@@ -50,7 +56,8 @@ import {
   ComplaintStatusType,
 } from "@ts/types";
 
-type SearchStatusType = "all" | "pending" | "resolved" | "invalid";
+type SearchStatusType = ComplaintStatusType | "all";
+const { PUT, POST } = METHOD;
 
 const updateComplaintsStatus = async (
   complaint: ComplaintType,
@@ -62,8 +69,9 @@ const updateComplaintsStatus = async (
 ) => {
   const { id } = complaint;
   const url = `${COMPLAINTS_URL}/${id}`;
+
   try {
-    const isDataUpdated = await sendData<ComplaintType>(url, "PUT", complaint);
+    const isDataUpdated = await sendData<ComplaintType>(url, PUT, complaint);
     const message = isDataUpdated
       ? "Status saved Successfully"
       : "Error in updating status";
@@ -96,9 +104,9 @@ const deleteComplaint = async (
 };
 
 const isMenuItemVisible = (optionStatus: string, status: string) => {
-  if (optionStatus === "pending") return true;
-  if (optionStatus === "resolved" && status !== "pending") return true;
-  if (optionStatus === "invalid" && status !== "pending") return true;
+  if (optionStatus === PENDING) return true;
+  if (optionStatus === RESOLVED && status !== PENDING) return true;
+  if (optionStatus === INVALID && status !== PENDING) return true;
   return false;
 };
 
@@ -133,6 +141,8 @@ const Complaints = () => {
   const {
     user: { role, name },
   } = useContext(AuthContext);
+  const theme = useTheme();
+  const isScreenSizeMdOrLarger = useMediaQuery(theme.breakpoints.up("md"));
   const isRoleStudent = role === STUDENT;
   const { status: seletedComplaintStatus } = selectedComplaint?.complaint || {};
   const { open, handleDialogClick, handleDialogSubmit } = useDialog(
@@ -148,15 +158,15 @@ const Complaints = () => {
   );
   const { alert, handleAlert } = useAlert();
   const selectMenuItems = [
-    { status: "pending", text: "Pending", icon: STATUS_ICONS.pending },
-    { status: "resolved", text: "Resolved", icon: STATUS_ICONS.resolved },
-    { status: "invalid", text: "Invalid", icon: STATUS_ICONS.invalid },
+    { status: PENDING, text: "Pending", icon: STATUS_ICONS.pending },
+    { status: RESOLVED, text: "Resolved", icon: STATUS_ICONS.resolved },
+    { status: INVALID, text: "Invalid", icon: STATUS_ICONS.invalid },
   ];
   const initialComplaint: ComplaintType = {
     date: todayDate(),
     type: "",
     description: "",
-    status: "pending",
+    status: PENDING,
     studentName: name,
   };
   async function getComplaintsData(
@@ -205,7 +215,7 @@ const Complaints = () => {
     try {
       const isComplaintAdded = await sendData<ComplaintType>(
         COMPLAINTS_URL,
-        "POST",
+        POST,
         complaint
       );
       const message = isComplaintAdded
@@ -256,7 +266,7 @@ const Complaints = () => {
   };
 
   const OnStatusChange = (
-    event: SelectChangeEvent<"pending" | "resolved" | "invalid">,
+    event: SelectChangeEvent<ComplaintStatusType>,
     row: ComplaintType
   ) => {
     event.stopPropagation();
@@ -273,8 +283,8 @@ const Complaints = () => {
   const adminSpecificColumns: GridColDef[] = [
     {
       field: "studentName",
-      headerName: "Student",
-      minWidth: 170,
+      headerName: "Raised By",
+      minWidth: 150,
 
       flex: 1,
       cellClassName: "hover:cursor-pointer",
@@ -286,19 +296,17 @@ const Complaints = () => {
     {
       field: "status",
       headerName: "Status",
-      minWidth: 170,
+      minWidth: 100,
       cellClassName: "hover:cursor-pointer",
       ...commonOptions,
       renderCell: ({ row }) => {
         const { status } = row as ComplaintType;
-        const { textColor } = getStatusColor(status, true);
-        const Icon = STATUS_ICONS[status];
         return (
           <ChipComponent
-            className="w-24 capitalize"
+            className="w-24 capitalize cursor-default"
             text={status}
             type={status}
-            icon={<Icon fontSize="small" className={textColor} />}
+            onClick={(event) => event.stopPropagation()}
           />
         );
       },
@@ -309,14 +317,14 @@ const Complaints = () => {
     {
       field: "id",
       headerName: "Id",
-      minWidth: 50,
+      minWidth: 30,
       headerClassName: "pl-8",
       cellClassName: "pl-8 hover:cursor-pointer",
       ...commonOptions,
     },
     {
       field: "date",
-      headerName: "Date",
+      headerName: "Created at",
       minWidth: 150,
       headerClassName: "pl-8",
       cellClassName: "pl-8 hover:cursor-pointer",
@@ -326,7 +334,7 @@ const Complaints = () => {
       field: "type",
       headerName: "Type",
 
-      minWidth: 170,
+      minWidth: 150,
       flex: 1,
       cellClassName: "hover:cursor-pointer",
       ...commonOptions,
@@ -334,7 +342,7 @@ const Complaints = () => {
     {
       field: "description",
       headerName: "Description",
-      minWidth: 170,
+      minWidth: 150,
 
       flex: 1,
       cellClassName: "hover:cursor-pointer",
@@ -344,15 +352,15 @@ const Complaints = () => {
     {
       field: "Actions",
       headerName:
-        isRoleStudent || searchStatus === "pending" || searchStatus === "all"
+        isRoleStudent || searchStatus === PENDING || searchStatus === ALL
           ? "Actions"
           : "Status",
-      minWidth: 170,
+      minWidth: 120,
       cellClassName: "hover:cursor-pointer",
       ...commonOptions,
       renderCell: ({ row }) => {
         const { status } = row as ComplaintType;
-        const isPending = status === "pending";
+        const isPending = status === PENDING;
         return (
           <>
             {isRoleStudent ? (
@@ -372,11 +380,9 @@ const Complaints = () => {
                 }}
                 size="large"
                 disabled={!isPending}
-                className={`p-2 ${
-                  isPending ? "text-error-main" : "text-gray-400"
-                }`}
+                className={`p-2 ${isPending ? "text-error-main" : "hidden"}`}
               >
-                <DeleteOutlineOutlined />
+                <DeleteOutlineOutlined fontSize="small" />
               </IconButton>
             ) : (
               <Select
@@ -384,7 +390,7 @@ const Complaints = () => {
                   "& fieldset": { border: "none" },
                 }}
                 inputProps={{
-                  className: "p-0",
+                  className: "pr-4",
                 }}
                 value={status}
                 label="Age"
@@ -397,31 +403,41 @@ const Complaints = () => {
                 MenuProps={{
                   PaperProps: {
                     style: {
-                      marginTop: "0.5rem",
+                      marginTop: "-0.8rem",
+                      display: isPending ? "block" : "none",
                     },
                   },
                 }}
+                renderValue={(selectedValue) => {
+                  return (
+                    <ChipComponent
+                      className={`w-24 capitalize ${
+                        !isPending && "cursor-default"
+                      }`}
+                      text={selectedValue}
+                      type={selectedValue}
+                      icon={
+                        isPending ? <ArrowDropDown color="error" /> : undefined
+                      }
+                    />
+                  );
+                }}
               >
-                {selectMenuItems.map(
-                  ({ status: optionStatus, icon: Icon, text }) => {
-                    const { textColor } = getStatusColor(status, true);
-                    const disabled = isMenuItemVisible(optionStatus, status);
-                    return (
-                      <MenuItem
-                        key={optionStatus}
-                        value={optionStatus}
-                        disabled={disabled}
-                      >
-                        <ChipComponent
-                          className="w-24"
-                          text={text}
-                          type={optionStatus}
-                          icon={<Icon fontSize="small" className={textColor} />}
-                        />
-                      </MenuItem>
-                    );
-                  }
-                )}
+                {selectMenuItems.map(({ status: optionStatus, text }) => {
+                  const disabled = isMenuItemVisible(optionStatus, status);
+                  return (
+                    <MenuItem
+                      sx={{
+                        fontSize: "0.8rem",
+                      }}
+                      key={optionStatus}
+                      value={optionStatus}
+                      disabled={disabled}
+                    >
+                      {text}
+                    </MenuItem>
+                  );
+                })}
               </Select>
             )}
           </>
@@ -432,19 +448,17 @@ const Complaints = () => {
 
   return (
     <>
-      <Box className="flex w-[96%] justify-center md:justify-start gap-2 shrink flex-wrap mx-auto gap-x-4">
-        {COMPLAINT_STATUS.map(({ status, icon: Icon }) => {
+      <Box className="flex w-[96%] justify-start items-center gap-2 shrink flex-wrap mx-auto gap-x-2 md:gap-x-4">
+        {COMPLAINT_STATUS.map(({ status }) => {
           const isActive = searchStatus === status;
-          const { textColor } = getStatusColor(status, isActive);
           return (
             <ChipComponent
               key={status}
-              text={status.toUpperCase()}
+              text={status}
               type={status}
-              className="w-28 justify-around"
+              className="w-24 justify-around capitalize animate-slidein"
               isActive={isActive}
               variant={isActive ? "filled" : "outlined"}
-              icon={<Icon fontSize="small" className={textColor} />}
               onClick={() => {
                 setSearchStatus(status as SearchStatusType);
                 setPaginationModel({ page: 0, pageSize: 10 });
@@ -454,16 +468,20 @@ const Complaints = () => {
           );
         })}
         {isRoleStudent && (
-          <Box className="flex-1 flex">
+          <Box className="flex-1 flex animate-slideinRight">
             <Button
               variant="contained"
-              className="ml-auto"
+              className="rounded-full md:rounded-[3px] md:ml-auto"
               size="large"
               onClick={(event) => {
                 handleOpenModal(event, initialComplaint, true);
               }}
             >
-              raise complaint
+              {isScreenSizeMdOrLarger ? (
+                "raise complaint"
+              ) : (
+                <Add fontSize="small" />
+              )}
             </Button>
           </Box>
         )}
@@ -502,7 +520,11 @@ const Complaints = () => {
           <DialogContent className="padding-0 ">
             {action === "delete"
               ? "Complaint will be deleted"
-              : `Complaint Status will be changed to ${seletedComplaintStatus}`}
+              : `Complaint status will be changed to ${
+                  selectedComplaint &&
+                  seletedComplaintStatus!.charAt(0).toUpperCase() +
+                    seletedComplaintStatus!.slice(1)
+                }`}
           </DialogContent>
         </ConfirmationModal>
         {selectedComplaint?.isModalOpen && (
