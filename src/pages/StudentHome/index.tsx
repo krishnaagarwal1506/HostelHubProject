@@ -1,7 +1,6 @@
 import { useState, useEffect, Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Typography, Paper, Skeleton } from "@mui/material";
-import { Apartment, HouseSiding, BedroomParent } from "@mui/icons-material";
 import {
   GridColDef,
   GridColumnHeaderParams,
@@ -20,6 +19,7 @@ import {
   COMPLAINTS_URL,
   TODAY_MENU_URL,
   ROOM_INFO_URL,
+  STUDENT_ROOM_DETAILS,
 } from "@constant/index";
 import { ComplaintType } from "@ts/types";
 
@@ -57,20 +57,6 @@ const StudentHome = () => {
   const [roomDetailsError, setRoomDetailsError] = useState<boolean>(false);
 
   const navigate = useNavigate();
-  const studentDetails = [
-    {
-      name: "Wing",
-      Icon: Apartment,
-    },
-    {
-      name: "Floor",
-      Icon: HouseSiding,
-    },
-    {
-      name: "Room",
-      Icon: BedroomParent,
-    },
-  ];
 
   useEffect(() => {
     getNoticesData();
@@ -231,7 +217,7 @@ const StudentHome = () => {
             <Box className="flex justify-evenly px-4 gap-2 md:gap-4 h-32 md:h-40 mt-12">
               {roomDetails ? (
                 <>
-                  {studentDetails.map(({ name, Icon }) => {
+                  {STUDENT_ROOM_DETAILS.map(({ name, Icon }) => {
                     return (
                       <Box
                         key={name}
