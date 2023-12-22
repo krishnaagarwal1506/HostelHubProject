@@ -9,6 +9,9 @@ import {
   DoneAll,
   Error,
   ViewList,
+  Apartment,
+  HouseSiding,
+  BedroomParent,
 } from "@mui/icons-material";
 
 import { SidebarValueType, AdminDashboardDetailsTypes } from "@ts/types";
@@ -290,4 +293,19 @@ export const COMPLAINT_TYPES_OPTIONS = [
   "Food related",
   "Hostel Staff",
   "Others",
+];
+
+export const STUDENT_ROOM_DETAILS = [
+  {
+    name: "Wing",
+    Icon: Apartment,
+  },
+  {
+    name: "Floor",
+    Icon: HouseSiding,
+  },
+  {
+    name: "Room",
+    Icon: BedroomParent,
+  },
 ];
