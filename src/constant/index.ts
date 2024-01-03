@@ -25,6 +25,7 @@ export const EMPTY = "empty" as const;
 export const FILLED = "filled" as const;
 export const PARTIAL_FILLED = "partialfilled" as const;
 export const NOT_AVAILABLE = "notavailable" as const;
+export const PRIMARY = "primary" as const;
 
 export const ADMIN_SIDEBAR: SidebarValueType[] = [
   {
