@@ -1,4 +1,4 @@
-import { ChangeEvent, Fragment, MouseEvent, useState } from "react";
+import { ChangeEvent, Fragment, MouseEvent, useState, useContext } from "react";
 import {
   Paper,
   Typography,
@@ -9,18 +9,31 @@ import {
   Skeleton,
   DialogContent,
 } from "@mui/material";
-import { Add as AddIcon } from "@mui/icons-material";
+import { Add as AddIcon, SmsFailedOutlined } from "@mui/icons-material";
 
 import NoticeListItem from "./NoticeListItem";
 import NoticeModal from "./NoticeModal";
 import AlertComponent from "@components/Alert";
 import ConfirmationModal from "@components/ConfirmationModal";
 
+import { AuthContext } from "@context/AuthContext";
 import useDialog from "@src/hooks/useDialog.ts";
 import useAlert from "@src/hooks/useAlert.ts";
-import { sendData, deleteData, catchErrorMessage } from "@utils/index";
+import {
+  sendData,
+  deleteData,
+  catchErrorMessage,
+  todayDate,
+} from "@utils/index";
 import { NoticeDataType, NoticeStateProps, SeverityType } from "@ts/types";
-import { NOTICES_URL, METHOD, SUCCESS, ERROR } from "@constant/index";
+import {
+  NOTICES_URL,
+  METHOD,
+  SUCCESS,
+  ERROR,
+  ADMIN,
+  DELETE,
+} from "@constant/index";
 
 const saveNotice = async (
   notice: NoticeDataType,
@@ -34,12 +47,12 @@ const saveNotice = async (
     const { PUT, POST } = METHOD;
     const method = notice.id ? PUT : POST;
     const url = notice.id ? `${NOTICES_URL}/${notice.id}` : NOTICES_URL;
-    const isDataSent = await sendData(url, method, notice);
+    const isDataSent = await sendData<NoticeDataType>(url, method, notice);
     const message = isDataSent ? "Notice updated" : "Notice added";
     const severity = isDataSent ? SUCCESS : ERROR;
     handleAlert(true, message, severity);
   } catch (error) {
-    handleAlert(true, catchErrorMessage(error), "error");
+    handleAlert(true, catchErrorMessage(error), ERROR);
   }
 };
 
@@ -69,12 +82,12 @@ const deleteNotice = async (
 
 type NoticesProps = {
   notices: NoticeDataType[] | null;
-  setupdateNoticeCheck: React.Dispatch<React.SetStateAction<boolean>>;
+  setupdateNoticeCheck?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const intitalNoticeState: NoticeDataType = {
   title: "",
-  date: new Date().toLocaleDateString(),
+  date: todayDate(),
   content: "",
 };
 
@@ -86,12 +99,16 @@ const NoticeList = ({ notices, setupdateNoticeCheck }: NoticesProps) => {
     add: false,
   });
   const [deleteNoticeId, setDeleteNoticeId] = useState<number | null>(null);
+  const {
+    user: { role },
+  } = useContext(AuthContext);
+  const isUserAdmin = role === ADMIN;
   const { alert, handleAlert } = useAlert();
   const { isOpen, message, severity } = alert;
 
   const handleDialog = () => {
     deleteNotice(deleteNoticeId, handleAlert);
-    setupdateNoticeCheck((val) => {
+    setupdateNoticeCheck!((val) => {
       return !val;
     });
   };
@@ -125,7 +142,7 @@ const NoticeList = ({ notices, setupdateNoticeCheck }: NoticesProps) => {
 
   const handleSubmit = (notice: NoticeDataType): void => {
     saveNotice(notice, handleAlert);
-    setupdateNoticeCheck((val) => {
+    setupdateNoticeCheck!((val) => {
       return !val;
     });
     handleClose();
@@ -144,37 +161,51 @@ const NoticeList = ({ notices, setupdateNoticeCheck }: NoticesProps) => {
 
   return (
     <>
-      <Paper className="w-full pb-8 md:w-[48%] lg:w-1/2 px-0 h-1/2 md:h-full flex-grow overflow-hidden rounded-xl">
+      <Paper className="w-full pb-8 md:w-[48%] lg:w-1/2 px-0 h-[50vh] md:h-full flex-grow overflow-hidden rounded-xl ">
         <Box className="mx-8 my-4 mb-2.5 flex justify-between">
-          <Typography className="text-2xl font-medium">Notice</Typography>
-          <Button
-            className="hover:bg-primary-dark "
-            variant="contained"
-            endIcon={<AddIcon />}
-            onClick={(event) =>
-              handleOpenNotice(event, "add", intitalNoticeState)
-            }
-          >
-            Add
-          </Button>
+          <Typography className="text-xl md:text-2xl font-medium">
+            Notice
+          </Typography>
+          {isUserAdmin && (
+            <Button
+              className="hover:bg-primary-dark "
+              variant="contained"
+              endIcon={<AddIcon />}
+              onClick={(event) =>
+                handleOpenNotice(event, "add", intitalNoticeState)
+              }
+            >
+              Add
+            </Button>
+          )}
         </Box>
         {notices ? (
-          <List className="w-full h-[90%] p-0 overflow-y-scroll">
-            {notices.reverse().map((notice: NoticeDataType, index: number) => {
-              return (
-                <Fragment key={notice.id}>
-                  <NoticeListItem
-                    noticeNumber={index}
-                    noticeData={notice}
-                    handleOpenNotice={handleOpenNotice}
-                    handleOpenConfirmationDialog={() => handleDialogClick(true)}
-                    setDeleteNoticeId={setDeleteNoticeId}
-                  />
-                  {index < notices.length - 1 && <Divider className="mx-8" />}
-                </Fragment>
-              );
-            })}
-          </List>
+          notices.length > 0 ? (
+            <List className="w-full h-[90%] p-0 overflow-y-scroll">
+              {notices.map((notice: NoticeDataType, index: number) => {
+                return (
+                  <Fragment key={notice.id}>
+                    <NoticeListItem
+                      isAutherized={isUserAdmin}
+                      noticeNumber={index}
+                      noticeData={notice}
+                      handleOpenNotice={handleOpenNotice}
+                      handleOpenConfirmationDialog={() =>
+                        handleDialogClick(true)
+                      }
+                      setDeleteNoticeId={setDeleteNoticeId}
+                    />
+                    {index < notices.length - 1 && <Divider className="mx-8" />}
+                  </Fragment>
+                );
+              })}
+            </List>
+          ) : (
+            <Box className="h-[90%] flex flex-col gap-y-4 justify-center items-center">
+              <SmsFailedOutlined color="primary" className="w-20 h-20" />
+              <p>No notices</p>
+            </Box>
+          )
         ) : (
           <>
             {[1, 2, 3].map((index: number) => {
@@ -200,8 +231,8 @@ const NoticeList = ({ notices, setupdateNoticeCheck }: NoticesProps) => {
         handleClose={() => handleDialogClick(false)}
         handleSubmit={handleDialogSubmit}
         title="Are You Sure ?"
-        buttontext="delete"
-        buttonType="delete"
+        buttontext={DELETE}
+        buttonType={DELETE}
       >
         <DialogContent className="padding-0">
           This notice will be deleted

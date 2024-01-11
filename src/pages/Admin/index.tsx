@@ -1,26 +1,34 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Box, Paper, Typography, Skeleton } from "@mui/material";
 import {
-  ChartWrapperOptions,
-  GoogleChartWrapper,
-  ReactGoogleChartProps,
-} from "react-google-charts";
-
+  Box,
+  Paper,
+  Typography,
+  Skeleton,
+  SelectChangeEvent,
+} from "@mui/material";
+import { ChartWrapperOptions } from "react-google-charts";
+import AlertComponent from "@components/Alert";
 import Chart from "@components/Chart";
 import ErrorComponent from "@components/ErrorComponent";
 import ErrorBoundary from "@components/ErrorBoundry";
 import DashboardDetail from "./DashboardDetail";
 import NoticeList from "./notice/NoticeList";
 import StaffTable from "./StaffTable";
-
-import { fetchData, dateFormat, extractArrayFromApiData } from "@utils/index";
+import useAlert from "@src/hooks/useAlert";
+import {
+  fetchData,
+  dateFormat,
+  extractArrayFromApiData,
+  catchErrorMessage,
+} from "@utils/index";
 import {
   AdminDashboardDataTypes,
   NoticeDataType,
   graphDataType,
   StaffMembersType,
   ErrorType,
+  SeverityType,
+  StaffStatusType,
 } from "@ts/types";
 import {
   ADMIN_DASHBOARD_DETAIL,
@@ -29,12 +37,20 @@ import {
   NOTICES_URL,
   ROOM_STATUS_DATA_URL,
   STAFF_LIST_URL,
+  ERROR,
 } from "@constant/index";
 import colors from "@src/themes/colors";
 
+const pieChartLegend = [
+  { label: "Empty", color: colors.success.light },
+  { label: "Partially Filled", color: colors.warning.main },
+  { label: "Filled", color: colors.error.light },
+  { label: "Not Available", color: colors.common.lightGray },
+];
+
 const pieChartOption: ChartWrapperOptions["options"] = {
   legend: {
-    position: "bottom",
+    position: "none",
     textStyle: {
       fontName: "Lato",
       fontSize: 12,
@@ -89,8 +105,8 @@ const PieChartSkeleton = () => {
         height={300}
         width={300}
       />
-      <Box className="flex gap-2 mt-4">
-        {[1, 2, 3].map((index: number) => {
+      <Box className="flex gap-8 justify-evenly mt-4">
+        {[1, 2, 3, 4].map((index: number) => {
           return (
             <Box key={index} className="mr-1">
               <Skeleton variant="circular" height={20} width={20} />
@@ -120,7 +136,12 @@ async function fetchDataAndUpdateState<T>(
   setData: React.Dispatch<React.SetStateAction<T>>,
   setError: React.Dispatch<
     React.SetStateAction<{ isError: boolean; message: string }>
-  >
+  >,
+  handleAlert: (
+    isOpen?: boolean,
+    message?: string,
+    severity?: SeverityType
+  ) => void
 ): Promise<void> {
   try {
     const response = await fetchData(url);
@@ -129,6 +150,7 @@ async function fetchDataAndUpdateState<T>(
     setError({ isError: false, message: "" });
   } catch (error) {
     setError({ isError: true, message: error as string });
+    handleAlert(true, catchErrorMessage(error), ERROR);
   }
 }
 
@@ -168,7 +190,8 @@ const AdminHome = () => {
     page: 0,
     pageSize: 10,
   });
-  const navigate = useNavigate();
+  const { alert, handleAlert } = useAlert();
+  const { isOpen, message, severity } = alert;
 
   useEffect(() => {
     getComplaintsData();
@@ -185,7 +208,8 @@ const AdminHome = () => {
       ADMIN_DASHBOARD_DETAIL_URL,
       "details",
       setDashboardData,
-      setDashboardDataError
+      setDashboardDataError,
+      handleAlert
     );
   };
 
@@ -194,7 +218,8 @@ const AdminHome = () => {
       ROOM_STATUS_DATA_URL,
       "graphData",
       setRoomStatusData,
-      setRoomStatusDataError
+      setRoomStatusDataError,
+      handleAlert
     );
   };
 
@@ -203,58 +228,64 @@ const AdminHome = () => {
       COMPLAINTS_STATS_URL,
       "graphData",
       setCompliaintsStats,
-      setCompliaintsStatsError
+      setCompliaintsStatsError,
+      handleAlert
     );
   };
 
   const getNoticesData = async (): Promise<void> => {
     try {
       const response = await fetchData(NOTICES_URL);
-      const data = extractArrayFromApiData(response.data);
+      const data = extractArrayFromApiData<NoticeDataType>(response.data);
       const formatedData = data.map((value: NoticeDataType) => {
         return {
           ...value,
           date: dateFormat(value.date),
         };
       });
+      formatedData.sort(
+        (a: NoticeDataType, b: NoticeDataType) =>
+          new Date(b.date).getTime() - new Date(a.date).getTime()
+      );
       setNotices(formatedData);
       setNoticeError({ isError: false, message: "" });
     } catch (error) {
       setNoticeError({ isError: true, message: error as string });
+      handleAlert(true, catchErrorMessage(error), ERROR);
     }
   };
 
   const getStaffListData = async (): Promise<void> => {
     try {
       const response = await fetchData(STAFF_LIST_URL);
-      const data = extractArrayFromApiData(response.data);
+      const data = extractArrayFromApiData<StaffMembersType>(response.data);
       setStaffList(data);
       setStaffListError({ isError: false, message: "" });
     } catch (error) {
       setStaffListError({ isError: true, message: error as string });
+      handleAlert(true, catchErrorMessage(error), ERROR);
     }
   };
 
-  const handleChartSelect = (chartWrapper: GoogleChartWrapper) => {
-    const chart = chartWrapper.getChart();
-    const selection = chart.getSelection();
-
-    if (selection.length > 0) {
-      const selectedRow = selection[0].row;
-      const seletedTable = chartWrapper.getDataTable();
-      if (!seletedTable) return null;
-      const selectedLabel = seletedTable.getValue(selectedRow, 0);
-      navigate(`/rooms?area=${selectedLabel}`);
+  const handleSaffListFilter = async (
+    event: SelectChangeEvent<StaffStatusType>
+  ) => {
+    const filter = event.target.value;
+    if (filter === "All") {
+      getStaffListData();
+      return;
+    }
+    const url = `${STAFF_LIST_URL}?filters[status][$eq]=${filter}`;
+    try {
+      const response = await fetchData(url);
+      const data = extractArrayFromApiData<StaffMembersType>(response.data);
+      setStaffList(data);
+      setStaffListError({ isError: false, message: "" });
+    } catch (error) {
+      setStaffListError({ isError: true, message: error as string });
+      handleAlert(true, catchErrorMessage(error), ERROR);
     }
   };
-
-  const chartEvents: ReactGoogleChartProps["chartEvents"] = [
-    {
-      eventName: "select",
-      callback: ({ chartWrapper }: { chartWrapper: GoogleChartWrapper }) =>
-        handleChartSelect(chartWrapper),
-    },
-  ];
 
   return (
     <Box className="p-4 w-full xl:p-8 flex flex-col  min-h-20 flex-grow-0 md:flex-grow md:min-h-1/2 overflow-scroll">
@@ -285,11 +316,13 @@ const AdminHome = () => {
         <ErrorBoundary
           error={noticeError.isError}
           ErrorComponent={
-            <Paper className="dashboard-paper ">
+            <Paper className="dashboard-paper">
               <ErrorComponent
                 className="w-full h-full"
-                onSubmit={() => getNoticesData()}
+                onSubmit={getNoticesData}
                 message="Error in fetching data"
+                heading="Notices"
+                headingClassName="mx-8 mt-4"
               />
             </Paper>
           }
@@ -299,7 +332,7 @@ const AdminHome = () => {
             setupdateNoticeCheck={setupdateNoticeCheck}
           />
         </ErrorBoundary>
-        <Paper className="dashboard-paper ">
+        <Paper className="dashboard-paper relative">
           <ErrorBoundary
             error={roomStatusDataError.isError}
             ErrorComponent={
@@ -307,10 +340,12 @@ const AdminHome = () => {
                 className="w-full h-full"
                 onSubmit={getRoomStatusDataForChart}
                 message="Error in fetching data"
+                heading="Rooms Status"
+                headingClassName="mx-8 mt-4"
               />
             }
           >
-            <Typography className="mx-8 mt-4 mb-0 text-2xl font-medium self-start">
+            <Typography className="mx-8 mt-4 mb-0 text-xl md:text-2xl font-medium self-start ">
               Rooms Status
             </Typography>
             <Chart
@@ -319,8 +354,22 @@ const AdminHome = () => {
               options={pieChartOption}
               className="m-auto"
               Skeleton={PieChartSkeleton}
-              chartEvents={chartEvents}
             />
+            {roomStatusData && (
+              <Box className="w-[90%] px-8 flex justify-center gap-4 flex-wrap top-[80%] absolute">
+                {pieChartLegend.map(({ label, color }) => {
+                  return (
+                    <Box key={label} className="flex gap-1">
+                      <Box
+                        sx={{ backgroundColor: color }}
+                        className={`rounded-full w-4 h-4`}
+                      />
+                      <Typography className="text-xs">{label}</Typography>
+                    </Box>
+                  );
+                })}
+              </Box>
+            )}
           </ErrorBoundary>
         </Paper>
       </Box>
@@ -331,8 +380,10 @@ const AdminHome = () => {
             <Paper className="dashboard-paper ">
               <ErrorComponent
                 className="w-full h-full"
-                onSubmit={() => getStaffListData}
+                onSubmit={getStaffListData}
                 message="Error in fetching data"
+                heading="Staff Members"
+                headingClassName="mx-8 mt-4"
               />
             </Paper>
           }
@@ -342,6 +393,7 @@ const AdminHome = () => {
             getData={getStaffListData}
             paginationModel={paginationModel}
             setPaginationModel={setPaginationModel}
+            handleFilter={handleSaffListFilter}
           />
         </ErrorBoundary>
         <Paper className="dashboard-paper ">
@@ -352,10 +404,12 @@ const AdminHome = () => {
                 className="w-full h-full"
                 onSubmit={getComplaintsData}
                 message="Error in fetching data"
+                heading="Complaints Statistics"
+                headingClassName="mx-8 mt-4"
               />
             }
           >
-            <Typography className="mx-8 mt-4 mb-0 text-2xl font-medium self-start">
+            <Typography className="mx-8 mt-4 mb-0 text-xl md:text-2xl font-medium self-start">
               Complaints Statistics
             </Typography>
             <Chart
@@ -368,6 +422,13 @@ const AdminHome = () => {
           </ErrorBoundary>
         </Paper>
       </Box>
+      {isOpen && (
+        <AlertComponent
+          message={message}
+          severity={severity}
+          handleClose={() => handleAlert(false)}
+        />
+      )}
     </Box>
   );
 };

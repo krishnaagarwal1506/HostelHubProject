@@ -10,15 +10,7 @@ import {
 import { Assessment as AssessmentIcon } from "@mui/icons-material";
 import DialogModal from "@components/DialogModal";
 import LoadingButton from "@components/LoadingButton";
-import {
-  STUDENT_NAME_INPUT,
-  STUDENT_EMAIL_INPUT,
-  STUDENT_PHONE_INPUT,
-  GUARDIAN_NAME_INPUT,
-  GUARDIAN_PHONE_INPUT,
-  ADDRESS_INPUT,
-  READ_ONLY_SX_VALUES,
-} from "@src/constant";
+import { STUDENT_INFO_INPUTS, READ_ONLY_SX_VALUES } from "@src/constant";
 import { StudentInfoStateType, StudentInfoType } from "@src/ts/types";
 import { validateEmail, validatePhone, validateText } from "@utils/validation";
 
@@ -105,6 +97,14 @@ const StudentProfile = ({
       className: textColor,
     },
   };
+  const {
+    studentNameInput,
+    mobileNumberInput,
+    emailInput,
+    guardianNameInput,
+    guardianPhoneNumberInput,
+    addressInput,
+  } = STUDENT_INFO_INPUTS;
   return (
     <DialogModal
       title="Student Profile"
@@ -120,7 +120,7 @@ const StudentProfile = ({
           </Grid>
           <Grid item xs={12} sm={6} className="pt-0">
             <TextField
-              {...STUDENT_NAME_INPUT}
+              {...studentNameInput}
               value={studentName}
               onChange={handleChange}
               error={!validateText(studentName)}
@@ -130,7 +130,7 @@ const StudentProfile = ({
           </Grid>
           <Grid item xs={12} sm={6} className="pt-0">
             <TextField
-              {...STUDENT_PHONE_INPUT}
+              {...mobileNumberInput}
               value={mobileNumber}
               onChange={handleChange}
               error={!validatePhone(mobileNumber)}
@@ -138,27 +138,36 @@ const StudentProfile = ({
                 !validatePhone(mobileNumber) && "Invalid Phone Number"
               }
               {...commonProps}
+              FormHelperTextProps={{
+                className: "mx-0",
+              }}
             />
           </Grid>
           <Grid item xs={12} sm={6} className="pt-0">
             <TextField
-              {...STUDENT_EMAIL_INPUT}
+              {...emailInput}
               value={email}
               onChange={handleChange}
               error={!validateEmail(email)}
               helperText={!validateEmail(email) && "Invalid Email"}
               {...commonProps}
+              FormHelperTextProps={{
+                className: "mx-0",
+              }}
             />
           </Grid>
           <Grid item xs={12} sm={6} className="pt-0">
             <TextField
               label="Room Number"
-              value={roomNumber || "---"}
+              value={roomNumber || "-"}
               margin="normal"
               fullWidth
               InputProps={{
                 readOnly: true,
                 className: "text-gray-500",
+              }}
+              FormHelperTextProps={{
+                className: "mx-0",
               }}
               sx={READ_ONLY_SX_VALUES}
             />
@@ -168,17 +177,20 @@ const StudentProfile = ({
           </Grid>
           <Grid item xs={12} sm={6} className="pt-0">
             <TextField
-              {...GUARDIAN_NAME_INPUT}
+              {...guardianNameInput}
               value={guardianName}
               onChange={handleChange}
               error={!validateText(guardianName)}
               helperText={!validateText(guardianName) && "Invalid Name"}
               {...commonProps}
+              FormHelperTextProps={{
+                className: "mx-0",
+              }}
             />
           </Grid>
           <Grid item xs={12} sm={6} className="pt-0">
             <TextField
-              {...GUARDIAN_PHONE_INPUT}
+              {...guardianPhoneNumberInput}
               value={guardianPhoneNumber}
               onChange={handleChange}
               error={!validatePhone(guardianPhoneNumber)}
@@ -186,16 +198,22 @@ const StudentProfile = ({
                 !validatePhone(guardianPhoneNumber) && "Invalid Phone Number"
               }
               {...commonProps}
+              FormHelperTextProps={{
+                className: "mx-0",
+              }}
             />
           </Grid>
           <Grid item xs={12} className="pt-0">
             <TextField
-              {...ADDRESS_INPUT}
+              {...addressInput}
               value={address}
               onChange={handleChange}
               error={address === ""}
               helperText={address === "" && "Invalid Address"}
               {...commonProps}
+              FormHelperTextProps={{
+                className: "mx-0",
+              }}
             />
           </Grid>
           <Grid item xs={12}>

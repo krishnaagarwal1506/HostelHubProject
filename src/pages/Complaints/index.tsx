@@ -35,6 +35,7 @@ import {
   extractArrayFromApiData,
   todayDate,
   deleteData,
+  capitalize,
 } from "@utils/index";
 import {
   COMPLAINTS_URL,
@@ -48,6 +49,7 @@ import {
   INVALID,
   ALL,
   METHOD,
+  DELETE,
 } from "@src/constant";
 import {
   ComplaintType,
@@ -147,7 +149,7 @@ const Complaints = () => {
   const { status: seletedComplaintStatus } = selectedComplaint?.complaint || {};
   const { open, handleDialogClick, handleDialogSubmit } = useDialog(
     async () => {
-      action === "delete"
+      action === DELETE
         ? await deleteComplaint(selectedComplaint!.complaint, handleAlert)
         : await updateComplaintsStatus(
             selectedComplaint!.complaint,
@@ -158,9 +160,13 @@ const Complaints = () => {
   );
   const { alert, handleAlert } = useAlert();
   const selectMenuItems = [
-    { status: PENDING, text: "Pending", icon: STATUS_ICONS.pending },
-    { status: RESOLVED, text: "Resolved", icon: STATUS_ICONS.resolved },
-    { status: INVALID, text: "Invalid", icon: STATUS_ICONS.invalid },
+    { status: PENDING, text: capitalize(PENDING), icon: STATUS_ICONS.pending },
+    {
+      status: RESOLVED,
+      text: capitalize(RESOLVED),
+      icon: STATUS_ICONS.resolved,
+    },
+    { status: INVALID, text: capitalize(INVALID), icon: STATUS_ICONS.invalid },
   ];
   const initialComplaint: ComplaintType = {
     date: todayDate(),
@@ -375,7 +381,7 @@ const Complaints = () => {
                       isModalEditable: false,
                     };
                   });
-                  setAction("delete");
+                  setAction(DELETE);
                   handleDialogClick(true);
                 }}
                 size="large"
@@ -395,9 +401,7 @@ const Complaints = () => {
                 value={status}
                 label="Age"
                 IconComponent={() => null}
-                onChange={(
-                  event: SelectChangeEvent<"pending" | "resolved" | "invalid">
-                ) => {
+                onChange={(event: SelectChangeEvent<ComplaintStatusType>) => {
                   OnStatusChange(event, row as ComplaintType);
                 }}
                 MenuProps={{
@@ -514,11 +518,11 @@ const Complaints = () => {
           handleClose={() => handleDialogClick(false)}
           handleSubmit={handleDialogSubmit}
           title="Are You Sure ?"
-          buttontext={action === "delete" ? "delete" : "save"}
-          buttonType={action === "delete" ? "delete" : "primary"}
+          buttontext={action === DELETE ? DELETE : "save"}
+          buttonType={action === DELETE ? DELETE : "primary"}
         >
           <DialogContent className="padding-0 ">
-            {action === "delete"
+            {action === DELETE
               ? "Complaint will be deleted"
               : `Complaint status will be changed to ${
                   selectedComplaint &&
