@@ -1,5 +1,93 @@
 @import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,400;0,500;1,100&family=Quicksand:wght@300;400;500;600;700&display=swap");
 
 @tailwind base;
+
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .width-100 {
+    @apply w-full;
+  }
+  .padding-0 {
+    @apply !p-0;
+  }
+  .padding-b-0 {
+    @apply pb-0;
+  }
+  .padding-t-2 {
+    @apply pt-2;
+  }
+  .padding-r-3 {
+    @apply pr-3;
+  }
+  .padding-b-2-5 {
+    @apply pb-2.5;
+  }
+  .margin-top-0-5 {
+    @apply !mt-0.5;
+  }
+  .margin-top-1-5 {
+    @apply !mt-1.5;
+  }
+  .flex-row {
+    @apply flex;
+  }
+  .justiy-content-sp {
+    @apply justify-between;
+  }
+  .align-items-center {
+    @apply items-center;
+  }
+  .align-self-end {
+    @apply self-end;
+  }
+  .flex-gap-1 {
+    @apply gap-1;
+  }
+  .color-primary {
+    @apply text-primary-main;
+  }
+  .resize-none {
+    resize: none;
+  }
+  .padding-x-0 {
+    @apply px-0;
+  }
+  .no-focus-ring:focus {
+    outline: none;
+  }
+  .no-text-select {
+    user-select: none;
+  }
+  .min-height-full {
+    @apply min-h-full;
+  }
+  .min-height-200 {
+    @apply min-h-[200px];
+  }
+  .show-icons #notice-icon-btns {
+    @apply block;
+  }
+  .line-h-date {
+    @apply !leading-7;
+  }
+  .dashboard-paper {
+    @apply w-full md:w-[48%] lg:w-1/2 h-1/2 md:h-full flex flex-col items-center flex-grow overflow-hidden !rounded-xl;
+  }
+  .step-connector .MuiStepConnector-line {
+    @apply min-h-[30px] border-l-2;
+  }
+  .reponsive-text {
+    @apply text-sm md:text-base;
+  }
+  .dashboard-heading {
+    @apply mx-8 my-4 mb-2.5 text-xl md:text-2xl font-medium;
+  }
+}
+.rpv-core__minimal-button {
+  @apply !text-primary-main;
+}
+.rpv-default-layout__container {
+  @apply !border-primary-light rounded-xl overflow-hidden;
+}

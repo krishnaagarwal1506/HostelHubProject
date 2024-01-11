@@ -17,7 +17,7 @@ type PieChartProps = {
   chartEvents?: ReactGoogleChartProps["chartEvents"];
 };
 
-const PieChart = ({
+const ChartComponent = ({
   graphType,
   data,
   options,
@@ -41,4 +41,4 @@ const PieChart = ({
   );
 };
 
-export default PieChart;
+export default ChartComponent;

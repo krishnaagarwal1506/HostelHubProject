@@ -47,6 +47,9 @@ const TableComponent = ({
         "&.MuiDataGrid-root .MuiDataGrid-cell:focus-within": {
           outline: "none !important",
         },
+        "& .MuiDataGrid-columnHeader:focus-within": {
+          outline: "none !important",
+        },
       }}
       onRowClick={({ row }, event) => {
         onRowClick!(event, row);

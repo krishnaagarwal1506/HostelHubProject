@@ -6,6 +6,7 @@ import AssignmentIcon from "@mui/icons-material/Assignment";
 import DialogModal from "@components/DialogModal";
 import LoadingButton from "@src/components/LoadingButton";
 import { NoticeStateProps, NoticeDataType } from "@ts/types";
+import { READ_ONLY_SX_VALUES } from "@src/constant";
 
 type NoticePropsTypes = {
   selectedNotice: NoticeStateProps;
@@ -29,11 +30,6 @@ const NoticeModal = ({
   const { title, content, date } = selectedNotice.notice;
   const heading: string = getHeading(isEditable, add);
   const isReadOnly: boolean = !isEditable && !add;
-  const textfieldSxValues = {
-    "& .MuiOutlinedInput-root": { padding: isReadOnly ? 0 : "default" },
-    "& fieldset": { border: isReadOnly ? "none" : "default" },
-  };
-  const minHeight = isReadOnly ? "min-h-[100px]" : "min-h-[200px]";
 
   const actions = (
     <>
@@ -44,7 +40,7 @@ const NoticeModal = ({
         <LoadingButton
           buttonText="Save"
           onSubmit={() => handleSubmit(selectedNotice.notice)}
-          disabled={!title || !content}
+          disabled={!(title?.trim() && content?.trim())}
         />
       )}
     </>
@@ -61,51 +57,70 @@ const NoticeModal = ({
     >
       <DialogContent className="padding-0">
         {!isReadOnly && (
-          <Typography variant="h6" className="padding-t-2 ">
-            Notice Title
+          <Typography variant="h6" className="text-lg md:text-xl padding-t-2 ">
+            Title
           </Typography>
         )}
         <TextField
-          className="width-100"
-          sx={textfieldSxValues}
+          className={isReadOnly ? "mt-2 md:w-[45%] md:mr-[5%]" : ""}
           value={title}
           rows={1}
           name="title"
           placeholder="Add title"
+          label={isReadOnly ? "Title" : null}
           multiline
-          required
+          fullWidth
+          required={!isReadOnly}
           onChange={handleChange}
-          inputProps={{
+          InputProps={{
             readOnly: isReadOnly,
-            style: {
-              fontWeight: 600,
-            },
+            className: isReadOnly
+              ? "text-gray-500 text-sm md:text-base"
+              : "text-sm md:text-base",
           }}
+          sx={isReadOnly ? READ_ONLY_SX_VALUES : null}
         />
-        {isReadOnly && (
-          <Typography className="text-gray-500 text-xs">{date}</Typography>
-        )}
         {!isReadOnly && (
-          <Typography variant="h6" className="padding-t-2">
-            Notice Content
+          <Typography variant="h6" className="text-lg md:text-xl padding-t-2">
+            Content
           </Typography>
         )}
+        {isReadOnly && (
+          <TextField
+            className="ml-auto w-1/2 md:mt-2"
+            label="Created On"
+            value={date}
+            margin="normal"
+            InputProps={{
+              readOnly: true,
+              className: "text-gray-500 text-sm md:text-base",
+            }}
+            FormHelperTextProps={{
+              className: "mx-0",
+            }}
+            sx={READ_ONLY_SX_VALUES}
+          />
+        )}
         <TextField
-          className={`width-100 padding-t-2 ${
-            isReadOnly ? "margin-top-1-5" : "margin-top-0-5"
-          }`}
-          sx={textfieldSxValues}
+          className={isReadOnly ? "mt-2" : "padding-t-2 margin-top-0-5"}
           value={content}
           name="content"
-          required
+          required={!isReadOnly}
+          label={isReadOnly ? "Content" : null}
           inputProps={{
-            readOnly: isReadOnly,
-            className: minHeight,
+            className: "min-h-[100px]  md:min-h-[200px]",
           }}
-          autoFocus={!isReadOnly}
+          fullWidth
           placeholder="Add Content"
           onChange={handleChange}
           multiline
+          InputProps={{
+            readOnly: isReadOnly,
+            className: isReadOnly
+              ? "text-gray-500 text-sm md:text-base"
+              : "text-sm md:text-base",
+          }}
+          sx={isReadOnly ? READ_ONLY_SX_VALUES : null}
         />
       </DialogContent>
     </DialogModal>
