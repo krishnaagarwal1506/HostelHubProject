@@ -19,6 +19,7 @@
     "*.{css,html,json}": "prettier --write"
   },
   "dependencies": {
+    "@esbuild/linux-x64": "^0.19.11",
     "@mui/icons-material": "^5.15.1",
     "@mui/material": "^5.14.18",
     "@mui/x-data-grid": "^6.18.2",
