@@ -30,7 +30,7 @@ export const PARTIAL_FILLED = "partialfilled" as const;
 export const NOT_AVAILABLE = "notavailable" as const;
 export const SUCCESS = "success" as const;
 export const ERROR = "error" as const;
-export const DELETE = "delete" as const;
+export const DELETE = "delete";
 
 export const ADMIN_SIDEBAR: SidebarValueType[] = [
   {
