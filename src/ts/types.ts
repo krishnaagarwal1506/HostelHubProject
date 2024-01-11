@@ -13,7 +13,7 @@ export type SidebarValueType = {
 };
 
 export type UserDetailsType = {
-  id: number;
+  id: number | null;
   name: string;
   email: string;
   role: string;
