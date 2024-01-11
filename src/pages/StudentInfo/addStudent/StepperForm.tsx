@@ -31,7 +31,7 @@ const StepperForm = ({ formFields, handleChange }: StepperFormType) => {
                   border: "0",
                 },
                 "& .MuiInputBase-root:focus": {
-                  width: "100%",
+                  width: "100%", // Change this to the width you want
                   border: "none",
                 },
                 "& .MuiOutlinedInput-root": {
@@ -42,6 +42,7 @@ const StepperForm = ({ formFields, handleChange }: StepperFormType) => {
               }}
               inputProps={{
                 className: "py-2 px-2 md:py-[0.85rem] md:px-[0.85rem]",
+                "data-testid": name,
               }}
               FormHelperTextProps={{
                 className: "m-0 ",

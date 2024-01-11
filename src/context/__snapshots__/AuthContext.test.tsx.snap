@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AuthContext SnapShot Test 1`] = `
+<DocumentFragment>
+  <div>
+    Test Component
+  </div>
+</DocumentFragment>
+`;

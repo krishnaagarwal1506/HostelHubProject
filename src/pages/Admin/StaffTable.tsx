@@ -93,6 +93,9 @@ export default function StaffTable({
           className="mx-8 my-4 w-28"
           onChange={handleChange}
           size="small"
+          inputProps={{
+            "data-testid": "filter",
+          }}
         >
           {menuOptions.map(({ value }) => (
             <MenuItem key={value} value={value}>

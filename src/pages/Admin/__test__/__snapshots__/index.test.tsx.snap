@@ -1,0 +1,524 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AdminHome snapshot test 1`] = `
+<DocumentFragment>
+  <div
+    class="p-4 w-full xl:p-8 flex flex-col  min-h-20 flex-grow-0 md:flex-grow md:min-h-1/2 overflow-scroll MuiBox-root css-0"
+  >
+    <div
+      class="gap-4 flex-wrap flex w-full lg:flex-nowrap justify-center lg:justify-around xl:gap-8 MuiBox-root css-0"
+    >
+      <div
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 w-2/5 px-4 md:w-[48%] lg:w-1/4 h-24 lg:h-32 flex flex-grow md:shrink-0 lg:shrink justify-between items-center rounded-xl cursor-pointer hover:brightness-90 bg-primary-main  css-1ps6pg7-MuiPaper-root"
+      >
+        <span
+          class="MuiSkeleton-root MuiSkeleton-rounded MuiSkeleton-pulse css-7uzo9y-MuiSkeleton-root"
+          style="width: 20%; height: 50%;"
+        />
+        <div
+          class="w-3/5 h-full flex flex-col justify-center MuiBox-root css-0"
+        >
+          <span
+            class="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1e1x4vv-MuiSkeleton-root"
+            style="width: 90%; height: 30%;"
+          />
+          <span
+            class="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1e1x4vv-MuiSkeleton-root"
+            style="width: 90%; height: 30%;"
+          />
+        </div>
+      </div>
+      <div
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 w-2/5 px-4 md:w-[48%] lg:w-1/4 h-24 lg:h-32 flex flex-grow md:shrink-0 lg:shrink justify-between items-center rounded-xl cursor-pointer hover:brightness-90 bg-common-lightBlue  css-1ps6pg7-MuiPaper-root"
+      >
+        <span
+          class="MuiSkeleton-root MuiSkeleton-rounded MuiSkeleton-pulse css-7uzo9y-MuiSkeleton-root"
+          style="width: 20%; height: 50%;"
+        />
+        <div
+          class="w-3/5 h-full flex flex-col justify-center MuiBox-root css-0"
+        >
+          <span
+            class="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1e1x4vv-MuiSkeleton-root"
+            style="width: 90%; height: 30%;"
+          />
+          <span
+            class="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1e1x4vv-MuiSkeleton-root"
+            style="width: 90%; height: 30%;"
+          />
+        </div>
+      </div>
+      <div
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 w-2/5 px-4 md:w-[48%] lg:w-1/4 h-24 lg:h-32 flex flex-grow md:shrink-0 lg:shrink justify-between items-center rounded-xl  bg-success-light  css-1ps6pg7-MuiPaper-root"
+      >
+        <span
+          class="MuiSkeleton-root MuiSkeleton-rounded MuiSkeleton-pulse css-7uzo9y-MuiSkeleton-root"
+          style="width: 20%; height: 50%;"
+        />
+        <div
+          class="w-3/5 h-full flex flex-col justify-center MuiBox-root css-0"
+        >
+          <span
+            class="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1e1x4vv-MuiSkeleton-root"
+            style="width: 90%; height: 30%;"
+          />
+          <span
+            class="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1e1x4vv-MuiSkeleton-root"
+            style="width: 90%; height: 30%;"
+          />
+        </div>
+      </div>
+      <div
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 w-2/5 px-4 md:w-[48%] lg:w-1/4 h-24 lg:h-32 flex flex-grow md:shrink-0 lg:shrink justify-between items-center rounded-xl  bg-secondary-main  css-1ps6pg7-MuiPaper-root"
+      >
+        <span
+          class="MuiSkeleton-root MuiSkeleton-rounded MuiSkeleton-pulse css-7uzo9y-MuiSkeleton-root"
+          style="width: 20%; height: 50%;"
+        />
+        <div
+          class="w-3/5 h-full flex flex-col justify-center MuiBox-root css-0"
+        >
+          <span
+            class="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1e1x4vv-MuiSkeleton-root"
+            style="width: 90%; height: 30%;"
+          />
+          <span
+            class="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1e1x4vv-MuiSkeleton-root"
+            style="width: 90%; height: 30%;"
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      class="gap-4 mt-4  flex-grow flex-wrap h-screen flex justify-around lg:flex-nowrap xl:gap-8 md:min-h-[66%] lg:min-h-[75%]  xl:mt-8 MuiBox-root css-0"
+    >
+      <div
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 w-full pb-8 md:w-[48%] lg:w-1/2 px-0 h-[50vh] md:h-full flex-grow overflow-hidden rounded-xl css-1ps6pg7-MuiPaper-root"
+        data-testid="notice-component"
+      >
+        <div
+          class="mx-8 my-4 mb-2.5 flex justify-between MuiBox-root css-0"
+        >
+          <p
+            class="MuiTypography-root MuiTypography-body1 text-xl md:text-2xl font-medium css-ahj2mt-MuiTypography-root"
+          >
+            Notice
+          </p>
+        </div>
+        <div
+          class="mx-8 h-1/3 pt-4 MuiBox-root css-0"
+        >
+          <span
+            class="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1e1x4vv-MuiSkeleton-root"
+            style="width: 30%;"
+          />
+          <span
+            class="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1e1x4vv-MuiSkeleton-root"
+            style="width: 10%;"
+          />
+          <span
+            class="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1e1x4vv-MuiSkeleton-root"
+            style="width: 100%; height: 80%;"
+          />
+        </div>
+        <div
+          class="mx-8 h-1/3 pt-4 MuiBox-root css-0"
+        >
+          <span
+            class="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1e1x4vv-MuiSkeleton-root"
+            style="width: 30%;"
+          />
+          <span
+            class="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1e1x4vv-MuiSkeleton-root"
+            style="width: 10%;"
+          />
+          <span
+            class="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1e1x4vv-MuiSkeleton-root"
+            style="width: 100%; height: 80%;"
+          />
+        </div>
+        <div
+          class="mx-8 h-1/3 pt-4 MuiBox-root css-0"
+        >
+          <span
+            class="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1e1x4vv-MuiSkeleton-root"
+            style="width: 30%;"
+          />
+          <span
+            class="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1e1x4vv-MuiSkeleton-root"
+            style="width: 10%;"
+          />
+          <span
+            class="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1e1x4vv-MuiSkeleton-root"
+            style="width: 100%; height: 80%;"
+          />
+        </div>
+      </div>
+      <div
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 dashboard-paper relative css-1ps6pg7-MuiPaper-root"
+      >
+        <p
+          class="MuiTypography-root MuiTypography-body1 mx-8 mt-4 mb-0 text-xl md:text-2xl font-medium self-start  css-ahj2mt-MuiTypography-root"
+        >
+          Rooms Status
+        </p>
+        <span
+          class="MuiSkeleton-root MuiSkeleton-circular MuiSkeleton-pulse scale-100 mt-6 css-wkdwxb-MuiSkeleton-root"
+          style="width: 300px; height: 300px;"
+        />
+        <div
+          class="flex gap-8 justify-evenly mt-4 MuiBox-root css-0"
+        >
+          <div
+            class="mr-1 MuiBox-root css-0"
+          >
+            <span
+              class="MuiSkeleton-root MuiSkeleton-circular MuiSkeleton-pulse css-wkdwxb-MuiSkeleton-root"
+              style="width: 20px; height: 20px;"
+            />
+            <span
+              class="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1e1x4vv-MuiSkeleton-root"
+              style="width: 70px; height: 20px;"
+            />
+          </div>
+          <div
+            class="mr-1 MuiBox-root css-0"
+          >
+            <span
+              class="MuiSkeleton-root MuiSkeleton-circular MuiSkeleton-pulse css-wkdwxb-MuiSkeleton-root"
+              style="width: 20px; height: 20px;"
+            />
+            <span
+              class="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1e1x4vv-MuiSkeleton-root"
+              style="width: 70px; height: 20px;"
+            />
+          </div>
+          <div
+            class="mr-1 MuiBox-root css-0"
+          >
+            <span
+              class="MuiSkeleton-root MuiSkeleton-circular MuiSkeleton-pulse css-wkdwxb-MuiSkeleton-root"
+              style="width: 20px; height: 20px;"
+            />
+            <span
+              class="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1e1x4vv-MuiSkeleton-root"
+              style="width: 70px; height: 20px;"
+            />
+          </div>
+          <div
+            class="mr-1 MuiBox-root css-0"
+          >
+            <span
+              class="MuiSkeleton-root MuiSkeleton-circular MuiSkeleton-pulse css-wkdwxb-MuiSkeleton-root"
+              style="width: 20px; height: 20px;"
+            />
+            <span
+              class="MuiSkeleton-root MuiSkeleton-text MuiSkeleton-pulse css-1e1x4vv-MuiSkeleton-root"
+              style="width: 70px; height: 20px;"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="gap-4 mt-4 py-4 flex-grow flex-wrap h-screen flex justify-around lg:py-0 lg:flex-nowrap xl:gap-8 md:min-h-[66%] lg:min-h-[75%]  xl:mt-8 MuiBox-root css-0"
+    >
+      <div
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 w-full pb-8 md:w-[48%] lg:w-1/2 px-0 h-1/2 md:h-full flex-grow overflow-hidden rounded-xl css-1ps6pg7-MuiPaper-root"
+      >
+        <div
+          class="flex justify-between MuiBox-root css-0"
+        >
+          <p
+            class="MuiTypography-root MuiTypography-body1 mx-8 my-4 mb-2.5 text-xl md:text-2xl font-medium  css-ahj2mt-MuiTypography-root"
+          >
+            Staff Members
+          </p>
+          <div
+            class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-sizeSmall mx-8 my-4 w-28 css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root"
+          >
+            <div
+              aria-controls=":r2:"
+              aria-expanded="false"
+              aria-haspopup="listbox"
+              class="MuiSelect-select MuiSelect-outlined MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-jedpe8-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input"
+              role="combobox"
+              tabindex="0"
+            >
+              All
+            </div>
+            <input
+              aria-hidden="true"
+              aria-invalid="false"
+              class="MuiSelect-nativeInput css-yf8vq0-MuiSelect-nativeInput"
+              data-testid="filter"
+              tabindex="-1"
+              value="All"
+            />
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSelect-icon MuiSelect-iconOutlined css-hfutr2-MuiSvgIcon-root-MuiSelect-icon"
+              data-testid="ArrowDropDownIcon"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M7 10l5 5 5-5z"
+              />
+            </svg>
+            <fieldset
+              aria-hidden="true"
+              class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+            >
+              <legend
+                class="css-ihdtdm"
+              >
+                <span
+                  class="notranslate"
+                >
+                  ​
+                </span>
+              </legend>
+            </fieldset>
+          </div>
+        </div>
+        <div
+          aria-colcount="3"
+          aria-multiselectable="false"
+          aria-rowcount="101"
+          class="px-6 pb-4 h-full border-0 MuiDataGrid-root MuiDataGrid-root--densityStandard MuiDataGrid-withBorderColor css-13dniha-MuiDataGrid-root"
+          role="grid"
+        >
+          <div
+            class="MuiDataGrid-main css-204u17-MuiDataGrid-main"
+          >
+            <div
+              class="MuiDataGrid-columnHeaders MuiDataGrid-withBorderColor css-1iyq7zh-MuiDataGrid-columnHeaders"
+              role="presentation"
+              style="min-height: 56px; max-height: 56px; line-height: 56px;"
+            >
+              <div
+                class="MuiDataGrid-columnHeadersInner css-gl260s-MuiDataGrid-columnHeadersInner"
+                role="rowgroup"
+                style="transform: translate3d(0px, 0px, 0px);"
+              >
+                <div
+                  aria-rowindex="1"
+                  class="css-yrdy0g-MuiDataGrid-columnHeaderRow"
+                  role="row"
+                >
+                  <div
+                    aria-colindex="1"
+                    aria-sort="none"
+                    class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor"
+                    data-field="name"
+                    role="columnheader"
+                    style="height: 56px; width: 0px; min-width: 0; max-width: 0;"
+                    tabindex="0"
+                  >
+                    <div
+                      class="MuiDataGrid-columnHeaderDraggableContainer"
+                      draggable="false"
+                      role="presentation"
+                    >
+                      <div
+                        class="MuiDataGrid-columnHeaderTitleContainer"
+                        role="presentation"
+                      >
+                        <div
+                          class="MuiDataGrid-columnHeaderTitleContainerContent"
+                        >
+                          <p
+                            class="MuiTypography-root MuiTypography-body1 font-semibold css-ahj2mt-MuiTypography-root"
+                          >
+                            Staff Name
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="MuiDataGrid-columnSeparator MuiDataGrid-columnSeparator--sideRight"
+                      style="min-height: 56px; opacity: 1;"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiDataGrid-iconSeparator css-i4bv87-MuiSvgIcon-root"
+                        data-testid="SeparatorIcon"
+                        focusable="false"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M11 19V5h2v14z"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  <div
+                    aria-colindex="2"
+                    aria-sort="none"
+                    class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor"
+                    data-field="position"
+                    role="columnheader"
+                    style="height: 56px; width: 0px; min-width: 0; max-width: 0;"
+                    tabindex="-1"
+                  >
+                    <div
+                      class="MuiDataGrid-columnHeaderDraggableContainer"
+                      draggable="false"
+                      role="presentation"
+                    >
+                      <div
+                        class="MuiDataGrid-columnHeaderTitleContainer"
+                        role="presentation"
+                      >
+                        <div
+                          class="MuiDataGrid-columnHeaderTitleContainerContent"
+                        >
+                          <p
+                            class="MuiTypography-root MuiTypography-body1 font-semibold css-ahj2mt-MuiTypography-root"
+                          >
+                            Position
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="MuiDataGrid-columnSeparator MuiDataGrid-columnSeparator--sideRight"
+                      style="min-height: 56px; opacity: 1;"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiDataGrid-iconSeparator css-i4bv87-MuiSvgIcon-root"
+                        data-testid="SeparatorIcon"
+                        focusable="false"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M11 19V5h2v14z"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  <div
+                    aria-colindex="3"
+                    aria-sort="none"
+                    class="MuiDataGrid-columnHeader MuiDataGrid-columnHeader--alignCenter MuiDataGrid-withBorderColor"
+                    data-field="status"
+                    role="columnheader"
+                    style="height: 56px; width: 0px; min-width: 0; max-width: 0;"
+                    tabindex="-1"
+                  >
+                    <div
+                      class="MuiDataGrid-columnHeaderDraggableContainer"
+                      draggable="false"
+                      role="presentation"
+                    >
+                      <div
+                        class="MuiDataGrid-columnHeaderTitleContainer"
+                        role="presentation"
+                      >
+                        <div
+                          class="MuiDataGrid-columnHeaderTitleContainerContent"
+                        >
+                          <p
+                            class="MuiTypography-root MuiTypography-body1 font-semibold css-ahj2mt-MuiTypography-root"
+                          >
+                            Status
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="MuiDataGrid-columnSeparator MuiDataGrid-columnSeparator--sideRight"
+                      style="min-height: 56px; opacity: 1;"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiDataGrid-iconSeparator css-i4bv87-MuiSvgIcon-root"
+                        data-testid="SeparatorIcon"
+                        focusable="false"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M11 19V5h2v14z"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="MuiDataGrid-virtualScroller css-qvtrhg-MuiDataGrid-virtualScroller"
+              role="presentation"
+              style="overflow-x: hidden;"
+            >
+              <div
+                class="MuiDataGrid-overlayWrapper css-19qgr0z-MuiDataGrid-overlayWrapper"
+              >
+                <div
+                  class="MuiDataGrid-overlayWrapperInner css-1akuw9y-MuiDataGrid-overlayWrapperInner"
+                  style="height: 0px; width: 0px;"
+                >
+                  <div
+                    class="MuiDataGrid-overlay css-1w53k9d-MuiDataGrid-overlay"
+                  >
+                    <span
+                      class="MuiCircularProgress-root MuiCircularProgress-indeterminate MuiCircularProgress-colorPrimary css-18lrjg1-MuiCircularProgress-root"
+                      role="progressbar"
+                      style="width: 40px; height: 40px;"
+                    >
+                      <svg
+                        class="MuiCircularProgress-svg css-1idz92c-MuiCircularProgress-svg"
+                        viewBox="22 22 44 44"
+                      >
+                        <circle
+                          class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate css-176wh8e-MuiCircularProgress-circle"
+                          cx="44"
+                          cy="44"
+                          fill="none"
+                          r="20.2"
+                          stroke-width="3.6"
+                        />
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="MuiDataGrid-virtualScrollerContent MuiDataGrid-virtualScrollerContent--overflowed css-1kwdphh-MuiDataGrid-virtualScrollerContent"
+                role="presentation"
+                style="width: auto; height: 1px; min-height: auto;"
+              >
+                <div
+                  class="MuiDataGrid-virtualScrollerRenderZone css-s1v7zr-MuiDataGrid-virtualScrollerRenderZone"
+                  role="rowgroup"
+                  style="transform: translate3d(0px, undefinedpx, 0px);"
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            class="MuiDataGrid-footerContainer MuiDataGrid-withBorderColor css-wop1k0-MuiDataGrid-footerContainer"
+          >
+            <div />
+          </div>
+        </div>
+      </div>
+      <div
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 dashboard-paper  css-1ps6pg7-MuiPaper-root"
+      >
+        <p
+          class="MuiTypography-root MuiTypography-body1 mx-8 mt-4 mb-0 text-xl md:text-2xl font-medium self-start css-ahj2mt-MuiTypography-root"
+        >
+          Complaints Statistics
+        </p>
+        <span
+          class="MuiSkeleton-root MuiSkeleton-rounded MuiSkeleton-pulse scale-100 mt-6 css-7uzo9y-MuiSkeleton-root"
+          style="width: 90%; height: 80%;"
+        />
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

@@ -68,7 +68,11 @@ const DialogModal = ({
               </Typography>
             )}
           </Box>
-          <IconButton className={iconButtonClasses} onClick={handleClose}>
+          <IconButton
+            className={iconButtonClasses}
+            onClick={handleClose}
+            data-testid="close-icon"
+          >
             <CloseIcon className="text-white" />
           </IconButton>
         </Box>

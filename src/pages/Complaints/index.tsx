@@ -449,7 +449,6 @@ const Complaints = () => {
       },
     },
   ];
-
   return (
     <>
       <Box className="flex w-[96%] justify-start items-center gap-2 shrink flex-wrap mx-auto gap-x-2 md:gap-x-4">

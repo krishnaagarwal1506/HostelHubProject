@@ -58,7 +58,10 @@ const GovermentIdForm = ({
         className="hidden"
         type="file"
         inputRef={fileInputRef}
-        inputProps={{ accept: "image/png, image/jpeg" }}
+        inputProps={{
+          accept: "image/png, image/jpeg",
+          "data-testid": "fileupload",
+        }}
         fullWidth
         name="govIdImage"
         onChange={handleImageChange}
@@ -68,7 +71,7 @@ const GovermentIdForm = ({
         <img
           className={"w-auto h-36 md:h-56  m-auto rounded-xl"}
           src={selectedImage || noImageUploaded}
-          alt="gov-id-img"
+          alt={selectedImage ? "Id card image" : "No Image Uploaded"}
         />
       </Box>
     </Box>
