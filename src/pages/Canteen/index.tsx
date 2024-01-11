@@ -115,38 +115,37 @@ const Canteen = () => {
 
   return (
     <>
-      <ErrorBoundary
-        error={error}
-        ErrorComponent={
-          <ErrorComponent
-            className={`w-[96%] m-auto ${boxCss}`}
-            boxClassName="h-40"
-            onSubmit={() => getPdf(setPdf, setError, handleAlert)}
-            message="Error in fetching data"
-          />
-        }
-      >
-        <Box className={boxCss}>
-          {role === ADMIN && (
-            <>
-              <Button
-                size="large"
-                className="ml-auto block mr-6 animate-slideinRight"
-                variant="contained"
-                onClick={handleClick}
-              >
-                Update
-              </Button>
-              <TextField
-                className="hidden"
-                type="file"
-                inputRef={fileInputRef}
-                onChange={handleChange}
-                inputProps={{ accept: "application/pdf" }}
-              />
-            </>
-          )}
-
+      <Box className={boxCss}>
+        {role === ADMIN && (
+          <>
+            <Button
+              size="large"
+              className="ml-auto block mr-6 animate-slideinRight"
+              variant="contained"
+              onClick={handleClick}
+            >
+              Update
+            </Button>
+            <TextField
+              className="hidden"
+              type="file"
+              inputRef={fileInputRef}
+              onChange={handleChange}
+              inputProps={{ accept: "application/pdf" }}
+            />
+          </>
+        )}
+        <ErrorBoundary
+          error={error}
+          ErrorComponent={
+            <ErrorComponent
+              className={`w-[96%] m-auto ${boxCss}`}
+              boxClassName="h-40"
+              onSubmit={() => getPdf(setPdf, setError, handleAlert)}
+              message="Error in fetching data"
+            />
+          }
+        >
           <Box className=" h-4/5 md:h-full md:px-0 w-[96%] rounded-xl my-4 shadow-md m-auto text-primary-main">
             {id ? (
               <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
@@ -160,8 +159,8 @@ const Canteen = () => {
               <Skeleton className="h-full w-full scale-100"></Skeleton>
             )}
           </Box>
-        </Box>
-      </ErrorBoundary>
+        </ErrorBoundary>
+      </Box>
       {isOpen && (
         <AlertComponent
           message={message}
