@@ -85,6 +85,8 @@ type NoticesProps = {
   setupdateNoticeCheck?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+console.log(todayDate);
+
 const intitalNoticeState: NoticeDataType = {
   title: "",
   date: todayDate(),
@@ -161,7 +163,10 @@ const NoticeList = ({ notices, setupdateNoticeCheck }: NoticesProps) => {
 
   return (
     <>
-      <Paper className="w-full pb-8 md:w-[48%] lg:w-1/2 px-0 h-[50vh] md:h-full flex-grow overflow-hidden rounded-xl ">
+      <Paper
+        className="w-full pb-8 md:w-[48%] lg:w-1/2 px-0 h-[50vh] md:h-full flex-grow overflow-hidden rounded-xl"
+        data-testid="notice-component"
+      >
         <Box className="mx-8 my-4 mb-2.5 flex justify-between">
           <Typography className="text-xl md:text-2xl font-medium">
             Notice

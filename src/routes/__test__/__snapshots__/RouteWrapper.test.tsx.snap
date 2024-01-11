@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RouteWrapper snapshot test 1`] = `
+<DocumentFragment>
+  <div
+    data-testid="admin-component"
+  >
+    Admin Child Component
+  </div>
+</DocumentFragment>
+`;

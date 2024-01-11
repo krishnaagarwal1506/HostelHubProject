@@ -1,0 +1,222 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NoticeList snapshot test 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 w-full pb-8 md:w-[48%] lg:w-1/2 px-0 h-[50vh] md:h-full flex-grow overflow-hidden rounded-xl css-1ps6pg7-MuiPaper-root"
+    data-testid="notice-component"
+  >
+    <div
+      class="mx-8 my-4 mb-2.5 flex justify-between MuiBox-root css-0"
+    >
+      <p
+        class="MuiTypography-root MuiTypography-body1 text-xl md:text-2xl font-medium css-ahj2mt-MuiTypography-root"
+      >
+        Notice
+      </p>
+      <button
+        class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium hover:bg-primary-dark  css-sghohy-MuiButtonBase-root-MuiButton-root"
+        tabindex="0"
+        type="button"
+      >
+        Add
+        <span
+          class="MuiButton-endIcon MuiButton-iconSizeMedium css-9tj150-MuiButton-endIcon"
+        >
+          <svg
+            aria-hidden="true"
+            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+            data-testid="AddIcon"
+            focusable="false"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"
+            />
+          </svg>
+        </span>
+        <span
+          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+        />
+      </button>
+    </div>
+    <ul
+      class="MuiList-root MuiList-padding w-full h-[90%] p-0 overflow-y-scroll css-h4y409-MuiList-root"
+    >
+      <li
+        class="MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-alignItemsFlexStart px-8 cursor-pointer py-1hover:bg-gray-100 css-hhvo2v-MuiListItem-root"
+      >
+        <div
+          class="MuiListItemText-root MuiListItemText-multiline css-konndc-MuiListItemText-root"
+        >
+          <span
+            class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-10hburv-MuiTypography-root"
+          >
+            <div
+              class="flex justify-between MuiBox-root css-0"
+            >
+              <div
+                class="MuiBox-root css-0"
+              >
+                <p
+                  class="MuiTypography-root MuiTypography-body1 font-semibold text-sm md:text-base css-ahj2mt-MuiTypography-root"
+                >
+                  <span
+                    class="pr-1"
+                  >
+                    1.
+                  </span>
+                  Notice 1
+                </p>
+                <p
+                  class="MuiTypography-root MuiTypography-body1 text-gray-500 text-[0.7rem] md:text-xs ml-[15px] css-ahj2mt-MuiTypography-root"
+                >
+                  2022-01-01
+                </p>
+              </div>
+              <div
+                class="MuiBox-root css-0"
+                id="notice-icon-btns"
+              >
+                <button
+                  class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorPrimary MuiIconButton-sizeSmall text-sm css-2rshpx-MuiButtonBase-root-MuiIconButton-root"
+                  tabindex="0"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="EditOutlinedIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="m14.06 9.02.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z"
+                    />
+                  </svg>
+                  <span
+                    class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                  />
+                </button>
+                <button
+                  class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorError MuiIconButton-sizeSmall css-1mk6yu1-MuiButtonBase-root-MuiIconButton-root"
+                  tabindex="0"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="DeleteOutlineOutlinedIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8 9h8v10H8V9zm7.5-5-1-1h-5l-1 1H5v2h14V4h-3.5z"
+                    />
+                  </svg>
+                  <span
+                    class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                  />
+                </button>
+              </div>
+            </div>
+          </span>
+          <p
+            class="MuiTypography-root MuiTypography-body1 line-clamp-3 text-sm md:text-base ml-[15px] mr-2.5 mt-1 css-ahj2mt-MuiTypography-root"
+          >
+            This is notice 1
+          </p>
+        </div>
+      </li>
+      <hr
+        class="MuiDivider-root MuiDivider-fullWidth mx-8 css-9mgopn-MuiDivider-root"
+      />
+      <li
+        class="MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-alignItemsFlexStart px-8 cursor-pointer py-1hover:bg-gray-100 css-hhvo2v-MuiListItem-root"
+      >
+        <div
+          class="MuiListItemText-root MuiListItemText-multiline css-konndc-MuiListItemText-root"
+        >
+          <span
+            class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-10hburv-MuiTypography-root"
+          >
+            <div
+              class="flex justify-between MuiBox-root css-0"
+            >
+              <div
+                class="MuiBox-root css-0"
+              >
+                <p
+                  class="MuiTypography-root MuiTypography-body1 font-semibold text-sm md:text-base css-ahj2mt-MuiTypography-root"
+                >
+                  <span
+                    class="pr-1"
+                  >
+                    2.
+                  </span>
+                  Notice 2
+                </p>
+                <p
+                  class="MuiTypography-root MuiTypography-body1 text-gray-500 text-[0.7rem] md:text-xs ml-[15px] css-ahj2mt-MuiTypography-root"
+                >
+                  2022-01-02
+                </p>
+              </div>
+              <div
+                class="MuiBox-root css-0"
+                id="notice-icon-btns"
+              >
+                <button
+                  class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorPrimary MuiIconButton-sizeSmall text-sm css-2rshpx-MuiButtonBase-root-MuiIconButton-root"
+                  tabindex="0"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="EditOutlinedIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="m14.06 9.02.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z"
+                    />
+                  </svg>
+                  <span
+                    class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                  />
+                </button>
+                <button
+                  class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorError MuiIconButton-sizeSmall css-1mk6yu1-MuiButtonBase-root-MuiIconButton-root"
+                  tabindex="0"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-ptiqhd-MuiSvgIcon-root"
+                    data-testid="DeleteOutlineOutlinedIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8 9h8v10H8V9zm7.5-5-1-1h-5l-1 1H5v2h14V4h-3.5z"
+                    />
+                  </svg>
+                  <span
+                    class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                  />
+                </button>
+              </div>
+            </div>
+          </span>
+          <p
+            class="MuiTypography-root MuiTypography-body1 line-clamp-3 text-sm md:text-base ml-[15px] mr-2.5 mt-1 css-ahj2mt-MuiTypography-root"
+          >
+            This is notice 2
+          </p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</DocumentFragment>
+`;

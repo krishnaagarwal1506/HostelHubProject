@@ -1,0 +1,315 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`StudentHome snapshot test 1`] = `
+<DocumentFragment>
+  <div
+    class="p-4 w-full xl:p-8 flex flex-col min-h-20 flex-grow-0 md:flex-grow md:min-h-1/2 overflow-scroll MuiBox-root css-0"
+  >
+    <div
+      class="flex-col gap-y-4 flex md:flex-row justify-around gap-x-6 md:gap-y-0 h-1/2 pb-6 MuiBox-root css-0"
+    >
+      <div
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 w-full pb-8 md:w-[48%] lg:w-1/2 px-0 h-1/2 md:h-full flex-grow overflow-hidden rounded-xl css-1ps6pg7-MuiPaper-root"
+      >
+        <p
+          class="MuiTypography-root MuiTypography-body1 mx-8 my-4 mb-2.5 text-xl md:text-2xl font-medium  css-ahj2mt-MuiTypography-root"
+        >
+          Room Information
+        </p>
+        <div
+          class="flex justify-evenly px-4 gap-2 md:gap-4 h-32 md:h-40 mt-12 MuiBox-root css-0"
+        >
+          <span
+            class="MuiSkeleton-root MuiSkeleton-rectangular MuiSkeleton-pulse css-153n0d3-MuiSkeleton-root"
+            style="width: 100%; height: 100%;"
+          />
+        </div>
+      </div>
+      <div
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 w-full pb-8 md:w-[48%] lg:w-1/2 px-0 h-[50vh] md:h-full flex-grow overflow-hidden rounded-xl css-1ps6pg7-MuiPaper-root"
+        data-testid="notice-component"
+      >
+        <div
+          class="mx-8 my-4 mb-2.5 flex justify-between MuiBox-root css-0"
+        >
+          <p
+            class="MuiTypography-root MuiTypography-body1 text-xl md:text-2xl font-medium css-ahj2mt-MuiTypography-root"
+          >
+            Notice
+          </p>
+        </div>
+        <div
+          class="h-[90%] flex flex-col gap-y-4 justify-center items-center MuiBox-root css-0"
+        >
+          <svg
+            aria-hidden="true"
+            class="MuiSvgIcon-root MuiSvgIcon-colorPrimary MuiSvgIcon-fontSizeMedium w-20 h-20 css-ci5apu-MuiSvgIcon-root"
+            data-testid="SmsFailedOutlinedIcon"
+            focusable="false"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12zm-9-4h2v2h-2zm0-6h2v4h-2z"
+            />
+          </svg>
+          <p>
+            No notices
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      class="flex-col gap-y-4 flex md:flex-row justify-around gap-x-6 md:gap-y-0 h-1/2 pb-3 MuiBox-root css-0"
+    >
+      <div
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 w-full md:w-1/2 h-full  rounded-xl css-1ps6pg7-MuiPaper-root"
+      >
+        <p
+          class="MuiTypography-root MuiTypography-body1 mx-8 my-4 mb-2.5 text-xl md:text-2xl font-medium  css-ahj2mt-MuiTypography-root"
+        >
+          Today's Menu
+        </p>
+        <div
+          class="flex justify-evenly mx-4 py-4 gap-4 max-h-fit mt-8 mb-6 border rounded-xl MuiBox-root css-0"
+        >
+          <span
+            class="MuiSkeleton-root MuiSkeleton-rectangular MuiSkeleton-pulse css-153n0d3-MuiSkeleton-root"
+            style="width: 100%; height: 100%;"
+          />
+        </div>
+      </div>
+      <div
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 w-full pb-8 h-[50vh] md:w-[48%] lg:w-1/2 px-0  md:h-full flex-grow overflow-hidden rounded-xl css-1ps6pg7-MuiPaper-root"
+      >
+        <p
+          class="MuiTypography-root MuiTypography-body1 mx-8 my-4 mb-2.5 text-xl md:text-2xl font-medium  css-ahj2mt-MuiTypography-root"
+        >
+          My Complaints
+        </p>
+        <div
+          aria-colcount="4"
+          aria-multiselectable="false"
+          aria-rowcount="101"
+          class="px-4 pb-4 h-full border-0 MuiDataGrid-root MuiDataGrid-root--densityStandard MuiDataGrid-withBorderColor css-13dniha-MuiDataGrid-root"
+          role="grid"
+        >
+          <div
+            class="MuiDataGrid-main css-204u17-MuiDataGrid-main"
+          >
+            <div
+              class="MuiDataGrid-columnHeaders MuiDataGrid-withBorderColor css-1iyq7zh-MuiDataGrid-columnHeaders"
+              role="presentation"
+              style="min-height: 56px; max-height: 56px; line-height: 56px;"
+            >
+              <div
+                class="MuiDataGrid-columnHeadersInner MuiDataGrid-columnHeadersInner--scrollable css-gl260s-MuiDataGrid-columnHeadersInner"
+                role="rowgroup"
+                style="transform: translate3d(0px, 0px, 0px);"
+              >
+                <div
+                  aria-rowindex="1"
+                  class="css-yrdy0g-MuiDataGrid-columnHeaderRow"
+                  role="row"
+                >
+                  <div
+                    aria-colindex="1"
+                    aria-sort="none"
+                    class="MuiDataGrid-columnHeader MuiDataGrid-columnHeader--alignCenter MuiDataGrid-withBorderColor pl-8"
+                    data-field="id"
+                    role="columnheader"
+                    style="height: 56px; width: 100px; min-width: 100px; max-width: 100px;"
+                    tabindex="0"
+                  >
+                    <div
+                      class="MuiDataGrid-columnHeaderDraggableContainer"
+                      draggable="false"
+                      role="presentation"
+                    >
+                      <div
+                        class="MuiDataGrid-columnHeaderTitleContainer"
+                        role="presentation"
+                      >
+                        <div
+                          class="MuiDataGrid-columnHeaderTitleContainerContent"
+                        >
+                          <p
+                            class="MuiTypography-root MuiTypography-body1 font-semibold css-ahj2mt-MuiTypography-root"
+                          >
+                            Id
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="MuiDataGrid-columnSeparator MuiDataGrid-columnSeparator--sideRight"
+                      style="min-height: 56px; opacity: 1;"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiDataGrid-iconSeparator css-i4bv87-MuiSvgIcon-root"
+                        data-testid="SeparatorIcon"
+                        focusable="false"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M11 19V5h2v14z"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  <div
+                    aria-colindex="2"
+                    aria-sort="none"
+                    class="MuiDataGrid-columnHeader MuiDataGrid-columnHeader--alignCenter MuiDataGrid-withBorderColor pl-8"
+                    data-field="date"
+                    role="columnheader"
+                    style="height: 56px; width: 150px; min-width: 150px; max-width: 150px;"
+                    tabindex="-1"
+                  >
+                    <div
+                      class="MuiDataGrid-columnHeaderDraggableContainer"
+                      draggable="false"
+                      role="presentation"
+                    >
+                      <div
+                        class="MuiDataGrid-columnHeaderTitleContainer"
+                        role="presentation"
+                      >
+                        <div
+                          class="MuiDataGrid-columnHeaderTitleContainerContent"
+                        >
+                          <p
+                            class="MuiTypography-root MuiTypography-body1 font-semibold css-ahj2mt-MuiTypography-root"
+                          >
+                            Date
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="MuiDataGrid-columnSeparator MuiDataGrid-columnSeparator--sideRight"
+                      style="min-height: 56px; opacity: 1;"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiDataGrid-iconSeparator css-i4bv87-MuiSvgIcon-root"
+                        data-testid="SeparatorIcon"
+                        focusable="false"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M11 19V5h2v14z"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  <div
+                    aria-colindex="3"
+                    aria-sort="none"
+                    class="MuiDataGrid-columnHeader MuiDataGrid-columnHeader--alignCenter MuiDataGrid-withBorderColor"
+                    data-field="type"
+                    role="columnheader"
+                    style="height: 56px; width: 0px; min-width: 0; max-width: 0;"
+                    tabindex="-1"
+                  >
+                    <div
+                      class="MuiDataGrid-columnHeaderDraggableContainer"
+                      draggable="false"
+                      role="presentation"
+                    >
+                      <div
+                        class="MuiDataGrid-columnHeaderTitleContainer"
+                        role="presentation"
+                      >
+                        <div
+                          class="MuiDataGrid-columnHeaderTitleContainerContent"
+                        >
+                          <p
+                            class="MuiTypography-root MuiTypography-body1 font-semibold css-ahj2mt-MuiTypography-root"
+                          >
+                            Type
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="MuiDataGrid-columnSeparator MuiDataGrid-columnSeparator--sideRight"
+                      style="min-height: 56px; opacity: 1;"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiDataGrid-iconSeparator css-i4bv87-MuiSvgIcon-root"
+                        data-testid="SeparatorIcon"
+                        focusable="false"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M11 19V5h2v14z"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="MuiDataGrid-virtualScroller css-qvtrhg-MuiDataGrid-virtualScroller"
+              role="presentation"
+              style="overflow-x: hidden;"
+            >
+              <div
+                class="MuiDataGrid-overlayWrapper css-19qgr0z-MuiDataGrid-overlayWrapper"
+              >
+                <div
+                  class="MuiDataGrid-overlayWrapperInner css-1akuw9y-MuiDataGrid-overlayWrapperInner"
+                  style="height: 0px; width: 0px;"
+                >
+                  <div
+                    class="MuiDataGrid-overlay css-1w53k9d-MuiDataGrid-overlay"
+                  >
+                    <span
+                      class="MuiCircularProgress-root MuiCircularProgress-indeterminate MuiCircularProgress-colorPrimary css-18lrjg1-MuiCircularProgress-root"
+                      role="progressbar"
+                      style="width: 40px; height: 40px;"
+                    >
+                      <svg
+                        class="MuiCircularProgress-svg css-1idz92c-MuiCircularProgress-svg"
+                        viewBox="22 22 44 44"
+                      >
+                        <circle
+                          class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate css-176wh8e-MuiCircularProgress-circle"
+                          cx="44"
+                          cy="44"
+                          fill="none"
+                          r="20.2"
+                          stroke-width="3.6"
+                        />
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="MuiDataGrid-virtualScrollerContent MuiDataGrid-virtualScrollerContent--overflowed css-1kwdphh-MuiDataGrid-virtualScrollerContent"
+                role="presentation"
+                style="width: auto; height: 1px; min-height: auto;"
+              >
+                <div
+                  class="MuiDataGrid-virtualScrollerRenderZone css-s1v7zr-MuiDataGrid-virtualScrollerRenderZone"
+                  role="rowgroup"
+                  style="transform: translate3d(0px, undefinedpx, 0px);"
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            class="MuiDataGrid-footerContainer MuiDataGrid-withBorderColor css-wop1k0-MuiDataGrid-footerContainer"
+          >
+            <div />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

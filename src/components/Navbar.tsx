@@ -54,7 +54,11 @@ const Navbar = ({ toogleSideBar }: navbarPropsTypes) => {
   };
 
   return (
-    <Box className="h-20 bg-background-default" position="static">
+    <Box
+      className="h-20 bg-background-default"
+      position="static"
+      data-testid="navbar"
+    >
       <Toolbar className="h-20 px-2.5 md:px-5 animate-slideDown">
         <IconButton
           className="mr-4"

@@ -37,6 +37,6 @@
       "@ts/*": ["src/ts/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "src/__mocks__"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

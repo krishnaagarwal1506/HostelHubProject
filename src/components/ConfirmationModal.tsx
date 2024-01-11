@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 
 import DialogModal from "./DialogModal";
 import LoadingButton from "./LoadingButton";
-import { DELETE, ERROR, PRIMARY } from "@src/constant";
+import { DELETE, ERROR } from "@src/constant";
 
 type DialogModalPropsTypes = {
   isOpen: boolean;
@@ -38,7 +38,7 @@ const ConfirmationModal = ({
       <LoadingButton
         buttonText={buttontext}
         onSubmit={handleSubmit}
-        color={buttonType === DELETE ? ERROR : PRIMARY}
+        color={buttonType === DELETE ? ERROR : "primary"}
       />
     </>
   );

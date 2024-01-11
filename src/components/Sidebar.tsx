@@ -37,6 +37,7 @@ const Sidebar = ({
   return (
     <Box
       className={`fixed w-60 z-10 lg:z-0 h-screen bg-primary-main lg:static overflow-hidden animate-slidein lg:block lg:transition-all ${sidebarboxCss}`}
+      data-testid="sidebar"
     >
       <Box className="flex justify-center items-center gap-x-2.5 pt-3">
         <AppLogo className="w-14 h-14" fill="#fff" />

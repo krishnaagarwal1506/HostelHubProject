@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ChipComponent snapshot test 1`] = `
+<DocumentFragment>
+  <div
+    class="MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorDefault MuiChip-filledDefault undefined border-primary-light bg-primary-light  bg-opacity-25 border-opacity-25 text-primary-dark flex-row-reverse  css-1epr0eg-MuiChip-root"
+  >
+    <span
+      class="MuiChip-label MuiChip-labelMedium css-6od3lo-MuiChip-label"
+    >
+      Test Chip
+    </span>
+  </div>
+</DocumentFragment>
+`;

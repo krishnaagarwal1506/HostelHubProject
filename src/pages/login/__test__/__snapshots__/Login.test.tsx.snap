@@ -1,0 +1,260 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Login snapshot test 1`] = `
+<DocumentFragment>
+  <div
+    class="h-screen w-screen flex justify-center items-center MuiBox-root css-0"
+    data-testid="login-page"
+  >
+    <div
+      class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 w-full m-4 sm:w-[28rem] sm:m-0  rounded-xl p-10 css-1ps6pg7-MuiPaper-root"
+    >
+      <div
+        class="m-auto w-fit mb-6 flex gap-x-2 items-center MuiBox-root css-0"
+      >
+        <svg
+          class=""
+          fill="none"
+          height="60"
+          viewBox="0 0 58 80"
+          width="48"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g
+            filter="url(#filter0_d_2_14)"
+          >
+            <path
+              d="M12.5218 18.336C12.5463 17.6087 12.9316 17.1589 13.6776 16.9867L15.0478 16.6704C15.4132 16.586 15.713 16.6691 15.9473 16.9197C16.1932 17.1516 16.318 17.4836 16.3215 17.9157L15.9838 31.2475L27.1281 28.6746L27.4342 14.8931C27.4588 14.1659 27.8516 13.7144 28.6129 13.5386L29.9602 13.2275C30.3409 13.1397 30.6483 13.221 30.8825 13.4716C31.1133 13.707 31.2304 14.0408 31.234 14.4729L30.4852 47.696C30.4455 48.4268 30.0526 48.8783 29.3066 49.0505L27.9592 49.3616C27.5786 49.4495 27.2729 49.3757 27.0422 49.1403C26.8079 48.8897 26.6908 48.556 26.6908 48.139L27.0722 32.0791L15.9279 34.652L15.55 51.1441C15.5254 51.8714 15.1402 52.3211 14.3942 52.4933L13.0468 52.8044C12.6662 52.8923 12.3605 52.8185 12.1298 52.5831C11.8803 52.3361 11.7631 52.0023 11.7783 51.5819L12.5218 18.336Z"
+              fill="#6646b0"
+            />
+            <path
+              d="M27.064 32.4258C27.0886 31.6985 27.4738 31.2487 28.2198 31.0765L29.59 30.7602C29.9554 30.6758 30.2553 30.7589 30.4895 31.0095C30.7355 31.2414 30.8602 31.5734 30.8638 32.0056L30.526 45.3373L41.6703 42.7644L41.9765 28.983C42.001 28.2557 42.3939 27.8042 43.1551 27.6284L44.5025 27.3174C44.8831 27.2295 45.1905 27.3109 45.4248 27.5615C45.6555 27.7968 45.7727 28.1306 45.7762 28.5628L45.0275 61.7858C44.9877 62.5166 44.5948 62.9681 43.8488 63.1404L42.5015 63.4514C42.1208 63.5393 41.8152 63.4655 41.5844 63.2302C41.3502 62.9796 41.233 62.6458 41.233 62.2289L41.6145 46.169L30.4701 48.7418L30.0922 65.2339C30.0677 65.9612 29.6824 66.4109 28.9364 66.5832L27.589 66.8942C27.2084 66.9821 26.9027 66.9084 26.672 66.673C26.4225 66.4259 26.3054 66.0921 26.3206 65.6717L27.064 32.4258Z"
+              fill="#6646b0"
+            />
+          </g>
+          <defs>
+            <filter
+              color-interpolation-filters="sRGB"
+              filterUnits="userSpaceOnUse"
+              height="62.1676"
+              id="filter0_d_2_14"
+              width="57.2628"
+              x="0.131821"
+              y="12.9798"
+            >
+              <feflood
+                flood-opacity="0"
+                result="BackgroundImageFix"
+              />
+              <fecolormatrix
+                in="SourceAlpha"
+                result="hardAlpha"
+                type="matrix"
+                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+              />
+              <feoffset
+                dy="4"
+              />
+              <fegaussianblur
+                stdDeviation="2"
+              />
+              <fecomposite
+                in2="hardAlpha"
+                operator="out"
+              />
+              <fecolormatrix
+                type="matrix"
+                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+              />
+              <feblend
+                in2="BackgroundImageFix"
+                mode="normal"
+                result="effect1_dropShadow_2_14"
+              />
+              <feblend
+                in="SourceGraphic"
+                in2="effect1_dropShadow_2_14"
+                mode="normal"
+                result="shape"
+              />
+            </filter>
+          </defs>
+        </svg>
+        <p
+          class="MuiTypography-root MuiTypography-body1 text-center text-3xl font-semibold text-primary-light css-ahj2mt-MuiTypography-root"
+        >
+          HostelHub
+        </p>
+      </div>
+      <h5
+        class="MuiTypography-root MuiTypography-h5 font-semibold text-gray-700 mb-1.5 css-ag7rrr-MuiTypography-root"
+      >
+        Welcome Back! 👋🏻
+      </h5>
+      <p
+        class="MuiTypography-root MuiTypography-body1 text-gray-500 css-ahj2mt-MuiTypography-root"
+      >
+        Please sign-in to your account to continue
+      </p>
+      <div
+        class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root mt-6 h-14 css-wb57ya-MuiFormControl-root-MuiTextField-root"
+      >
+        <label
+          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-outlined MuiFormLabel-colorPrimary Mui-required MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-outlined css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root"
+          data-shrink="false"
+          for=":r2:"
+          id=":r2:-label"
+        >
+          Email
+          <span
+            aria-hidden="true"
+            class="MuiFormLabel-asterisk MuiInputLabel-asterisk css-wgai2y-MuiFormLabel-asterisk"
+          >
+             *
+          </span>
+        </label>
+        <div
+          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl css-md26zr-MuiInputBase-root-MuiOutlinedInput-root"
+        >
+          <input
+            aria-invalid="false"
+            class="MuiInputBase-input MuiOutlinedInput-input css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input"
+            id=":r2:"
+            name="email"
+            required=""
+            type="email"
+            value=""
+          />
+          <fieldset
+            aria-hidden="true"
+            class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+          >
+            <legend
+              class="css-yjsfm1"
+            >
+              <span>
+                Email *
+              </span>
+            </legend>
+          </fieldset>
+        </div>
+      </div>
+      <div
+        class="MuiFormControl-root MuiFormControl-fullWidth MuiTextField-root mt-6 mb-3 h-14 css-wb57ya-MuiFormControl-root-MuiTextField-root"
+      >
+        <label
+          class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-outlined MuiFormLabel-colorPrimary Mui-required MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-sizeMedium MuiInputLabel-outlined css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root"
+          data-shrink="false"
+          for=":r3:"
+          id=":r3:-label"
+        >
+          Password
+          <span
+            aria-hidden="true"
+            class="MuiFormLabel-asterisk MuiInputLabel-asterisk css-wgai2y-MuiFormLabel-asterisk"
+          >
+             *
+          </span>
+        </label>
+        <div
+          class="MuiInputBase-root MuiOutlinedInput-root MuiInputBase-colorPrimary MuiInputBase-fullWidth MuiInputBase-formControl MuiInputBase-adornedEnd css-154xyx0-MuiInputBase-root-MuiOutlinedInput-root"
+        >
+          <input
+            aria-invalid="false"
+            class="MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputAdornedEnd css-nxo287-MuiInputBase-input-MuiOutlinedInput-input"
+            data-testid="password"
+            id=":r3:"
+            name="password"
+            required=""
+            type="password"
+            value=""
+          />
+          <button
+            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+            tabindex="0"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+              data-testid="VisibilityOffIcon"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78 3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"
+              />
+            </svg>
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </button>
+          <fieldset
+            aria-hidden="true"
+            class="MuiOutlinedInput-notchedOutline css-1d3z3hw-MuiOutlinedInput-notchedOutline"
+          >
+            <legend
+              class="css-yjsfm1"
+            >
+              <span>
+                Password *
+              </span>
+            </legend>
+          </fieldset>
+        </div>
+      </div>
+      <button
+        class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeLarge MuiButton-containedSizeLarge mt-4 w-full css-jh47zj-MuiButtonBase-root-MuiButton-root"
+        disabled=""
+        tabindex="-1"
+        type="button"
+      >
+        Login
+      </button>
+      <div
+        class="MuiDivider-root MuiDivider-fullWidth MuiDivider-withChildren css-c0gfo3-MuiDivider-root"
+        role="separator"
+      >
+        <span
+          class="MuiDivider-wrapper css-qywfm8-MuiDivider-wrapper"
+        >
+          or
+        </span>
+      </div>
+      <button
+        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium m-auto flex items-center gap-x-2 px-4  text-black text-lg normal-case css-1e6y48t-MuiButtonBase-root-MuiButton-root"
+        tabindex="0"
+        type="button"
+      >
+        <span
+          class="MuiButton-startIcon MuiButton-iconSizeMedium css-1d6wzja-MuiButton-startIcon"
+        >
+          <img
+            class="w-6 h-6"
+            src="google_logo.png"
+          />
+        </span>
+        Sign in with Google
+        <span
+          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+        />
+      </button>
+      <img
+        alt="background image 1"
+        class="hidden absolute lg:block bottom-0 left-0 -z-10 w-full"
+        src="auth-v1-mask-light.png"
+      />
+      <img
+        alt="background image 2"
+        class="hidden absolute lg:block left-0 bottom-0"
+        src="auth-v1-tree.png"
+      />
+      <img
+        alt="background image 3"
+        class="hidden absolute lg:block right-0 bottom-0"
+        src="auth-v1-tree-2.png"
+      />
+    </div>
+  </div>
+</DocumentFragment>
+`;

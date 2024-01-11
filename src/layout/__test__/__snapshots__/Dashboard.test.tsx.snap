@@ -1,0 +1,340 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Dashboard snapshot testing 1`] = `
+<DocumentFragment>
+  <div
+    class="flex h-full lg:h-screen w-screen MuiBox-root css-0"
+  >
+    <div
+      class="fixed w-60 z-10 lg:z-0 h-screen bg-primary-main lg:static overflow-hidden animate-slidein lg:block lg:transition-all lg:w-24 hidden MuiBox-root css-0"
+      data-testid="sidebar"
+    >
+      <div
+        class="flex justify-center items-center gap-x-2.5 pt-3 MuiBox-root css-0"
+      >
+        <svg
+          class="w-14 h-14"
+          fill="none"
+          height="60"
+          viewBox="0 0 58 80"
+          width="48"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g
+            filter="url(#filter0_d_2_14)"
+          >
+            <path
+              d="M12.5218 18.336C12.5463 17.6087 12.9316 17.1589 13.6776 16.9867L15.0478 16.6704C15.4132 16.586 15.713 16.6691 15.9473 16.9197C16.1932 17.1516 16.318 17.4836 16.3215 17.9157L15.9838 31.2475L27.1281 28.6746L27.4342 14.8931C27.4588 14.1659 27.8516 13.7144 28.6129 13.5386L29.9602 13.2275C30.3409 13.1397 30.6483 13.221 30.8825 13.4716C31.1133 13.707 31.2304 14.0408 31.234 14.4729L30.4852 47.696C30.4455 48.4268 30.0526 48.8783 29.3066 49.0505L27.9592 49.3616C27.5786 49.4495 27.2729 49.3757 27.0422 49.1403C26.8079 48.8897 26.6908 48.556 26.6908 48.139L27.0722 32.0791L15.9279 34.652L15.55 51.1441C15.5254 51.8714 15.1402 52.3211 14.3942 52.4933L13.0468 52.8044C12.6662 52.8923 12.3605 52.8185 12.1298 52.5831C11.8803 52.3361 11.7631 52.0023 11.7783 51.5819L12.5218 18.336Z"
+              fill="#fff"
+            />
+            <path
+              d="M27.064 32.4258C27.0886 31.6985 27.4738 31.2487 28.2198 31.0765L29.59 30.7602C29.9554 30.6758 30.2553 30.7589 30.4895 31.0095C30.7355 31.2414 30.8602 31.5734 30.8638 32.0056L30.526 45.3373L41.6703 42.7644L41.9765 28.983C42.001 28.2557 42.3939 27.8042 43.1551 27.6284L44.5025 27.3174C44.8831 27.2295 45.1905 27.3109 45.4248 27.5615C45.6555 27.7968 45.7727 28.1306 45.7762 28.5628L45.0275 61.7858C44.9877 62.5166 44.5948 62.9681 43.8488 63.1404L42.5015 63.4514C42.1208 63.5393 41.8152 63.4655 41.5844 63.2302C41.3502 62.9796 41.233 62.6458 41.233 62.2289L41.6145 46.169L30.4701 48.7418L30.0922 65.2339C30.0677 65.9612 29.6824 66.4109 28.9364 66.5832L27.589 66.8942C27.2084 66.9821 26.9027 66.9084 26.672 66.673C26.4225 66.4259 26.3054 66.0921 26.3206 65.6717L27.064 32.4258Z"
+              fill="#fff"
+            />
+          </g>
+          <defs>
+            <filter
+              color-interpolation-filters="sRGB"
+              filterUnits="userSpaceOnUse"
+              height="62.1676"
+              id="filter0_d_2_14"
+              width="57.2628"
+              x="0.131821"
+              y="12.9798"
+            >
+              <feflood
+                flood-opacity="0"
+                result="BackgroundImageFix"
+              />
+              <fecolormatrix
+                in="SourceAlpha"
+                result="hardAlpha"
+                type="matrix"
+                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+              />
+              <feoffset
+                dy="4"
+              />
+              <fegaussianblur
+                stdDeviation="2"
+              />
+              <fecomposite
+                in2="hardAlpha"
+                operator="out"
+              />
+              <fecolormatrix
+                type="matrix"
+                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+              />
+              <feblend
+                in2="BackgroundImageFix"
+                mode="normal"
+                result="effect1_dropShadow_2_14"
+              />
+              <feblend
+                in="SourceGraphic"
+                in2="effect1_dropShadow_2_14"
+                mode="normal"
+                result="shape"
+              />
+            </filter>
+          </defs>
+        </svg>
+        <h4
+          class="MuiTypography-root MuiTypography-h4 hidden text-white lg:hidden css-5lbw0b-MuiTypography-root"
+        >
+          HostelHub
+        </h4>
+      </div>
+      <ul
+        class="MuiList-root MuiList-padding flex flex-col mt-4 css-h4y409-MuiList-root"
+      >
+        <li
+          class="MuiListItem-root MuiListItem-gutters pl-5 h-16 css-1nxmd3h-MuiListItem-root"
+        >
+          <div
+            class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-gutters h-14 bg-background-default rounded-l-2xl transition-transform css-16ac5r2-MuiButtonBase-root-MuiListItemButton-root"
+            role="button"
+            tabindex="0"
+          >
+            <div
+              class="MuiListItemIcon-root css-cveggr-MuiListItemIcon-root"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium fill-primary-main css-i4bv87-MuiSvgIcon-root"
+                data-testid="DashboardIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"
+                />
+              </svg>
+            </div>
+            <div
+              class="MuiListItemText-root text-primary-main css-tlelie-MuiListItemText-root"
+            >
+              <span
+                class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-10hburv-MuiTypography-root"
+              >
+                Dashboard
+              </span>
+            </div>
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </div>
+          <div
+            class="before:content-[''] before:bg-primary-main before:rounded-br-full before:absolute before:top-0 before:right-0 before:w-4 before:h-4 absolute right-0 -top-3 w-4 h-4  bg-background-default z-50 MuiBox-root css-0"
+          />
+          <div
+            class="before:content-[''] before:bg-primary-main before:rounded-tr-full before:absolute before:top-0 before:right-0 before:w-4 before:h-4 absolute right-0 -bottom-3 w-4 h-4  bg-background-default z-50 MuiBox-root css-0"
+          />
+        </li>
+        <li
+          class="MuiListItem-root MuiListItem-gutters pl-5 h-16 css-1nxmd3h-MuiListItem-root"
+        >
+          <div
+            class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-gutters h-14 bg-primary-main transition-transform css-16ac5r2-MuiButtonBase-root-MuiListItemButton-root"
+            role="button"
+            tabindex="0"
+          >
+            <div
+              class="MuiListItemIcon-root css-cveggr-MuiListItemIcon-root"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium fill-white css-i4bv87-MuiSvgIcon-root"
+                data-testid="AccountBoxIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"
+                />
+              </svg>
+            </div>
+            <div
+              class="MuiListItemText-root text-white css-tlelie-MuiListItemText-root"
+            >
+              <span
+                class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-10hburv-MuiTypography-root"
+              >
+                Student Info.
+              </span>
+            </div>
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </div>
+          <div
+            class="before:content-[''] before:bg-primary-main before:rounded-br-full before:absolute before:top-0 before:right-0 before:w-4 before:h-4 absolute right-0 -top-3 w-4 h-4  bg-background-default hidden MuiBox-root css-0"
+          />
+          <div
+            class="before:content-[''] before:bg-primary-main before:rounded-tr-full before:absolute before:top-0 before:right-0 before:w-4 before:h-4 absolute right-0 -bottom-3 w-4 h-4  bg-background-default hidden MuiBox-root css-0"
+          />
+        </li>
+        <li
+          class="MuiListItem-root MuiListItem-gutters pl-5 h-16 css-1nxmd3h-MuiListItem-root"
+        >
+          <div
+            class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-gutters h-14 bg-primary-main transition-transform css-16ac5r2-MuiButtonBase-root-MuiListItemButton-root"
+            role="button"
+            tabindex="0"
+          >
+            <div
+              class="MuiListItemIcon-root css-cveggr-MuiListItemIcon-root"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium fill-white css-i4bv87-MuiSvgIcon-root"
+                data-testid="AssessmentIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"
+                />
+              </svg>
+            </div>
+            <div
+              class="MuiListItemText-root text-white css-tlelie-MuiListItemText-root"
+            >
+              <span
+                class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-10hburv-MuiTypography-root"
+              >
+                Complaints
+              </span>
+            </div>
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </div>
+          <div
+            class="before:content-[''] before:bg-primary-main before:rounded-br-full before:absolute before:top-0 before:right-0 before:w-4 before:h-4 absolute right-0 -top-3 w-4 h-4  bg-background-default hidden MuiBox-root css-0"
+          />
+          <div
+            class="before:content-[''] before:bg-primary-main before:rounded-tr-full before:absolute before:top-0 before:right-0 before:w-4 before:h-4 absolute right-0 -bottom-3 w-4 h-4  bg-background-default hidden MuiBox-root css-0"
+          />
+        </li>
+        <li
+          class="MuiListItem-root MuiListItem-gutters pl-5 h-16 css-1nxmd3h-MuiListItem-root"
+        >
+          <div
+            class="MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters MuiListItemButton-root MuiListItemButton-gutters h-14 bg-primary-main transition-transform css-16ac5r2-MuiButtonBase-root-MuiListItemButton-root"
+            role="button"
+            tabindex="0"
+          >
+            <div
+              class="MuiListItemIcon-root css-cveggr-MuiListItemIcon-root"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium fill-white css-i4bv87-MuiSvgIcon-root"
+                data-testid="RestaurantMenuIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="m8.1 13.34 2.83-2.83L3.91 3.5c-1.56 1.56-1.56 4.09 0 5.66l4.19 4.18zm6.78-1.81c1.53.71 3.68.21 5.27-1.38 1.91-1.91 2.28-4.65.81-6.12-1.46-1.46-4.2-1.1-6.12.81-1.59 1.59-2.09 3.74-1.38 5.27L3.7 19.87l1.41 1.41L12 14.41l6.88 6.88 1.41-1.41L13.41 13l1.47-1.47z"
+                />
+              </svg>
+            </div>
+            <div
+              class="MuiListItemText-root text-white css-tlelie-MuiListItemText-root"
+            >
+              <span
+                class="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-10hburv-MuiTypography-root"
+              >
+                Canteen Menu
+              </span>
+            </div>
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </div>
+          <div
+            class="before:content-[''] before:bg-primary-main before:rounded-br-full before:absolute before:top-0 before:right-0 before:w-4 before:h-4 absolute right-0 -top-3 w-4 h-4  bg-background-default hidden MuiBox-root css-0"
+          />
+          <div
+            class="before:content-[''] before:bg-primary-main before:rounded-tr-full before:absolute before:top-0 before:right-0 before:w-4 before:h-4 absolute right-0 -bottom-3 w-4 h-4  bg-background-default hidden MuiBox-root css-0"
+          />
+        </li>
+      </ul>
+    </div>
+    <div
+      class="relative  w-full h-full md:h-screen flex flex-col MuiBox-root css-0"
+    >
+      <div
+        class="h-20 bg-background-default MuiBox-root css-1vu2yqv"
+        data-testid="navbar"
+      >
+        <div
+          class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular h-20 px-2.5 md:px-5 animate-slideDown css-hyum1k-MuiToolbar-root"
+        >
+          <button
+            aria-label="menu"
+            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-edgeStart MuiIconButton-sizeLarge mr-4 css-184mzhy-MuiButtonBase-root-MuiIconButton-root"
+            tabindex="0"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium text-3xl css-i4bv87-MuiSvgIcon-root"
+              data-testid="SegmentIcon"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M9 18h12v-2H9v2zM3 6v2h18V6H3zm6 7h12v-2H9v2z"
+              />
+            </svg>
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </button>
+          <h5
+            class="MuiTypography-root MuiTypography-h5 grow font-bold text-2xl md:text-3xl css-ag7rrr-MuiTypography-root"
+          >
+            Dashboard
+          </h5>
+          <div
+            class="grow-0 MuiBox-root css-0"
+          >
+            <button
+              aria-label="Open settings"
+              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium p-0 css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+              data-mui-internal-clone-element="true"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                class="MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault bg-primary-main w-8 h-8 md:h-10 md:w-10 css-2s90m6-MuiAvatar-root"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiAvatar-fallback css-10mi8st-MuiSvgIcon-root-MuiAvatar-fallback"
+                  data-testid="PersonIcon"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                  />
+                </svg>
+              </div>
+              <span
+                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              />
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        class="lg:hidden absolute top-0 h-full w-full backdrop-blur-sm hidden MuiBox-root css-0"
+      />
+    </div>
+  </div>
+</DocumentFragment>
+`;

@@ -49,7 +49,10 @@ const Login = () => {
   };
 
   return (
-    <Box className="h-screen w-screen flex justify-center items-center">
+    <Box
+      className="h-screen w-screen flex justify-center items-center"
+      data-testid="login-page"
+    >
       <Paper className="w-full m-4 sm:w-[28rem] sm:m-0  rounded-xl p-10">
         <Box className="m-auto w-fit mb-6 flex gap-x-2 items-center">
           <AppLogo />
@@ -97,6 +100,9 @@ const Login = () => {
                 {showPassword ? <Visibility /> : <VisibilityOff />}
               </IconButton>
             ),
+          }}
+          inputProps={{
+            "data-testid": "password",
           }}
           error={validateError(password, "password")}
           helperText={getHelperText(password, "password")}

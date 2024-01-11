@@ -19,7 +19,7 @@ import {
   SUCCESS,
 } from "@constant/index";
 
-type AuthContextType = {
+export type AuthContextType = {
   user: UserDetailsType;
   updateUserDetails: (updatedUserDetails: UserDetailsType) => void;
   getUser: () => Promise<void>;

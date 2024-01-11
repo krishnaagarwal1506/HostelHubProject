@@ -13,8 +13,8 @@ import StudentInfo from "@pages/StudentInfo";
 import Complaints from "@pages/Complaints";
 import Canteen from "@pages/Canteen";
 import StudentHome from "@pages/StudentHome";
+//import Rooms from "@pages/Rooms";
 import Login from "@pages/login";
-import Rooms from "@pages/Rooms";
 
 import PageNotFound from "@components/PageNotFound";
 import Forbidden from "@components/Forbidden";
@@ -23,7 +23,7 @@ import PrivateRoutes from "@routes/PrivateRoutes";
 import PublicRoutes from "@routes/PublicRoutes";
 import RouteWrapper from "@routes/RouteWrapper";
 
-import AuthProvider from "@context/AuthContext.tsx";
+import AuthProvider from "@context/AuthContext";
 
 import { appTheme } from "@themes/app.theme.ts";
 import "@style/App.css";
@@ -87,7 +87,7 @@ const App = () => {
                     />
                   }
                 />
-                <Route
+                {/* <Route
                   path="rooms"
                   element={
                     <RouteWrapper
@@ -96,10 +96,9 @@ const App = () => {
                       }}
                     />
                   }
-                />
+                /> */}
               </Route>
             </Route>
-
             <Route element={<PublicRoutes />}>
               <Route path="/login" element={<Login />} />
             </Route>
