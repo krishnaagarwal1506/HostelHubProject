@@ -102,7 +102,7 @@ export const METHOD = {
 
 export const DASHBOARD_ENDPOINT: string = "dashboard";
 
-export const BASE_URL: string = "http://localhost:1337";
+export const BASE_URL: string = "https://hostelhub-strapi.onrender.com";
 
 export const USER_DATA_URL: string = "/api/users/me";
 
