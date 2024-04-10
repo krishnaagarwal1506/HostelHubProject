@@ -4,12 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
+    "dev": "vite --host",
+    "build": "tsc && vite build --host",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "prepare": "husky install",
-    "test": "jest"
+    "test": "jest",
+    "generate-pwa-assets": "pwa-assets-generator --preset minimal public/logo.svg"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
@@ -19,7 +20,6 @@
     "*.{css,html,json}": "prettier --write"
   },
   "dependencies": {
-    "@esbuild/linux-x64": "^0.19.11",
     "@mui/icons-material": "^5.15.1",
     "@mui/material": "^5.14.18",
     "@mui/x-data-grid": "^6.18.2",
@@ -43,6 +43,7 @@
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
+    "@vite-pwa/assets-generator": "^0.2.4",
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.16",
     "eslint": "^8.45.0",
@@ -57,6 +58,7 @@
     "prettier": "3.0.3",
     "tailwindcss": "^3.3.5",
     "typescript": "^5.0.2",
-    "vite": "^4.4.5"
+    "vite": "^4.4.5",
+    "vite-plugin-pwa": "^0.19.8"
   }
 }
