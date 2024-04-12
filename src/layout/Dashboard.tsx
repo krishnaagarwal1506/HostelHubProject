@@ -1,13 +1,12 @@
 import { useContext, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { Box } from "@mui/material";
-
 import { AuthContext } from "@context/AuthContext";
 import Navbar from "@components/Navbar";
 import Sidebar from "@components/Sidebar";
 import Loader from "@src/components/Loader";
-
 import { ADMIN, ADMIN_SIDEBAR, STUDENT_SIDEBAR } from "@constant/index";
+import MobileNavbar from "@src/components/MobileNavbar";
 
 const DashBoard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
@@ -29,7 +28,7 @@ const DashBoard = () => {
         sidebarFields={sidebarFields}
         toogleSideBar={toogleSideBar}
       />
-      <Box className="relative  w-full h-full md:h-screen flex flex-col">
+      <Box className="relative  w-full h-full md:h-screen flex flex-col mb-16 md:mb-0">
         <Navbar toogleSideBar={toogleSideBar} />
         <Outlet />
         <Box
@@ -39,6 +38,7 @@ const DashBoard = () => {
           onClick={toogleSideBar}
         />
       </Box>
+      <MobileNavbar sidebarFields={sidebarFields} />
     </Box>
   );
 };
