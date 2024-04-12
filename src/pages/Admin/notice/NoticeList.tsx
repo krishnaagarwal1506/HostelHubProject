@@ -85,8 +85,6 @@ type NoticesProps = {
   setupdateNoticeCheck?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-console.log(todayDate);
-
 const intitalNoticeState: NoticeDataType = {
   title: "",
   date: todayDate(),
