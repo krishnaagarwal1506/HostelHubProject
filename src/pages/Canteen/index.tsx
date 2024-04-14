@@ -153,6 +153,10 @@ const Canteen = () => {
                   plugins={[defaultLayoutPluginInstance]}
                   fileUrl={url}
                   withCredentials={true}
+                  renderError={() => {
+                    setError(true);
+                    return <></>;
+                  }}
                 />
               </Worker>
             ) : (
