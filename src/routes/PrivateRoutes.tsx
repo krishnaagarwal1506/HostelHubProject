@@ -39,7 +39,7 @@ const PrivateRoute = ({ allowedRoles }: PrivateRouteProps) => {
         }
         setLoading(false);
       } catch (error) {
-        console.log("error", error);
+        console.error("error", error);
         handleLogout(false);
         handleAlert(true, "Login Failed", "error");
         setLoading(false);

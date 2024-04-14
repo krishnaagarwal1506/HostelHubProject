@@ -95,7 +95,7 @@ const StudentHome = () => {
       setRoomDetails(response.data.attributes.data);
       setRoomDetailsError(false);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       setRoomDetailsError(true);
     }
   }
