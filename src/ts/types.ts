@@ -23,6 +23,7 @@ export type AdminDashboardDataTypes = {
   numberOfStudents: number;
   complaitsPending: number;
   numberOfRooms: number;
+  numberOfStaff: number;
 };
 
 export type AdminDashboardDetailsTypes = {
@@ -38,6 +39,9 @@ export type NoticeDataType = {
   date: string;
   title: string;
   content: string;
+  createdAt?: string;
+  updatedAt?: string;
+  publishedAt?: string;
 };
 
 export type NoticeStateProps = {
@@ -113,3 +117,34 @@ export type ComplaintStateType = {
 };
 
 export type StaffStatusType = "Present" | "Absent" | "All";
+
+export interface FetchAdminDashboardData {
+  data: {
+    id: string;
+    attributes: {
+      details: AdminDashboardDataTypes;
+    };
+  };
+}
+
+export interface FetchgraphData {
+  data: {
+    id: string;
+    attributes: {
+      graphData: graphDataType;
+    };
+  };
+}
+
+export interface fetchNoticeData {
+  data: {
+    id: number;
+    attributes: NoticeDataType;
+  }[];
+}
+export interface fetchStaffListData {
+  data: {
+    id: number;
+    attributes: StaffMembersType;
+  }[];
+}

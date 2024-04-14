@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import DashBoard from "@layout/Dashboard";
 import AdminHome from "@pages/Admin";
@@ -29,65 +30,78 @@ import { appTheme } from "@themes/app.theme.ts";
 import "@style/App.css";
 
 const App = () => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnMount: true,
+        refetchOnReconnect: true,
+        refetchOnWindowFocus: true,
+        retry: false,
+        staleTime: 30 * 1000, // 30 Seconds
+      },
+    },
+  });
+
   return (
     <AuthProvider>
       <ThemeProvider theme={appTheme}>
         <CssBaseline />
-        <Router>
-          <Routes>
-            <Route path="/" element={<Navigate to="/dashboard" />} />
-            <Route
-              element={<PrivateRoutes allowedRoles={["admin", "student"]} />}
-            >
-              <Route path="dashboard" element={<DashBoard />}>
-                <Route
-                  path=""
-                  element={
-                    <RouteWrapper
-                      components={{
-                        admin: <AdminHome />,
-                        student: <StudentHome />,
-                      }}
-                    />
-                  }
-                />
-                <Route
-                  path="complaints"
-                  element={
-                    <RouteWrapper
-                      components={{
-                        admin: <Complaints />,
-                        student: <Complaints />,
-                      }}
-                    />
-                  }
-                />
-                <Route
-                  path="canteenMenu"
-                  element={
-                    <RouteWrapper
-                      components={{
-                        admin: <Canteen />,
-                        student: <Canteen />,
-                      }}
-                    />
-                  }
-                />
+        <QueryClientProvider client={queryClient}>
+          <Router>
+            <Routes>
+              <Route path="/" element={<Navigate to="/dashboard" />} />
+              <Route
+                element={<PrivateRoutes allowedRoles={["admin", "student"]} />}
+              >
+                <Route path="dashboard" element={<DashBoard />}>
+                  <Route
+                    path=""
+                    element={
+                      <RouteWrapper
+                        components={{
+                          admin: <AdminHome />,
+                          student: <StudentHome />,
+                        }}
+                      />
+                    }
+                  />
+                  <Route
+                    path="complaints"
+                    element={
+                      <RouteWrapper
+                        components={{
+                          admin: <Complaints />,
+                          student: <Complaints />,
+                        }}
+                      />
+                    }
+                  />
+                  <Route
+                    path="canteenMenu"
+                    element={
+                      <RouteWrapper
+                        components={{
+                          admin: <Canteen />,
+                          student: <Canteen />,
+                        }}
+                      />
+                    }
+                  />
+                </Route>
               </Route>
-            </Route>
-            <Route element={<PrivateRoutes allowedRoles={["admin"]} />}>
-              <Route path="dashboard" element={<DashBoard />}>
-                <Route
-                  path="students"
-                  element={
-                    <RouteWrapper
-                      components={{
-                        admin: <StudentInfo />,
-                      }}
-                    />
-                  }
-                />
-                {/* <Route
+              <Route element={<PrivateRoutes allowedRoles={["admin"]} />}>
+                <Route path="dashboard" element={<DashBoard />}>
+                  <Route
+                    path="students"
+                    element={
+                      <RouteWrapper
+                        components={{
+                          admin: <StudentInfo />,
+                        }}
+                      />
+                    }
+                  />
+                  {/* <Route
                   path="rooms"
                   element={
                     <RouteWrapper
@@ -97,16 +111,17 @@ const App = () => {
                     />
                   }
                 /> */}
+                </Route>
               </Route>
-            </Route>
-            <Route element={<PublicRoutes />}>
-              <Route path="/login" element={<Login />} />
-            </Route>
+              <Route element={<PublicRoutes />}>
+                <Route path="/login" element={<Login />} />
+              </Route>
 
-            <Route path="/forbidden" element={<Forbidden />} />
-            <Route path="*" element={<PageNotFound />} />
-          </Routes>
-        </Router>
+              <Route path="/forbidden" element={<Forbidden />} />
+              <Route path="*" element={<PageNotFound />} />
+            </Routes>
+          </Router>
+        </QueryClientProvider>
       </ThemeProvider>
     </AuthProvider>
   );

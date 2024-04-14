@@ -16,19 +16,16 @@ import NoticeList from "./notice/NoticeList";
 import StaffTable from "./StaffTable";
 import useAlert from "@src/hooks/useAlert";
 import {
-  fetchData,
   dateFormat,
   extractArrayFromApiData,
   catchErrorMessage,
 } from "@utils/index";
 import {
-  AdminDashboardDataTypes,
   NoticeDataType,
-  graphDataType,
   StaffMembersType,
-  ErrorType,
-  SeverityType,
   StaffStatusType,
+  fetchNoticeData,
+  fetchStaffListData,
 } from "@ts/types";
 import {
   ADMIN_DASHBOARD_DETAIL,
@@ -38,8 +35,16 @@ import {
   ROOM_STATUS_DATA_URL,
   STAFF_LIST_URL,
   ERROR,
+  DEFAULT_ERROR_MESSAGE,
 } from "@constant/index";
 import colors from "@src/themes/colors";
+import {
+  useFetchAdminDashboardDetails,
+  useFetchComplaintStatusGraphChart,
+  useFetchNoticeData,
+  useFetchRoomStatusGraphChart,
+  useFetchStaffListData,
+} from "@src/queryHooks/query";
 
 const pieChartLegend = [
   { label: "Empty", color: colors.success.light },
@@ -130,62 +135,10 @@ const LineChartSkeleton = () => {
   );
 };
 
-async function fetchDataAndUpdateState<T>(
-  url: string,
-  attribute: string,
-  setData: React.Dispatch<React.SetStateAction<T>>,
-  setError: React.Dispatch<
-    React.SetStateAction<{ isError: boolean; message: string }>
-  >,
-  handleAlert: (
-    isOpen?: boolean,
-    message?: string,
-    severity?: SeverityType
-  ) => void
-): Promise<void> {
-  try {
-    const response = await fetchData(url);
-    const data = response.data.attributes[attribute];
-    setData(data);
-    setError({ isError: false, message: "" });
-  } catch (error) {
-    setError({ isError: true, message: error as string });
-    handleAlert(true, catchErrorMessage(error), ERROR);
-  }
-}
-
 const AdminHome = () => {
-  const [dashboardData, setDashboardData] =
-    useState<AdminDashboardDataTypes | null>(null);
-  const [dashboardDataError, setDashboardDataError] = useState<ErrorType>({
-    isError: false,
-    message: "",
-  });
   const [notices, setNotices] = useState<NoticeDataType[] | null>(null);
-  const [noticeError, setNoticeError] = useState<ErrorType>({
-    isError: false,
-    message: "",
-  });
-  const [updateNoticeCheck, setupdateNoticeCheck] = useState<boolean>(false);
-  const [roomStatusData, setRoomStatusData] = useState<graphDataType | null>(
-    null
-  );
-  const [roomStatusDataError, setRoomStatusDataError] = useState<ErrorType>({
-    isError: false,
-    message: "",
-  });
-  const [complaintsStats, setCompliaintsStats] = useState<graphDataType | null>(
-    null
-  );
-  const [complaintsStatsError, setCompliaintsStatsError] = useState<ErrorType>({
-    isError: false,
-    message: "",
-  });
   const [staffList, setStaffList] = useState<StaffMembersType[] | null>(null);
-  const [staffListError, setStaffListError] = useState<ErrorType>({
-    isError: false,
-    message: "",
-  });
+  const [staffListurl, setStaffListurl] = useState<string>(STAFF_LIST_URL);
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 10,
@@ -193,78 +146,119 @@ const AdminHome = () => {
   const { alert, handleAlert } = useAlert();
   const { isOpen, message, severity } = alert;
 
-  useEffect(() => {
-    getComplaintsData();
-    getDashboardDetails();
-    getRoomStatusDataForChart();
-  }, []);
+  const {
+    data: adminDashboardDetailData,
+    isError: adminDashboardDetailDataError,
+    refetch: refetchAdminDashboardDetailData,
+    error: admindashboardError,
+  } = useFetchAdminDashboardDetails(ADMIN_DASHBOARD_DETAIL_URL);
+
+  const {
+    data: roomStatusGraphData,
+    isError: roomStatusGraphDataError,
+    refetch: refetchRoomStatusGraphData,
+    error: roomStatusGraphDataErrorMessage,
+  } = useFetchRoomStatusGraphChart(ROOM_STATUS_DATA_URL);
+
+  const {
+    data: complaintGraphData,
+    isError: complaintGraphDataError,
+    refetch: refetchComplaintGraphData,
+    error: complaintGraphDataErrorMessage,
+  } = useFetchComplaintStatusGraphChart(COMPLAINTS_STATS_URL);
+
+  const {
+    data: noticeData,
+    isError: noticeDataError,
+    refetch: refetchNoticeData,
+    error: noticeDataErrorMessage,
+  } = useFetchNoticeData(NOTICES_URL);
+
+  const {
+    data: staffListData,
+    isError: staffListError,
+    refetch: refetchStaffListData,
+    error: staffListDataErrorMessage,
+  } = useFetchStaffListData(staffListurl);
 
   useEffect(() => {
-    getNoticesData();
-  }, [updateNoticeCheck]);
-
-  const getDashboardDetails = (): Promise<void> => {
-    return fetchDataAndUpdateState<AdminDashboardDataTypes | null>(
-      ADMIN_DASHBOARD_DETAIL_URL,
-      "details",
-      setDashboardData,
-      setDashboardDataError,
-      handleAlert
-    );
-  };
-
-  const getRoomStatusDataForChart = (): Promise<void> => {
-    return fetchDataAndUpdateState<graphDataType | null>(
-      ROOM_STATUS_DATA_URL,
-      "graphData",
-      setRoomStatusData,
-      setRoomStatusDataError,
-      handleAlert
-    );
-  };
-
-  const getComplaintsData = (): Promise<void> => {
-    return fetchDataAndUpdateState<graphDataType | null>(
-      COMPLAINTS_STATS_URL,
-      "graphData",
-      setCompliaintsStats,
-      setCompliaintsStatsError,
-      handleAlert
-    );
-  };
-
-  const getNoticesData = async (): Promise<void> => {
-    try {
-      const response = await fetchData(NOTICES_URL);
-      const data = extractArrayFromApiData<NoticeDataType>(response.data);
-      const formatedData = data.map((value: NoticeDataType) => {
-        return {
-          ...value,
-          date: dateFormat(value.date),
-        };
-      });
-      formatedData.sort(
-        (a: NoticeDataType, b: NoticeDataType) =>
-          new Date(b.date).getTime() - new Date(a.date).getTime()
+    if (adminDashboardDetailDataError)
+      handleAlert(
+        true,
+        catchErrorMessage(admindashboardError) || DEFAULT_ERROR_MESSAGE,
+        ERROR
       );
-      setNotices(formatedData);
-      setNoticeError({ isError: false, message: "" });
-    } catch (error) {
-      setNoticeError({ isError: true, message: error as string });
-      handleAlert(true, catchErrorMessage(error), ERROR);
+  }, [adminDashboardDetailDataError]);
+
+  useEffect(() => {
+    if (roomStatusGraphDataError)
+      handleAlert(
+        true,
+        catchErrorMessage(roomStatusGraphDataErrorMessage) ||
+          DEFAULT_ERROR_MESSAGE,
+        ERROR
+      );
+  }, [roomStatusGraphDataError]);
+
+  useEffect(() => {
+    if (complaintGraphDataError)
+      handleAlert(
+        true,
+        catchErrorMessage(complaintGraphDataErrorMessage) ||
+          DEFAULT_ERROR_MESSAGE,
+        ERROR
+      );
+  }, [complaintGraphDataError]);
+
+  useEffect(() => {
+    if (noticeDataError)
+      handleAlert(
+        true,
+        catchErrorMessage(noticeDataErrorMessage) || DEFAULT_ERROR_MESSAGE,
+        ERROR
+      );
+  }, [noticeDataError]);
+
+  useEffect(() => {
+    if (staffListError)
+      handleAlert(
+        true,
+        catchErrorMessage(staffListDataErrorMessage) || DEFAULT_ERROR_MESSAGE,
+        ERROR
+      );
+  }, [staffListError]);
+
+  useEffect(() => {
+    if (noticeData) {
+      getNoticesData(noticeData);
     }
+  }, [noticeData]);
+
+  useEffect(() => {
+    if (staffListData) {
+      getStaffListData(staffListData);
+    }
+  }, [staffListData]);
+
+  const getNoticesData = (noticeData: fetchNoticeData) => {
+    const data = extractArrayFromApiData<NoticeDataType>(noticeData.data);
+    const formatedData = data.map((value: NoticeDataType) => {
+      return {
+        ...value,
+        date: dateFormat(value.date),
+      };
+    });
+    formatedData.sort(
+      (a: NoticeDataType, b: NoticeDataType) =>
+        new Date(b?.updatedAt || b.date).getTime() -
+        new Date(a?.updatedAt || a.date).getTime()
+    );
+    setNotices(formatedData);
   };
 
-  const getStaffListData = async (): Promise<void> => {
-    try {
-      const response = await fetchData(STAFF_LIST_URL);
-      const data = extractArrayFromApiData<StaffMembersType>(response.data);
-      setStaffList(data);
-      setStaffListError({ isError: false, message: "" });
-    } catch (error) {
-      setStaffListError({ isError: true, message: error as string });
-      handleAlert(true, catchErrorMessage(error), ERROR);
-    }
+  const getStaffListData = (staffListData: fetchStaffListData) => {
+    const data = extractArrayFromApiData<StaffMembersType>(staffListData.data);
+    setStaffList(data);
   };
 
   const handleSaffListFilter = async (
@@ -272,30 +266,22 @@ const AdminHome = () => {
   ) => {
     const filter = event.target.value;
     if (filter === "All") {
-      getStaffListData();
+      setStaffListurl(STAFF_LIST_URL);
       return;
     }
     const url = `${STAFF_LIST_URL}?filters[status][$eq]=${filter}`;
-    try {
-      const response = await fetchData(url);
-      const data = extractArrayFromApiData<StaffMembersType>(response.data);
-      setStaffList(data);
-      setStaffListError({ isError: false, message: "" });
-    } catch (error) {
-      setStaffListError({ isError: true, message: error as string });
-      handleAlert(true, catchErrorMessage(error), ERROR);
-    }
+    setStaffListurl(url);
   };
 
   return (
     <Box className="p-4 w-full xl:p-8 flex flex-col  min-h-20 flex-grow-0 md:flex-grow md:min-h-1/2 overflow-scroll">
       <ErrorBoundary
-        error={dashboardDataError.isError}
+        error={adminDashboardDetailDataError}
         ErrorComponent={
           <ErrorComponent
             className="w-full"
             boxClassName="h-40"
-            onSubmit={getDashboardDetails}
+            onSubmit={refetchAdminDashboardDetailData}
             message="Error in fetching data"
           />
         }
@@ -305,7 +291,9 @@ const AdminHome = () => {
             return (
               <DashboardDetail
                 key={value.label}
-                dashboardData={dashboardData}
+                dashboardData={
+                  adminDashboardDetailData?.data?.attributes["details"] || null
+                }
                 detail={value}
               />
             );
@@ -314,12 +302,12 @@ const AdminHome = () => {
       </ErrorBoundary>
       <Box className="gap-4 mt-4  flex-grow flex-wrap h-screen flex justify-around lg:flex-nowrap xl:gap-8 md:min-h-[66%] lg:min-h-[75%]  xl:mt-8">
         <ErrorBoundary
-          error={noticeError.isError}
+          error={noticeDataError}
           ErrorComponent={
             <Paper className="dashboard-paper">
               <ErrorComponent
                 className="w-full h-full"
-                onSubmit={getNoticesData}
+                onSubmit={refetchNoticeData}
                 message="Error in fetching data"
                 heading="Notices"
                 headingClassName="mx-8 mt-4"
@@ -327,18 +315,15 @@ const AdminHome = () => {
             </Paper>
           }
         >
-          <NoticeList
-            notices={notices}
-            setupdateNoticeCheck={setupdateNoticeCheck}
-          />
+          <NoticeList notices={notices} />
         </ErrorBoundary>
         <Paper className="dashboard-paper relative">
           <ErrorBoundary
-            error={roomStatusDataError.isError}
+            error={roomStatusGraphDataError}
             ErrorComponent={
               <ErrorComponent
                 className="w-full h-full"
-                onSubmit={getRoomStatusDataForChart}
+                onSubmit={refetchRoomStatusGraphData}
                 message="Error in fetching data"
                 heading="Rooms Status"
                 headingClassName="mx-8 mt-4"
@@ -349,13 +334,13 @@ const AdminHome = () => {
               Rooms Status
             </Typography>
             <Chart
-              data={roomStatusData}
+              data={roomStatusGraphData?.data?.attributes["graphData"] || null}
               graphType="PieChart"
               options={pieChartOption}
               className="m-auto"
               Skeleton={PieChartSkeleton}
             />
-            {roomStatusData && (
+            {roomStatusGraphData && (
               <Box className="w-[90%] px-8 flex justify-center gap-4 flex-wrap top-[80%] absolute">
                 {pieChartLegend.map(({ label, color }) => {
                   return (
@@ -375,12 +360,12 @@ const AdminHome = () => {
       </Box>
       <Box className="gap-4 mt-4 py-4 flex-grow flex-wrap h-screen flex justify-around lg:py-0 lg:flex-nowrap xl:gap-8 md:min-h-[66%] lg:min-h-[75%]  xl:mt-8">
         <ErrorBoundary
-          error={staffListError.isError}
+          error={staffListError}
           ErrorComponent={
             <Paper className="dashboard-paper ">
               <ErrorComponent
                 className="w-full h-full"
-                onSubmit={getStaffListData}
+                onSubmit={refetchStaffListData}
                 message="Error in fetching data"
                 heading="Staff Members"
                 headingClassName="mx-8 mt-4"
@@ -390,7 +375,7 @@ const AdminHome = () => {
         >
           <StaffTable
             staffList={staffList}
-            getData={getStaffListData}
+            getData={refetchStaffListData}
             paginationModel={paginationModel}
             setPaginationModel={setPaginationModel}
             handleFilter={handleSaffListFilter}
@@ -398,11 +383,11 @@ const AdminHome = () => {
         </ErrorBoundary>
         <Paper className="dashboard-paper ">
           <ErrorBoundary
-            error={complaintsStatsError.isError}
+            error={complaintGraphDataError}
             ErrorComponent={
               <ErrorComponent
                 className="w-full h-full"
-                onSubmit={getComplaintsData}
+                onSubmit={refetchComplaintGraphData}
                 message="Error in fetching data"
                 heading="Complaints Statistics"
                 headingClassName="mx-8 mt-4"
@@ -413,7 +398,7 @@ const AdminHome = () => {
               Complaints Statistics
             </Typography>
             <Chart
-              data={complaintsStats}
+              data={complaintGraphData?.data?.attributes["graphData"] || null}
               graphType="LineChart"
               options={lineChartOptions}
               className="m-auto mr-4"

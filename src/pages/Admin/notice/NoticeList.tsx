@@ -19,13 +19,8 @@ import ConfirmationModal from "@components/ConfirmationModal";
 import { AuthContext } from "@context/AuthContext";
 import useDialog from "@src/hooks/useDialog.ts";
 import useAlert from "@src/hooks/useAlert.ts";
-import {
-  sendData,
-  deleteData,
-  catchErrorMessage,
-  todayDate,
-} from "@utils/index";
-import { NoticeDataType, NoticeStateProps, SeverityType } from "@ts/types";
+import { catchErrorMessage, todayDate } from "@utils/index";
+import { NoticeDataType, NoticeStateProps } from "@ts/types";
 import {
   NOTICES_URL,
   METHOD,
@@ -34,55 +29,14 @@ import {
   ADMIN,
   DELETE,
 } from "@constant/index";
-
-const saveNotice = async (
-  notice: NoticeDataType,
-  handleAlert: (
-    isOpen: boolean,
-    message: string,
-    serverity: SeverityType
-  ) => void
-) => {
-  try {
-    const { PUT, POST } = METHOD;
-    const method = notice.id ? PUT : POST;
-    const url = notice.id ? `${NOTICES_URL}/${notice.id}` : NOTICES_URL;
-    const isDataSent = await sendData<NoticeDataType>(url, method, notice);
-    const message = isDataSent ? "Notice updated" : "Notice added";
-    const severity = isDataSent ? SUCCESS : ERROR;
-    handleAlert(true, message, severity);
-  } catch (error) {
-    handleAlert(true, catchErrorMessage(error), ERROR);
-  }
-};
-
-const deleteNotice = async (
-  id: number | null,
-  handleAlert: (
-    isOpen: boolean,
-    message: string,
-    serverity: SeverityType
-  ) => void
-) => {
-  try {
-    if (!id) {
-      throw new Error("notice do not exist");
-    }
-    const url = `${NOTICES_URL}/${id}`;
-    const isDataDeleted = await deleteData(url);
-    const message = isDataDeleted
-      ? "Notice deleted"
-      : "Error, Notice not deleted";
-    const severity = isDataDeleted ? SUCCESS : ERROR;
-    handleAlert(true, message, severity);
-  } catch (error) {
-    handleAlert(true, catchErrorMessage(error), ERROR);
-  }
-};
+import {
+  useSaveNotice,
+  SendDataParams,
+  useDeleteNotice,
+} from "@src/queryHooks/query";
 
 type NoticesProps = {
   notices: NoticeDataType[] | null;
-  setupdateNoticeCheck?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const intitalNoticeState: NoticeDataType = {
@@ -91,7 +45,7 @@ const intitalNoticeState: NoticeDataType = {
   content: "",
 };
 
-const NoticeList = ({ notices, setupdateNoticeCheck }: NoticesProps) => {
+const NoticeList = ({ notices }: NoticesProps) => {
   const [selectedNotice, setSelectedNotice] = useState<NoticeStateProps>({
     notice: intitalNoticeState,
     isModalOpen: false,
@@ -105,12 +59,24 @@ const NoticeList = ({ notices, setupdateNoticeCheck }: NoticesProps) => {
   const isUserAdmin = role === ADMIN;
   const { alert, handleAlert } = useAlert();
   const { isOpen, message, severity } = alert;
+  const { mutate: saveOrUpdateNotice } = useSaveNotice();
+  const { mutate: deleteNotice } = useDeleteNotice();
 
   const handleDialog = () => {
-    deleteNotice(deleteNoticeId, handleAlert);
-    setupdateNoticeCheck!((val) => {
-      return !val;
-    });
+    try {
+      if (!deleteNoticeId) {
+        throw new Error("notice do not exist");
+      }
+      const url = `${NOTICES_URL}/${deleteNoticeId}`;
+      deleteNotice(url, {
+        onSuccess: () => {
+          handleAlert(true, "Notice deleted", SUCCESS);
+        },
+        onError: () => handleAlert(true, "Error, Notice not deleted", ERROR),
+      });
+    } catch (error) {
+      handleAlert(true, catchErrorMessage(error), ERROR);
+    }
   };
   const { open, handleDialogClick, handleDialogSubmit } =
     useDialog(handleDialog);
@@ -141,10 +107,24 @@ const NoticeList = ({ notices, setupdateNoticeCheck }: NoticesProps) => {
   };
 
   const handleSubmit = (notice: NoticeDataType): void => {
-    saveNotice(notice, handleAlert);
-    setupdateNoticeCheck!((val) => {
-      return !val;
+    const { PUT, POST } = METHOD;
+    const method = notice.id ? PUT : POST;
+    const url = notice.id ? `${NOTICES_URL}/${notice.id}` : NOTICES_URL;
+    const params: SendDataParams = {
+      url,
+      method,
+      content: notice,
+    };
+    saveOrUpdateNotice(params, {
+      onSuccess: () => {
+        const message = method === PUT ? "Notice updated" : "Notice added";
+        handleAlert(true, message, SUCCESS);
+      },
+      onError(error) {
+        handleAlert(true, error.message, ERROR);
+      },
     });
+
     handleClose();
   };
 
