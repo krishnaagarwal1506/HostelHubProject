@@ -43,7 +43,6 @@ function getPdf(
 ) {
   fetchData(CANTEEN_MENU_URL)
     .then((data) => {
-      console.log("Data", data);
       const {
         id,
         attributes: { link },
