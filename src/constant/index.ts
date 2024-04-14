@@ -101,8 +101,7 @@ export const METHOD = {
 };
 
 export const DASHBOARD_ENDPOINT: string = "dashboard";
-
-export const BASE_URL: string = "https://hostelhub-strapi.onrender.com";
+export const BASE_URL: string = import.meta.env.VITE_BASE_URL;
 
 export const USER_DATA_URL: string = "/api/users/me";
 
