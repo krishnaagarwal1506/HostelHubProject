@@ -10,6 +10,7 @@ import {
   NOT_AVAILABLE,
   PARTIAL_FILLED,
 } from "@constant/index";
+import { SendDataParams } from "@src/queryHooks/query";
 import axiosInstance from "@utils/axiosInstance";
 
 interface AxiosError extends Error {
@@ -32,11 +33,8 @@ export const fetchData = async (url: string) => {
   return response.data;
 };
 
-export async function sendData<Type>(
-  url: string,
-  method: "POST" | "PUT",
-  content: Type,
-  wrapper: boolean = true
+export async function sendData(
+  { url, method, content, wrapper = true }: SendDataParams
   //eslint-disable-next-line
 ): Promise<any> {
   const apiData = {

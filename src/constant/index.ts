@@ -31,6 +31,7 @@ export const NOT_AVAILABLE = "notavailable" as const;
 export const SUCCESS = "success" as const;
 export const ERROR = "error" as const;
 export const DELETE = "delete";
+export const DEFAULT_ERROR_MESSAGE = "An Error Occurred";
 
 export const ADMIN_SIDEBAR: SidebarValueType[] = [
   {

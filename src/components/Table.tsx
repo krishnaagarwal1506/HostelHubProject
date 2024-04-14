@@ -38,8 +38,8 @@ const TableComponent = ({
   searchText = "",
 }: TablePropsTypes) => {
   useEffect(() => {
-    getData(pagination, paginationModel!.page, searchText);
-  }, [paginationModel!.page]);
+    if (pagination) getData(pagination, paginationModel!.page, searchText);
+  }, [paginationModel]);
 
   return (
     <DataGrid
