@@ -10,5 +10,6 @@ module.exports = {
   parser: "@typescript-eslint/parser",
   rules: {
     "react-hooks/exhaustive-deps": "off",
+    "no-console": ["error", { allow: ["error"] }],
   },
 };
