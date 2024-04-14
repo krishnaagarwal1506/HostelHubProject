@@ -6,7 +6,7 @@ node_modules
 dist
 server
 coverage
-
+.env
 .vscode/*
 !.vscode/extensions.json
 .DS_Store
