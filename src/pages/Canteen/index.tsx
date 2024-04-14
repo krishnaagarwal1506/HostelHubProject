@@ -43,6 +43,7 @@ function getPdf(
 ) {
   fetchData(CANTEEN_MENU_URL)
     .then((data) => {
+      console.log("Data", data);
       const {
         id,
         attributes: { link },
@@ -153,6 +154,10 @@ const Canteen = () => {
                   plugins={[defaultLayoutPluginInstance]}
                   fileUrl={url}
                   withCredentials={true}
+                  renderError={() => {
+                    setError(true);
+                    return <></>;
+                  }}
                 />
               </Worker>
             ) : (
