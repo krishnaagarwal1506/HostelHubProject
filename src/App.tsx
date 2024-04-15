@@ -37,6 +37,7 @@ const App = () => {
         refetchOnReconnect: true,
         refetchOnWindowFocus: true,
         retry: false,
+        networkMode: "always",
         staleTime: 30 * 1000, // 30 Seconds
       },
     },
