@@ -37,7 +37,7 @@ const App = () => {
         refetchOnReconnect: true,
         refetchOnWindowFocus: true,
         retry: false,
-        networkMode: "always", // to hit api even in offline status
+        networkMode: "always",
         staleTime: 30 * 1000, // 30 Seconds
       },
     },
