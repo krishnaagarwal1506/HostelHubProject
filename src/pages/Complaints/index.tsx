@@ -73,7 +73,11 @@ const updateComplaintsStatus = async (
   const url = `${COMPLAINTS_URL}/${id}`;
 
   try {
-    const isDataUpdated = await sendData<ComplaintType>(url, PUT, complaint);
+    const isDataUpdated = await sendData({
+      url,
+      method: PUT,
+      content: complaint,
+    });
     const message = isDataUpdated
       ? "Status saved Successfully"
       : "Error in updating status";
@@ -219,11 +223,11 @@ const Complaints = () => {
     ) => void
   ) => {
     try {
-      const isComplaintAdded = await sendData<ComplaintType>(
-        COMPLAINTS_URL,
-        POST,
-        complaint
-      );
+      const isComplaintAdded = await sendData({
+        url: COMPLAINTS_URL,
+        method: POST,
+        content: complaint,
+      });
       const message = isComplaintAdded
         ? "Complaint added Successfully"
         : "Error in adding complaint";

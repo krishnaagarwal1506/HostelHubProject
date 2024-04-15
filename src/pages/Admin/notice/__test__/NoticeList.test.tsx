@@ -69,10 +69,7 @@ describe("NoticeList", () => {
   beforeEach(() => {
     render(
       <AuthProviderMock value={{ isLoading: false }}>
-        <NoticeList
-          notices={mockNotices}
-          setupdateNoticeCheck={mockSetUpdateNoticeCheck}
-        />
+        <NoticeList notices={mockNotices} />
       </AuthProviderMock>
     );
   });

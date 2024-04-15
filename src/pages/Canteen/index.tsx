@@ -97,9 +97,12 @@ const Canteen = () => {
           const data = {
             link: newPdfUrl,
           };
-          const isMenuLinkUpdated = await sendData<{
-            link: string;
-          }>(CANTEEN_MENU_URL, PUT, data, true);
+          const isMenuLinkUpdated = await sendData({
+            url: CANTEEN_MENU_URL,
+            method: PUT,
+            content: data,
+            wrapper: true,
+          });
           if (isMenuLinkUpdated) {
             getPdf(setPdf, setError, handleAlert);
             handleAlert(true, "File Uploaded Successfully", SUCCESS);
