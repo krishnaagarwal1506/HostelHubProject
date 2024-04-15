@@ -1,7 +1,6 @@
 logs
 *.log
 npm-debug.log*
-
 node_modules
 dist
 server
@@ -10,4 +9,4 @@ coverage
 .vscode/*
 !.vscode/extensions.json
 .DS_Store
-
+dev-dist
