@@ -21,5 +21,5 @@
 ## Add .env file in root folder
 
 ```
-VITE_BASE_URL=http://localhost:1337
+VITE_BASE_URL=https://hostelhub-strapi.onrender.com
 ```
