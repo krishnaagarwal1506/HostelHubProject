@@ -19,7 +19,7 @@ const axiosInstance = (): AxiosInstance => {
   instance.interceptors.response.use(
     (response) => response,
     (error) => {
-      if (error.response.status === 401) {
+      if (error?.response?.status === 401) {
         deleteLocalStorage("jwtToken");
         window.location.href = "/login";
       }

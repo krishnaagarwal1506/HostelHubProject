@@ -95,7 +95,9 @@ export const checkEmailExists = async (
 
 export const catchErrorMessage = (error: unknown) => {
   return (
-    (error as AxiosError).response?.data.error.message || "An error occurred"
+    (error as AxiosError)?.message ||
+    (error as AxiosError)?.response?.data.error.message ||
+    "An error occurred"
   );
 };
 
