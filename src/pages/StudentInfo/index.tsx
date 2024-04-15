@@ -102,16 +102,18 @@ const saveStudentData = async (
       username: studentInfo.email,
       email: studentInfo.email,
     };
-    const isUserDataUpdated = await sendData<{
-      username: string;
-      email: string;
-    }>(userUrl, PUT, user, false);
+    const isUserDataUpdated = await sendData({
+      url: userUrl,
+      method: PUT,
+      content: user,
+      wrapper: false,
+    });
     if (!isUserDataUpdated) throw new Error("Error, data not updated");
-    const isDataUpdated = await sendData<StudentInfoType>(
+    const isDataUpdated = await sendData({
       url,
-      PUT,
-      studentInfo
-    );
+      method: PUT,
+      content: studentInfo,
+    });
     const message = isDataUpdated
       ? "Data updated successfully"
       : "Data not updated";
@@ -131,11 +133,11 @@ const addStudentData = async (
   ) => void
 ) => {
   try {
-    const isDataSent = await sendData<StudentInfoType>(
-      STUDENT_INFO_URL,
-      POST,
-      studentData
-    );
+    const isDataSent = await sendData({
+      url: STUDENT_INFO_URL,
+      method: POST,
+      content: studentData,
+    });
     if (!isDataSent) throw new Error("Data not saved");
     const {
       data: {
@@ -150,13 +152,12 @@ const addStudentData = async (
       role: 4,
       student: id,
     };
-    const isUserCreated = await sendData<{
-      username: string;
-      email: string;
-      password: string;
-      role: number;
-      student: number;
-    }>(`${STRAPI_USER_URL}`, POST, userData, false);
+    const isUserCreated = await sendData({
+      url: `${STRAPI_USER_URL}`,
+      method: POST,
+      content: userData,
+      wrapper: false,
+    });
     const message = isUserCreated
       ? "Data saved successfully"
       : "Data not saved";
