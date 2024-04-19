@@ -19,6 +19,7 @@ import Login from "@pages/login";
 
 import PageNotFound from "@components/PageNotFound";
 import Forbidden from "@components/Forbidden";
+import NetworkStatusBoundry from "@components/NetworkStatusBoundry";
 
 import PrivateRoutes from "@routes/PrivateRoutes";
 import PublicRoutes from "@routes/PublicRoutes";
@@ -44,65 +45,68 @@ const App = () => {
   });
 
   return (
-    <AuthProvider>
-      <ThemeProvider theme={appTheme}>
-        <CssBaseline />
-        <QueryClientProvider client={queryClient}>
-          <Router>
-            <Routes>
-              <Route path="/" element={<Navigate to="/dashboard" />} />
-              <Route
-                element={<PrivateRoutes allowedRoles={["admin", "student"]} />}
-              >
-                <Route path="dashboard" element={<DashBoard />}>
-                  <Route
-                    path=""
-                    element={
-                      <RouteWrapper
-                        components={{
-                          admin: <AdminHome />,
-                          student: <StudentHome />,
-                        }}
-                      />
-                    }
-                  />
-                  <Route
-                    path="complaints"
-                    element={
-                      <RouteWrapper
-                        components={{
-                          admin: <Complaints />,
-                          student: <Complaints />,
-                        }}
-                      />
-                    }
-                  />
-                  <Route
-                    path="canteenMenu"
-                    element={
-                      <RouteWrapper
-                        components={{
-                          admin: <Canteen />,
-                          student: <Canteen />,
-                        }}
-                      />
-                    }
-                  />
+    <ThemeProvider theme={appTheme}>
+      <CssBaseline />
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <NetworkStatusBoundry>
+            <AuthProvider>
+              <Routes>
+                <Route path="/" element={<Navigate to="/dashboard" />} />
+                <Route
+                  element={
+                    <PrivateRoutes allowedRoles={["admin", "student"]} />
+                  }
+                >
+                  <Route path="dashboard" element={<DashBoard />}>
+                    <Route
+                      path=""
+                      element={
+                        <RouteWrapper
+                          components={{
+                            admin: <AdminHome />,
+                            student: <StudentHome />,
+                          }}
+                        />
+                      }
+                    />
+                    <Route
+                      path="complaints"
+                      element={
+                        <RouteWrapper
+                          components={{
+                            admin: <Complaints />,
+                            student: <Complaints />,
+                          }}
+                        />
+                      }
+                    />
+                    <Route
+                      path="canteenMenu"
+                      element={
+                        <RouteWrapper
+                          components={{
+                            admin: <Canteen />,
+                            student: <Canteen />,
+                          }}
+                        />
+                      }
+                    />
+                  </Route>
                 </Route>
-              </Route>
-              <Route element={<PrivateRoutes allowedRoles={["admin"]} />}>
-                <Route path="dashboard" element={<DashBoard />}>
-                  <Route
-                    path="students"
-                    element={
-                      <RouteWrapper
-                        components={{
-                          admin: <StudentInfo />,
-                        }}
-                      />
-                    }
-                  />
-                  {/* <Route
+                <Route element={<PrivateRoutes allowedRoles={["admin"]} />}>
+                  <Route path="dashboard" element={<DashBoard />}>
+                    <Route
+                      path="students"
+                      element={
+                        <RouteWrapper
+                          components={{
+                            admin: <StudentInfo />,
+                          }}
+                        />
+                      }
+                    />
+                    {/* <Route
                   path="rooms"
                   element={
                     <RouteWrapper
@@ -112,19 +116,20 @@ const App = () => {
                     />
                   }
                 /> */}
+                  </Route>
                 </Route>
-              </Route>
-              <Route element={<PublicRoutes />}>
-                <Route path="/login" element={<Login />} />
-              </Route>
+                <Route element={<PublicRoutes />}>
+                  <Route path="/login" element={<Login />} />
+                </Route>
 
-              <Route path="/forbidden" element={<Forbidden />} />
-              <Route path="*" element={<PageNotFound />} />
-            </Routes>
-          </Router>
-        </QueryClientProvider>
-      </ThemeProvider>
-    </AuthProvider>
+                <Route path="/forbidden" element={<Forbidden />} />
+                <Route path="*" element={<PageNotFound />} />
+              </Routes>
+            </AuthProvider>
+          </NetworkStatusBoundry>
+        </Router>
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 };
 
