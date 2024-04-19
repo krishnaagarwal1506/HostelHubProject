@@ -12,7 +12,9 @@ export default defineConfig({
         enabled: true,
       },
       workbox: {
-        globPatterns: ["**/*.{js,css,html,png,svg,jpg,jpeg}"],
+        globPatterns: [
+          "**/*.{js,css,html,png,svg,jpg,jpeg,woff,woff2,ttf,otf}",
+        ],
       },
       manifest: {
         name: "HostelHub",
