@@ -158,3 +158,9 @@
 .rpv-default-layout__container {
   @apply !border-primary-light rounded-xl overflow-hidden;
 }
+
+@media (display-mode: standalone) {
+  body {
+    user-select: none;
+  }
+}

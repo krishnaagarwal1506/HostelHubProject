@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment } from "react";
+import { useState, useEffect, Fragment, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Typography, Paper, Skeleton } from "@mui/material";
 import {
@@ -11,6 +11,8 @@ import ErrorBoundary from "@components/ErrorBoundry";
 import ErrorComponent from "@components/ErrorComponent";
 import TableComponent from "@components/Table";
 import ChipComponent from "@components/Chip";
+
+import { AuthContext } from "@src/context/AuthContext";
 
 import { NoticeDataType, ErrorType } from "@ts/types";
 import { fetchData, extractArrayFromApiData, dateFormat } from "@utils/index";
@@ -55,6 +57,9 @@ const StudentHome = () => {
     room: string;
   } | null>(null);
   const [roomDetailsError, setRoomDetailsError] = useState<boolean>(false);
+  const {
+    user: { studentInfo },
+  } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -62,6 +67,7 @@ const StudentHome = () => {
     getNoticesData();
     getTodayMenu();
     getRoomDetails();
+    getComplaintsData();
   }, []);
 
   async function getNoticesData(): Promise<void> {
@@ -100,32 +106,23 @@ const StudentHome = () => {
     }
   }
 
-  async function getComplaintsData(
-    pagination: boolean,
-    page?: number,
-    searchStatus?: string
-  ) {
+  async function getComplaintsData() {
     try {
       setLoading(true);
-      const response = await fetchData(COMPLAINTS_URL);
-      const data = extractArrayFromApiData<ComplaintType>(response.data);
-      data.sort(
-        (a: ComplaintType, b: ComplaintType) =>
-          new Date(b.date).getTime() - new Date(a.date).getTime()
+      const response = await fetchData(
+        `${COMPLAINTS_URL}?populate=*&filters[student][id][$eq]=${studentInfo?.id}`
       );
-      const filteredData = searchStatus
-        ? data.filter(({ status }: ComplaintType) => {
-            if (searchStatus === "all") return true;
-            return status === searchStatus;
-          })
-        : data;
-      filteredData.forEach((complaint: ComplaintType) => {
-        complaint.date = dateFormat(complaint.date);
-      });
-      if (!pagination) setComplaintData(filteredData);
-      else {
-        setComplaintData(filteredData.slice(page! * 10, page! * 10 + 10));
-      }
+      const data = extractArrayFromApiData<ComplaintType>(response.data);
+      const filteredData = data
+        .sort(
+          (a: ComplaintType, b: ComplaintType) =>
+            new Date(b.date).getTime() - new Date(a.date).getTime()
+        )
+        .map((complaint: ComplaintType) => {
+          return { ...complaint, date: dateFormat(complaint.date) };
+        });
+
+      setComplaintData(filteredData);
       setcomplaintDataError({ isError: false, message: "" });
       setLoading(false);
     } catch (error) {
@@ -322,7 +319,7 @@ const StudentHome = () => {
             <Paper className="dashboard-paper ">
               <ErrorComponent
                 className="w-full h-full"
-                onSubmit={() => getComplaintsData(false)}
+                onSubmit={getComplaintsData}
                 message="Error in fetching data"
                 heading="My Compaints"
                 headingClassName="text-xl md:text-2xl font-medium mx-8 my-4 mb-4"

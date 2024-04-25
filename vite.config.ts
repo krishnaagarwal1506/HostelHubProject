@@ -20,7 +20,8 @@ export default defineConfig({
         name: "HostelHub",
         short_name: "HostelHub",
         description: "Tecno hostel management system",
-        theme_color: "#ffffff",
+        theme_color: "#f2f2f2",
+        orientation: "portrait",
         icons: [
           {
             src: "pwa-192x192.png",
