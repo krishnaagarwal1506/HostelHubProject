@@ -17,6 +17,7 @@ export type UserDetailsType = {
   name: string;
   email: string;
   role: string;
+  studentInfo?: StudentInfoType;
 };
 
 export type AdminDashboardDataTypes = {

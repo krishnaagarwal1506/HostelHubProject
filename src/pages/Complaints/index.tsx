@@ -145,7 +145,7 @@ const Complaints = () => {
   });
   const [action, setAction] = useState<string>("");
   const {
-    user: { role, name },
+    user: { role, name, studentInfo },
   } = useContext(AuthContext);
   const theme = useTheme();
   const isScreenSizeMdOrLarger = useMediaQuery(theme.breakpoints.up("md"));
@@ -186,7 +186,10 @@ const Complaints = () => {
   ) {
     try {
       setLoading(true);
-      const response = await fetchData(COMPLAINTS_URL);
+      const url = isRoleStudent
+        ? `${COMPLAINTS_URL}?populate=*&filters[student][id][$eq]=${studentInfo?.id}`
+        : COMPLAINTS_URL;
+      const response = await fetchData(url);
       const data = extractArrayFromApiData<ComplaintType>(response.data);
       data.sort(
         (a: ComplaintType, b: ComplaintType) =>
@@ -226,7 +229,7 @@ const Complaints = () => {
       const isComplaintAdded = await sendData({
         url: COMPLAINTS_URL,
         method: POST,
-        content: complaint,
+        content: { ...complaint, student: studentInfo?.id },
       });
       const message = isComplaintAdded
         ? "Complaint added Successfully"

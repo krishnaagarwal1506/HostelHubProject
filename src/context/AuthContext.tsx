@@ -77,6 +77,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
             name: student ? student.studentName : username,
             email,
             role: type,
+            studentInfo: student,
           });
           resolve();
         })
