@@ -1,5 +1,6 @@
 import { useEffect, MouseEvent } from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { useTheme } from "@mui/material";
 
 type TablePropsTypes = {
   columns: GridColDef[];
@@ -37,6 +38,8 @@ const TableComponent = ({
   onRowClick,
   searchText = "",
 }: TablePropsTypes) => {
+  const theme = useTheme();
+
   useEffect(() => {
     if (pagination) getData(pagination, paginationModel!.page, searchText);
   }, [paginationModel]);
@@ -50,6 +53,7 @@ const TableComponent = ({
         "& .MuiDataGrid-columnHeader:focus-within": {
           outline: "none !important",
         },
+        backgroundColor: theme.palette.background.paper,
       }}
       onRowClick={({ row }, event) => {
         onRowClick!(event, row);

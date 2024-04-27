@@ -34,4 +34,40 @@ const colors = {
   },
 };
 
+export const darkModeColors = {
+  primary: {
+    main: "#40189D",
+    light: "#b066b0",
+    dark: "#0a0418",
+  },
+  secondary: {
+    main: "#8BC740",
+    light: "#b0e8cf",
+  },
+  error: {
+    main: "#d32f2f",
+    light: "#ef5350",
+    dark: "#c62828",
+  },
+  warning: {
+    main: "#FE8024",
+  },
+  success: {
+    main: "#2e7d32",
+    light: "#4caf50",
+    dark: "#1b5e20",
+    contrastText: "#fff",
+  },
+  common: {
+    black: "#000",
+    white: "#fff",
+    lightBlue: "#48A9F8",
+    lightGray: "#babbbf",
+  },
+  background: {
+    paper: "#28253b",
+    default: "#251e35",
+  },
+};
+
 export default colors;

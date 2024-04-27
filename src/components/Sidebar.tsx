@@ -6,6 +6,7 @@ import {
   ListItemButton,
   ListItemIcon,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -29,6 +30,7 @@ const Sidebar = ({
     location.pathname.lastIndexOf("/") + 1
   );
   const navigate = useNavigate();
+  const theme = useTheme();
   const sidebarboxCss = isSidebarOpen
     ? "lg:min-w-[200px] lg:w-1/4"
     : "lg:w-24 hidden";
@@ -51,9 +53,7 @@ const Sidebar = ({
       <List className="flex flex-col mt-4">
         {sidebarFields.map(({ path, field, icon }: SidebarValueType) => {
           const isCurrentPage = path === locationPath;
-          const listbuttonCss = isCurrentPage
-            ? "bg-background-default rounded-l-2xl"
-            : "bg-primary-main";
+          const listbuttonCss = isCurrentPage ? "rounded-l-2xl" : "";
           const listSvgCss = isCurrentPage ? "fill-primary-main" : "fill-white";
           const listTextCss = isCurrentPage
             ? "text-primary-main"
@@ -75,6 +75,11 @@ const Sidebar = ({
               }}
             >
               <ListItemButton
+                sx={{
+                  backgroundColor: isCurrentPage
+                    ? theme.palette.background.default
+                    : theme.palette.primary.main,
+                }}
                 className={`h-14 ${listbuttonCss} transition-transform`}
               >
                 <ListItemIcon>
@@ -84,12 +89,22 @@ const Sidebar = ({
               </ListItemButton>
 
               <Box
-                className={`before:content-[''] before:bg-primary-main before:rounded-br-full before:absolute before:top-0 before:right-0 before:w-4 before:h-4 absolute right-0 -top-3 w-4 h-4  bg-background-default ${
+                sx={{
+                  backgroundColor: isCurrentPage
+                    ? theme.palette.background.default
+                    : theme.palette.primary.main,
+                }}
+                className={`before:content-[''] before:bg-primary-main before:rounded-br-full before:absolute before:top-0 before:right-0 before:w-4 before:h-4 absolute right-0 -top-3 w-4 h-4   ${
                   isCurrentPage ? "z-50" : "hidden"
                 }`}
               ></Box>
               <Box
-                className={`before:content-[''] before:bg-primary-main before:rounded-tr-full before:absolute before:top-0 before:right-0 before:w-4 before:h-4 absolute right-0 -bottom-3 w-4 h-4  bg-background-default ${
+                sx={{
+                  backgroundColor: isCurrentPage
+                    ? theme.palette.background.default
+                    : theme.palette.primary.main,
+                }}
+                className={`before:content-[''] before:bg-primary-main before:rounded-tr-full before:absolute before:top-0 before:right-0 before:w-4 before:h-4 absolute right-0 -bottom-3 w-4 h-4   ${
                   isCurrentPage ? "z-50" : "hidden"
                 }`}
               ></Box>

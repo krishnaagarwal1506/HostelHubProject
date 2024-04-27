@@ -4,7 +4,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { ThemeProvider } from "@mui/material/styles";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -27,8 +27,9 @@ import RouteWrapper from "@routes/RouteWrapper";
 
 import AuthProvider from "@context/AuthContext";
 
-import { appTheme } from "@themes/app.theme.ts";
+import getDesignTokens from "@themes/app.theme.ts";
 import "@style/App.css";
+import { useMemo, useState } from "react";
 
 const App = () => {
   const queryClient = new QueryClient({
@@ -44,8 +45,11 @@ const App = () => {
     },
   });
 
+  const [mode, setMode] = useState<"light" | "dark">("light");
+  const theme = useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
+
   return (
-    <ThemeProvider theme={appTheme}>
+    <ThemeProvider theme={createTheme(theme)}>
       <CssBaseline />
       <QueryClientProvider client={queryClient}>
         <Router>
@@ -58,7 +62,10 @@ const App = () => {
                     <PrivateRoutes allowedRoles={["admin", "student"]} />
                   }
                 >
-                  <Route path="dashboard" element={<DashBoard />}>
+                  <Route
+                    path="dashboard"
+                    element={<DashBoard handleTheme={setMode} mode={mode} />}
+                  >
                     <Route
                       path=""
                       element={
@@ -95,7 +102,10 @@ const App = () => {
                   </Route>
                 </Route>
                 <Route element={<PrivateRoutes allowedRoles={["admin"]} />}>
-                  <Route path="dashboard" element={<DashBoard />}>
+                  <Route
+                    path="dashboard"
+                    element={<DashBoard handleTheme={setMode} mode={mode} />}
+                  >
                     <Route
                       path="students"
                       element={

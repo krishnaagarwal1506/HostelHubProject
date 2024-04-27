@@ -443,7 +443,7 @@ const StudentInfo = () => {
           columns={columns}
           isLoading={loading}
           rows={studentsData || []}
-          tableClassName="max-h-full bg-white rounded-xl"
+          tableClassName="max-h-full rounded-xl"
           pagination={true}
           getData={getStudentInfoData}
           rowCount={rowCount}

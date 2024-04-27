@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { Dispatch, SetStateAction, useContext, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { Box } from "@mui/material";
 import { AuthContext } from "@context/AuthContext";
@@ -8,7 +8,13 @@ import Loader from "@src/components/Loader";
 import { ADMIN, ADMIN_SIDEBAR, STUDENT_SIDEBAR } from "@constant/index";
 import MobileNavbar from "@src/components/MobileNavbar";
 
-const DashBoard = () => {
+const DashBoard = ({
+  handleTheme,
+  mode,
+}: {
+  handleTheme: Dispatch<SetStateAction<"light" | "dark">>;
+  mode: "light" | "dark";
+}) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const authContext = useContext(AuthContext);
 
@@ -29,7 +35,11 @@ const DashBoard = () => {
         toogleSideBar={toogleSideBar}
       />
       <Box className="relative  w-full h-full md:h-screen flex flex-col mb-16 md:mb-0">
-        <Navbar toogleSideBar={toogleSideBar} />
+        <Navbar
+          toogleSideBar={toogleSideBar}
+          handleTheme={handleTheme}
+          mode={mode}
+        />
         <Outlet />
         <Box
           className={`lg:hidden absolute top-0 h-full w-full backdrop-blur-sm ${

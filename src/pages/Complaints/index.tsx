@@ -501,7 +501,7 @@ const Complaints = () => {
           columns={columns}
           isLoading={loading}
           rows={complaintData || []}
-          tableClassName="max-h-full bg-white rounded-xl"
+          tableClassName="max-h-full rounded-xl"
           pagination={true}
           getData={getComplaintsData}
           rowCount={rowCount}

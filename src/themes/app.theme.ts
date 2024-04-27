@@ -1,5 +1,5 @@
-import { createTheme, Breakpoints } from "@mui/material/styles";
-import colors from "./colors";
+import { Breakpoints } from "@mui/material/styles";
+import colors, { darkModeColors } from "./colors";
 
 declare module "@mui/material/styles" {
   interface CommonColors {
@@ -21,10 +21,10 @@ interface CustomBreakpoints extends Breakpoints {
 
 const rootElement = document.getElementById("root");
 
-export const appTheme = createTheme({
+const getDesignTokens = (mode: "light" | "dark") => ({
   palette: {
-    mode: "light",
-    ...colors,
+    mode,
+    ...(mode === "light" ? colors : darkModeColors),
   },
   typography: {
     fontFamily: "Lato",
@@ -48,3 +48,5 @@ export const appTheme = createTheme({
     },
   } as CustomBreakpoints,
 });
+
+export default getDesignTokens;

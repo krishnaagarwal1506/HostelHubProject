@@ -12,6 +12,8 @@ import {
   Apartment,
   HouseSiding,
   BedroomParent,
+  LightMode,
+  DarkMode,
 } from "@mui/icons-material";
 
 import { SidebarValueType, AdminDashboardDetailsTypes } from "@ts/types";
@@ -309,3 +311,8 @@ export const STUDENT_ROOM_DETAILS = [
     Icon: BedroomParent,
   },
 ];
+
+export const THEME_MODE_ICONS = {
+  light: LightMode,
+  dark: DarkMode,
+};
