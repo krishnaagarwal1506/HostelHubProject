@@ -13,6 +13,7 @@ import AdminHome from "@pages/Admin";
 import StudentInfo from "@pages/StudentInfo";
 import Complaints from "@pages/Complaints";
 import Canteen from "@pages/Canteen";
+import Applications from "@src/pages/Application";
 import StudentHome from "@pages/StudentHome";
 //import Rooms from "@pages/Rooms";
 import Login from "@pages/login";
@@ -77,6 +78,17 @@ const App = () => {
                           components={{
                             admin: <Complaints />,
                             student: <Complaints />,
+                          }}
+                        />
+                      }
+                    />
+                    <Route
+                      path="applications"
+                      element={
+                        <RouteWrapper
+                          components={{
+                            admin: <Applications />,
+                            student: <Applications />,
                           }}
                         />
                       }

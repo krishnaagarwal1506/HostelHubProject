@@ -22,60 +22,60 @@ import TableComponent from "@components/Table";
 import AlertComponent from "@components/Alert";
 import ConfirmationModal from "@components/ConfirmationModal";
 import ChipComponent from "@src/components/Chip";
-import ComplaintModal from "./ComplaintModal";
+import ApplicationModal from "./ApplicationModal";
 
 import useDialog from "@src/hooks/useDialog";
 import useAlert from "@src/hooks/useAlert";
 import { AuthContext } from "@context/AuthContext";
 import {
+  dateFormat,
   sendData,
   fetchData,
   catchErrorMessage,
   extractArrayFromApiData,
-  todayDate,
   deleteData,
   capitalize,
 } from "@utils/index";
 import {
-  COMPLAINTS_URL,
-  COMPLAINT_STATUS,
+  APPLICATIONS_URL,
+  APPLICATION_STATUS,
   ERROR,
   STUDENT,
   SUCCESS,
   STATUS_ICONS,
   PENDING,
-  RESOLVED,
-  INVALID,
+  APPROVED,
+  REJECTED,
   ALL,
   METHOD,
   DELETE,
 } from "@src/constant";
 import {
-  ComplaintType,
+  ApplicationsType,
   SeverityType,
-  ComplaintStateType,
-  ComplaintStatusType,
+  ApplicationStateType,
+  ApplicationStatusType,
 } from "@ts/types";
 
-type SearchStatusType = ComplaintStatusType | "all";
+type SearchStatusType = ApplicationStatusType | "all";
 const { PUT, POST } = METHOD;
 
-const updateComplaintsStatus = async (
-  complaint: ComplaintType,
+const updateApplicationsStatus = async (
+  application: ApplicationsType,
   handleAlert: (
     isOpen: boolean,
     message: string,
     serverity: SeverityType
   ) => void
 ) => {
-  const { id } = complaint;
-  const url = `${COMPLAINTS_URL}/${id}`;
+  const { id } = application;
+  const url = `${APPLICATIONS_URL}/${id}`;
 
   try {
     const isDataUpdated = await sendData({
       url,
       method: PUT,
-      content: complaint,
+      content: application,
     });
     const message = isDataUpdated
       ? "Status saved Successfully"
@@ -87,20 +87,20 @@ const updateComplaintsStatus = async (
   }
 };
 
-const deleteComplaint = async (
-  { id }: ComplaintType,
+const deleteApplication = async (
+  { id }: ApplicationsType,
   handleAlert: (
     isOpen: boolean,
     message: string,
     serverity: SeverityType
   ) => void
 ) => {
-  const url = `${COMPLAINTS_URL}/${id}`;
+  const url = `${APPLICATIONS_URL}/${id}`;
   try {
     const isDataDeleted = await deleteData(url);
     const message = isDataDeleted
-      ? "Complaint Deleted Successfully"
-      : "Error in deleting complaint";
+      ? "Application Deleted Successfully"
+      : "Error in deleting application";
     const severity = isDataDeleted ? SUCCESS : ERROR;
     handleAlert(true, message, severity);
   } catch (error) {
@@ -110,8 +110,8 @@ const deleteComplaint = async (
 
 const isMenuItemVisible = (optionStatus: string, status: string) => {
   if (optionStatus === PENDING) return true;
-  if (optionStatus === RESOLVED && status !== PENDING) return true;
-  if (optionStatus === INVALID && status !== PENDING) return true;
+  if (optionStatus === APPROVED && status !== PENDING) return true;
+  if (optionStatus === REJECTED && status !== PENDING) return true;
   return false;
 };
 
@@ -129,13 +129,13 @@ const commonOptions: {
   },
 };
 
-const Complaints = () => {
-  const [complaintData, setComplaintData] = useState<ComplaintType[] | null>(
-    null
-  );
+const Applications = () => {
+  const [applicationData, setApplicationData] = useState<
+    ApplicationsType[] | null
+  >(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [selectedComplaint, setSelectedComplaint] =
-    useState<ComplaintStateType | null>(null);
+  const [selectedApplication, setSelectedApplication] =
+    useState<ApplicationStateType | null>(null);
   const [searchStatus, setSearchStatus] = useState<SearchStatusType>("all");
   const [rowCount, setRowCount] = useState<number>(0);
   const [paginationModel, setPaginationModel] = useState({
@@ -144,41 +144,44 @@ const Complaints = () => {
   });
   const [action, setAction] = useState<string>("");
   const {
-    user: { role, name, studentInfo },
+    user: { role, studentInfo },
   } = useContext(AuthContext);
   const theme = useTheme();
   const isScreenSizeMdOrLarger = useMediaQuery(theme.breakpoints.up("md"));
   const isRoleStudent = role === STUDENT;
-  const { status: seletedComplaintStatus } = selectedComplaint?.complaint || {};
+  const { status: seletedApplicationStatus } =
+    selectedApplication?.application || {};
   const { open, handleDialogClick, handleDialogSubmit } = useDialog(
     async () => {
       action === DELETE
-        ? await deleteComplaint(selectedComplaint!.complaint, handleAlert)
-        : await updateComplaintsStatus(
-            selectedComplaint!.complaint,
+        ? await deleteApplication(selectedApplication!.application, handleAlert)
+        : await updateApplicationsStatus(
+            selectedApplication!.application,
             handleAlert
           );
-      getComplaintsData(true, paginationModel.page, searchStatus);
+      getApplicationsData(true, paginationModel.page, searchStatus);
     }
   );
   const { alert, handleAlert } = useAlert();
   const selectMenuItems = [
     { status: PENDING, text: capitalize(PENDING), icon: STATUS_ICONS.pending },
     {
-      status: RESOLVED,
-      text: capitalize(RESOLVED),
-      icon: STATUS_ICONS.resolved,
+      status: APPROVED,
+      text: capitalize(APPROVED),
     },
-    { status: INVALID, text: capitalize(INVALID), icon: STATUS_ICONS.invalid },
+    {
+      status: REJECTED,
+      text: capitalize(REJECTED),
+      icon: STATUS_ICONS.invalid,
+    },
   ];
-  const initialComplaint: ComplaintType = {
-    date: todayDate(),
-    type: "",
+  const initialAApplication = {
+    subject: "",
     description: "",
     status: PENDING,
-    studentName: name,
+    student: studentInfo?.id,
   };
-  async function getComplaintsData(
+  async function getApplicationsData(
     pagination: boolean,
     page = 0,
     searchStatus?: string
@@ -186,20 +189,21 @@ const Complaints = () => {
     try {
       setLoading(true);
       const url = isRoleStudent
-        ? `${COMPLAINTS_URL}?populate=*&filters[student][id][$eq]=${studentInfo?.id}&sort=createdAt:desc&pagination[page]=${
+        ? `${APPLICATIONS_URL}?populate=*&filters[student][id][$eq]=${studentInfo?.id}&sort=createdAt:desc&pagination[page]=${
             page + 1
           }&pagination[pageSize]=10`
-        : `${COMPLAINTS_URL}?sort=createdAt:desc&pagination[page]=${
+        : `${APPLICATIONS_URL}?populate=*&sort=createdAt:desc&pagination[page]=${
             page + 1
           }&pagination[pageSize]=10`;
+
       const searchUrl =
         searchStatus === "all"
           ? url
           : `${url}&filters[status][$eq]=${searchStatus}`;
       const response = await fetchData(searchUrl);
-      const data = extractArrayFromApiData<ComplaintType>(response.data);
-      setComplaintData(data);
-      setRowCount(response.meta.pagination.total);
+      const data = extractArrayFromApiData<ApplicationsType>(response.data);
+      setApplicationData(data);
+      setRowCount(data.length);
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -207,8 +211,8 @@ const Complaints = () => {
     }
   }
 
-  const addNewComplaint = async (
-    complaint: ComplaintType,
+  const addNewApplication = async (
+    application: ApplicationsType,
     handleAlert: (
       isOpen: boolean,
       message: string,
@@ -216,19 +220,19 @@ const Complaints = () => {
     ) => void
   ) => {
     try {
-      const isComplaintAdded = await sendData({
-        url: COMPLAINTS_URL,
+      const isApplicationAdded = await sendData({
+        url: APPLICATIONS_URL,
         method: POST,
-        content: { ...complaint, student: studentInfo?.id },
+        content: { ...application, student: studentInfo?.id },
       });
-      const message = isComplaintAdded
-        ? "Complaint added Successfully"
-        : "Error in adding complaint";
-      const severity = isComplaintAdded ? SUCCESS : ERROR;
+      const message = isApplicationAdded
+        ? "Application added Successfully"
+        : "Error in adding application";
+      const severity = isApplicationAdded ? SUCCESS : ERROR;
       handleAlert(true, message, severity);
-      isComplaintAdded &&
-        getComplaintsData(true, paginationModel.page, searchStatus);
-      setSelectedComplaint(null);
+      isApplicationAdded &&
+        getApplicationsData(true, paginationModel.page, searchStatus);
+      setSelectedApplication(null);
     } catch (error) {
       handleAlert(true, catchErrorMessage(error), ERROR);
     }
@@ -240,8 +244,8 @@ const Complaints = () => {
     isModalEditable: boolean = false
   ) => {
     event.stopPropagation();
-    setSelectedComplaint({
-      complaint: row as ComplaintType,
+    setSelectedApplication({
+      application: row as ApplicationsType,
       isModalOpen: true,
       isModalEditable,
     });
@@ -249,33 +253,23 @@ const Complaints = () => {
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setSelectedComplaint({
-      ...selectedComplaint!,
-      complaint: {
-        ...selectedComplaint!.complaint,
+    setSelectedApplication({
+      ...selectedApplication!,
+      application: {
+        ...selectedApplication!.application,
         [name]: value,
       },
     });
   };
 
-  const handleAutoCompleteChange = (type: string | null) => {
-    setSelectedComplaint({
-      ...selectedComplaint!,
-      complaint: {
-        ...selectedComplaint!.complaint,
-        type: type || "",
-      },
-    });
-  };
-
   const OnStatusChange = (
-    event: SelectChangeEvent<ComplaintStatusType>,
-    row: ComplaintType
+    event: SelectChangeEvent<ApplicationStatusType>,
+    row: ApplicationsType
   ) => {
     event.stopPropagation();
     const { value } = event.target;
-    setSelectedComplaint({
-      complaint: { ...row, status: value as ComplaintStatusType },
+    setSelectedApplication({
+      application: { ...row, status: value as ApplicationStatusType },
       isModalOpen: false,
       isModalEditable: false,
     });
@@ -288,7 +282,7 @@ const Complaints = () => {
       field: "studentName",
       headerName: "Raised By",
       minWidth: 150,
-
+      renderCell: ({ row }) => row.student.data.attributes.studentName,
       flex: 1,
       cellClassName: "hover:cursor-pointer",
       ...commonOptions,
@@ -303,7 +297,7 @@ const Complaints = () => {
       cellClassName: "hover:cursor-pointer",
       ...commonOptions,
       renderCell: ({ row }) => {
-        const { status } = row as ComplaintType;
+        const { status } = row as ApplicationsType;
         return (
           <ChipComponent
             className="w-24 capitalize cursor-default"
@@ -326,16 +320,17 @@ const Complaints = () => {
       ...commonOptions,
     },
     {
-      field: "date",
+      field: "createdAt",
       headerName: "Created at",
       minWidth: 150,
       headerClassName: "pl-8",
       cellClassName: "pl-8 hover:cursor-pointer",
+      renderCell: ({ row }) => dateFormat(row.createdAt || ""),
       ...commonOptions,
     },
     {
-      field: "type",
-      headerName: "Type",
+      field: "subject",
+      headerName: "subject",
 
       minWidth: 150,
       flex: 1,
@@ -362,7 +357,7 @@ const Complaints = () => {
       cellClassName: "hover:cursor-pointer",
       ...commonOptions,
       renderCell: ({ row }) => {
-        const { status } = row as ComplaintType;
+        const { status } = row as ApplicationsType;
         const isPending = status === PENDING;
         return (
           <>
@@ -370,10 +365,10 @@ const Complaints = () => {
               <IconButton
                 onClick={(event) => {
                   event.stopPropagation();
-                  setSelectedComplaint((prev) => {
+                  setSelectedApplication((prev) => {
                     return {
                       ...prev!,
-                      complaint: row as ComplaintType,
+                      application: row as ApplicationsType,
                       isModalOpen: false,
                       isModalEditable: false,
                     };
@@ -398,8 +393,8 @@ const Complaints = () => {
                 value={status}
                 label="Age"
                 IconComponent={() => null}
-                onChange={(event: SelectChangeEvent<ComplaintStatusType>) => {
-                  OnStatusChange(event, row as ComplaintType);
+                onChange={(event: SelectChangeEvent<ApplicationStatusType>) => {
+                  OnStatusChange(event, row as ApplicationsType);
                 }}
                 MenuProps={{
                   PaperProps: {
@@ -449,7 +444,7 @@ const Complaints = () => {
   return (
     <>
       <Box className="flex w-[96%] justify-start items-center gap-2 shrink flex-wrap mx-auto gap-x-2 md:gap-x-4">
-        {COMPLAINT_STATUS.map(({ status }) => {
+        {["all", ...APPLICATION_STATUS].map((status) => {
           const isActive = searchStatus === status;
           return (
             <ChipComponent
@@ -462,7 +457,7 @@ const Complaints = () => {
               onClick={() => {
                 setSearchStatus(status as SearchStatusType);
                 setPaginationModel({ page: 0, pageSize: 10 });
-                getComplaintsData(true, paginationModel.page, status);
+                getApplicationsData(true, paginationModel.page, status);
               }}
             />
           );
@@ -474,11 +469,11 @@ const Complaints = () => {
               className="rounded-full md:rounded-[3px] md:ml-auto"
               size="large"
               onClick={(event) => {
-                handleOpenModal(event, initialComplaint, true);
+                handleOpenModal(event, initialAApplication, true);
               }}
             >
               {isScreenSizeMdOrLarger ? (
-                "raise complaint"
+                "raise application"
               ) : (
                 <Add fontSize="small" />
               )}
@@ -490,10 +485,10 @@ const Complaints = () => {
         <TableComponent
           columns={columns}
           isLoading={loading}
-          rows={complaintData || []}
-          tableClassName="max-h-full rounded-xl"
+          rows={applicationData || []}
+          tableClassName="max-h-full bg-white rounded-xl"
           pagination={true}
-          getData={getComplaintsData}
+          getData={getApplicationsData}
           rowCount={rowCount}
           paginationModel={paginationModel}
           setPaginationModel={setPaginationModel}
@@ -519,22 +514,21 @@ const Complaints = () => {
         >
           <DialogContent className="padding-0 ">
             {action === DELETE
-              ? "Complaint will be deleted"
-              : `Complaint status will be changed to ${
-                  selectedComplaint &&
-                  seletedComplaintStatus!.charAt(0).toUpperCase() +
-                    seletedComplaintStatus!.slice(1)
+              ? "Application will be deleted"
+              : `Application status will be changed to ${
+                  selectedApplication &&
+                  seletedApplicationStatus!.charAt(0).toUpperCase() +
+                    seletedApplicationStatus!.slice(1)
                 }`}
           </DialogContent>
         </ConfirmationModal>
-        {selectedComplaint?.isModalOpen && (
-          <ComplaintModal
-            complaintState={selectedComplaint}
-            handleClose={() => setSelectedComplaint(null)}
+        {selectedApplication?.isModalOpen && (
+          <ApplicationModal
+            applicationState={selectedApplication}
+            handleClose={() => setSelectedApplication(null)}
             handleChange={handleInputChange}
-            handleAutoCompleteChange={handleAutoCompleteChange}
             handleAdd={() => {
-              addNewComplaint(selectedComplaint!.complaint, handleAlert);
+              addNewApplication(selectedApplication!.application, handleAlert);
             }}
           />
         )}
@@ -543,4 +537,4 @@ const Complaints = () => {
   );
 };
 
-export default Complaints;
+export default Applications;

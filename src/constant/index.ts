@@ -12,6 +12,7 @@ import {
   Apartment,
   HouseSiding,
   BedroomParent,
+  Mail,
 } from "@mui/icons-material";
 
 import { SidebarValueType, AdminDashboardDetailsTypes } from "@ts/types";
@@ -32,6 +33,8 @@ export const SUCCESS = "success" as const;
 export const ERROR = "error" as const;
 export const DELETE = "delete";
 export const DEFAULT_ERROR_MESSAGE = "An Error Occurred";
+export const REJECTED = "rejected" as const;
+export const APPROVED = "approved" as const;
 
 export const ADMIN_SIDEBAR: SidebarValueType[] = [
   {
@@ -50,6 +53,11 @@ export const ADMIN_SIDEBAR: SidebarValueType[] = [
     path: "complaints",
   },
   {
+    field: "Applications",
+    icon: Mail,
+    path: "applications",
+  },
+  {
     field: "Canteen Menu",
     icon: RestaurantMenuIcon,
     path: "canteenMenu",
@@ -66,11 +74,13 @@ export const NAVBAR_TITLE_ADMIN: { [key: string]: string } = {
   students: "Student Info.",
   complaints: "Complaints",
   canteenMenu: "Canteen Menu",
+  applications: "Applications",
   rooms: "Rooms",
 };
 export const NAVBAR_TITLE_STUDENT: { [key: string]: string } = {
   dashboard: "My Dashboard",
   complaints: "My Complaints",
+  applications: "Applications",
   canteenMenu: "Canteen Menu",
 };
 
@@ -84,6 +94,11 @@ export const STUDENT_SIDEBAR: SidebarValueType[] = [
     field: "Complaints",
     icon: AssessmentIcon,
     path: "complaints",
+  },
+  {
+    field: "Applications",
+    icon: Mail,
+    path: "applications",
   },
   {
     field: "Canteen Menu",
@@ -137,6 +152,8 @@ export const STRAPI_FILE_UPLOAD_URL = BASE_URL + "/api/upload";
 export const TODAY_MENU_URL = BASE_URL + "/api/todaymenu";
 
 export const ROOM_INFO_URL = BASE_URL + "/api/room-info";
+
+export const APPLICATIONS_URL = BASE_URL + "/api/applications";
 
 export const ADMIN_DASHBOARD_DETAIL: AdminDashboardDetailsTypes[] = [
   {
@@ -309,3 +326,5 @@ export const STUDENT_ROOM_DETAILS = [
     Icon: BedroomParent,
   },
 ];
+
+export const APPLICATION_STATUS = [PENDING, APPROVED, REJECTED];

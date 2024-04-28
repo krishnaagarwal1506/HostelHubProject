@@ -181,52 +181,33 @@ const AdminHome = () => {
     error: staffListDataErrorMessage,
   } = useFetchStaffListData(staffListurl);
 
-  useEffect(() => {
-    if (adminDashboardDetailDataError)
-      handleAlert(
-        true,
-        catchErrorMessage(admindashboardError) || DEFAULT_ERROR_MESSAGE,
-        ERROR
-      );
-  }, [adminDashboardDetailDataError]);
+  const errors = [
+    { error: adminDashboardDetailDataError, message: admindashboardError },
+    {
+      error: roomStatusGraphDataError,
+      message: roomStatusGraphDataErrorMessage,
+    },
+    { error: complaintGraphDataError, message: complaintGraphDataErrorMessage },
+    { error: noticeDataError, message: noticeDataErrorMessage },
+    { error: staffListError, message: staffListDataErrorMessage },
+  ];
 
   useEffect(() => {
-    if (roomStatusGraphDataError)
-      handleAlert(
-        true,
-        catchErrorMessage(roomStatusGraphDataErrorMessage) ||
-          DEFAULT_ERROR_MESSAGE,
-        ERROR
-      );
-  }, [roomStatusGraphDataError]);
-
-  useEffect(() => {
-    if (complaintGraphDataError)
-      handleAlert(
-        true,
-        catchErrorMessage(complaintGraphDataErrorMessage) ||
-          DEFAULT_ERROR_MESSAGE,
-        ERROR
-      );
-  }, [complaintGraphDataError]);
-
-  useEffect(() => {
-    if (noticeDataError)
-      handleAlert(
-        true,
-        catchErrorMessage(noticeDataErrorMessage) || DEFAULT_ERROR_MESSAGE,
-        ERROR
-      );
-  }, [noticeDataError]);
-
-  useEffect(() => {
-    if (staffListError)
-      handleAlert(
-        true,
-        catchErrorMessage(staffListDataErrorMessage) || DEFAULT_ERROR_MESSAGE,
-        ERROR
-      );
-  }, [staffListError]);
+    errors.forEach(({ error, message }) => {
+      if (error)
+        handleAlert(
+          true,
+          catchErrorMessage(message) || DEFAULT_ERROR_MESSAGE,
+          ERROR
+        );
+    });
+  }, [
+    adminDashboardDetailDataError,
+    roomStatusGraphDataError,
+    complaintGraphDataError,
+    noticeDataError,
+    staffListError,
+  ]);
 
   useEffect(() => {
     if (noticeData) {
