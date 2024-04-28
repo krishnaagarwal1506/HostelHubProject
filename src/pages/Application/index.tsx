@@ -189,18 +189,17 @@ const Applications = () => {
     try {
       setLoading(true);
       const url = isRoleStudent
-        ? `${APPLICATIONS_URL}?populate=*&filters[student][id][$eq]=${studentInfo?.id}&sort=createdAt:desc&pagination[page]=${
-            page + 1
-          }&pagination[pageSize]=10`
-        : `${APPLICATIONS_URL}?populate=*&sort=createdAt:desc&pagination[page]=${
-            page + 1
-          }&pagination[pageSize]=10`;
-
+        ? `${APPLICATIONS_URL}?populate=*&filters[student][id][$eq]=${studentInfo?.id}&sort=createdAt:desc`
+        : `${APPLICATIONS_URL}?populate=*&sort=createdAt:desc`;
       const searchUrl =
         searchStatus === "all"
           ? url
           : `${url}&filters[status][$eq]=${searchStatus}`;
-      const response = await fetchData(searchUrl);
+      const response = await fetchData(
+        pagination
+          ? `${searchUrl}&pagination[page]=${page + 1}&pagination[pageSize]=10`
+          : searchUrl
+      );
       const data = extractArrayFromApiData<ApplicationsType>(response.data);
       setApplicationData(data);
       setRowCount(data.length);

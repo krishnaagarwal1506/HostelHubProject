@@ -186,17 +186,17 @@ const Complaints = () => {
     try {
       setLoading(true);
       const url = isRoleStudent
-        ? `${COMPLAINTS_URL}?populate=*&filters[student][id][$eq]=${studentInfo?.id}&sort=createdAt:desc&pagination[page]=${
-            page + 1
-          }&pagination[pageSize]=10`
-        : `${COMPLAINTS_URL}?sort=createdAt:desc&pagination[page]=${
-            page + 1
-          }&pagination[pageSize]=10`;
+        ? `${COMPLAINTS_URL}?populate=*&filters[student][id][$eq]=${studentInfo?.id}&sort=createdAt:desc`
+        : `${COMPLAINTS_URL}?sort=createdAt:desc`;
       const searchUrl =
         searchStatus === "all"
           ? url
           : `${url}&filters[status][$eq]=${searchStatus}`;
-      const response = await fetchData(searchUrl);
+      const response = await fetchData(
+        pagination
+          ? `${searchUrl}&pagination[page]=${page + 1}&pagination[pageSize]=10`
+          : searchUrl
+      );
       const data = extractArrayFromApiData<ComplaintType>(response.data);
       setComplaintData(data);
       setRowCount(response.meta.pagination.total);
