@@ -101,6 +101,7 @@ export type StepperFormType = {
 };
 
 export type ComplaintStatusType = "pending" | "resolved" | "invalid";
+export type ApplicationStatusType = "pending" | "approved" | "rejected";
 
 export type ComplaintType = {
   id?: number;
@@ -113,6 +114,29 @@ export type ComplaintType = {
 
 export type ComplaintStateType = {
   complaint: ComplaintType;
+  isModalOpen: boolean;
+  isModalEditable: boolean;
+};
+
+export type ApplicationsType = {
+  id: number;
+  date: string;
+  subject: string;
+  description: string;
+  student: {
+    data: {
+      id: string;
+      attributes: StudentInfoType;
+    };
+  };
+  status: ApplicationStatusType;
+  createdAt?: string;
+  updatedAt?: string;
+  publishedAt?: string;
+};
+
+export type ApplicationStateType = {
+  application: ApplicationsType;
   isModalOpen: boolean;
   isModalEditable: boolean;
 };

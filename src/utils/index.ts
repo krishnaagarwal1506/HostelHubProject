@@ -9,6 +9,8 @@ import {
   PRESENT,
   NOT_AVAILABLE,
   PARTIAL_FILLED,
+  REJECTED,
+  APPROVED,
 } from "@constant/index";
 import { SendDataParams } from "@src/queryHooks/query";
 import axiosInstance from "@utils/axiosInstance";
@@ -117,6 +119,7 @@ export const getStatusColor = (status: string, isActive: boolean = true) => {
     case RESOLVED:
     case EMPTY:
     case PRESENT:
+    case APPROVED:
       return {
         boxClass: `border-success-light ${
           isActive ? `bg-success-light ${opacityClass}` : "bg-white"
@@ -125,6 +128,7 @@ export const getStatusColor = (status: string, isActive: boolean = true) => {
       };
     case INVALID:
     case NOT_AVAILABLE:
+    case REJECTED:
       return {
         boxClass: `border-gray-500 ${
           isActive ? `bg-gray-500 ${opacityClass}` : "bg-white"

@@ -4,35 +4,33 @@ import {
   Box,
   Button,
   TextField,
-  Autocomplete,
 } from "@mui/material";
 import { Assessment } from "@mui/icons-material";
 
 import DialogModal from "@components/DialogModal";
 import ChipComponent from "@src/components/Chip";
 import LoadingButton from "@components/LoadingButton";
-import { ComplaintStateType } from "@ts/types";
-import { COMPLAINT_TYPES_OPTIONS, READ_ONLY_SX_VALUES } from "@constant/index";
+import { ApplicationStateType } from "@ts/types";
+import { READ_ONLY_SX_VALUES } from "@constant/index";
 import { ChangeEvent } from "react";
+import { dateFormat } from "@src/utils";
 
-type ComplaintModalPropsType = {
-  complaintState: ComplaintStateType;
+type ApplicationModalPropsType = {
+  applicationState: ApplicationStateType;
   handleClose: () => void;
   handleChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  handleAutoCompleteChange: (type: string | null) => void;
   handleAdd: () => void;
 };
 
-const ComplaintModal = ({
-  complaintState,
+const ApplicationModal = ({
+  applicationState,
   handleClose,
   handleChange,
-  handleAutoCompleteChange,
   handleAdd,
-}: ComplaintModalPropsType) => {
-  const { complaint, isModalOpen, isModalEditable } = complaintState;
-  const { date, type, description, status, studentName } = complaint;
-  const isSaveDisabled = !(type?.trim() && description?.trim());
+}: ApplicationModalPropsType) => {
+  const { application, isModalOpen, isModalEditable } = applicationState;
+  const { createdAt, subject, description, status, student } = application;
+  const isSaveDisabled = !(subject?.trim() && description?.trim());
   const actions = (
     <>
       <Button variant="outlined" size="large" onClick={handleClose}>
@@ -63,17 +61,14 @@ const ComplaintModal = ({
             <Typography variant="h6" className="py-2">
               Type
             </Typography>
-            <Autocomplete
+            <TextField
               className="width-100"
               id="complaint-type"
-              options={COMPLAINT_TYPES_OPTIONS.map((option) => option)}
-              renderInput={(params) => (
-                <TextField {...params} placeholder="Select Type" />
-              )}
-              onChange={(event, newValue) => {
-                event.preventDefault();
-                handleAutoCompleteChange(newValue);
-              }}
+              value={subject}
+              name="subject"
+              required
+              placeholder="Add Subject"
+              onChange={handleChange}
             />
             <Typography variant="h6" className="py-2">
               Description
@@ -97,7 +92,7 @@ const ComplaintModal = ({
               <TextField
                 className="pr-4 md:w-1/2"
                 label="Type"
-                value={type}
+                value={subject}
                 margin="normal"
                 InputProps={{
                   readOnly: true,
@@ -122,7 +117,7 @@ const ComplaintModal = ({
               <TextField
                 className="mt-2 md:mt-4"
                 label="Raised By"
-                value={studentName}
+                value={student.data.attributes.studentName}
                 margin="normal"
                 fullWidth
                 InputProps={{
@@ -140,7 +135,7 @@ const ComplaintModal = ({
               <TextField
                 className="mt-2 md:mt-4"
                 label="Created On"
-                value={date}
+                value={dateFormat(createdAt || "")}
                 margin="normal"
                 fullWidth
                 InputProps={{
@@ -183,4 +178,4 @@ const ComplaintModal = ({
   );
 };
 
-export default ComplaintModal;
+export default ApplicationModal;

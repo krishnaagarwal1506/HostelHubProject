@@ -4,7 +4,7 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 type TablePropsTypes = {
   columns: GridColDef[];
   rows: {
-    [key: string]: string | number | null;
+    [key: string]: unknown;
   }[];
   tableClassName?: string;
   stickyHeader?: boolean;
