@@ -324,7 +324,7 @@ const StudentHome = () => {
               rows={applicationData || []}
               tableClassName="px-4 pb-4 h-full border-0"
               onRowClick={() => {
-                navigate("complaints");
+                navigate("applications");
               }}
             />
           </Paper>
