@@ -1,3 +1,4 @@
+import { ChangeEvent } from "react";
 import {
   STUDENT_INFO_URL,
   PENDING,
@@ -179,4 +180,25 @@ export const todayDate = () => {
 
 export const capitalize = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
+export const handleFileInputChange = (
+  event: ChangeEvent<HTMLInputElement>,
+  callback: (base64String: string | null) => void
+) => {
+  const { files, type } = event.target;
+
+  if (type === "file" && files) {
+    const file = files[0] || null;
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64String = reader.result as string;
+        callback(base64String);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      callback(null);
+    }
+  }
 };

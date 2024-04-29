@@ -130,6 +130,7 @@ export type ApplicationsType = {
     };
   };
   status: ApplicationStatusType;
+  document?: string;
   createdAt?: string;
   updatedAt?: string;
   publishedAt?: string;

@@ -35,6 +35,7 @@ import {
   checkEmailExists,
   getLocalStorage,
   setLocalStorage,
+  handleFileInputChange,
 } from "@utils/index";
 import {
   STEPPER_FORM_STEPS_NAME,
@@ -120,31 +121,18 @@ const AddStudent = ({ handleClose, handleSubmit }: AddStudentPropsType) => {
     setIsDisabled(isDisabled);
   }, [student, activeStep]);
 
-  const handleChange = ({
-    target: { name, value, files, type },
-  }: ChangeEvent<HTMLInputElement>) => {
-    if (type === "file" && files) {
-      const file = files[0] || null;
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          const base64String = reader.result as string;
-          setStudent((student) => {
-            return {
-              ...student,
-              govIdImage: base64String,
-            };
-          });
-        };
-        reader.readAsDataURL(file);
-      } else {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type } = event.target;
+
+    if (type === "file") {
+      handleFileInputChange(event, (base64String) => {
         setStudent((student) => {
           return {
             ...student,
-            govIdImage: "",
+            ...(base64String ? { govIdImage: base64String || "" } : {}),
           };
         });
-      }
+      });
     } else {
       setStudent((student) => {
         return {

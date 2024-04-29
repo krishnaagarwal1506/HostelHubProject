@@ -24,6 +24,7 @@ const ErrorPage = ({
         className="w-full md:w-1/2 xl:w-1/4 h-auto md:h-max-[50vh] xl:h-max-[30vh]"
         component="img"
         src={image}
+        loading="lazy"
       />
       {customRender && customRender}
       {viewNavigation && (

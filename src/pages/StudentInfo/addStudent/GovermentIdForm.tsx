@@ -72,6 +72,7 @@ const GovermentIdForm = ({
           className={"w-auto h-36 md:h-56  m-auto rounded-xl"}
           src={selectedImage || noImageUploaded}
           alt={selectedImage ? "Id card image" : "No Image Uploaded"}
+          loading="lazy"
         />
       </Box>
     </Box>

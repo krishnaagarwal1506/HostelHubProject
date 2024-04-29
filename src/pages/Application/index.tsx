@@ -35,6 +35,7 @@ import {
   extractArrayFromApiData,
   deleteData,
   capitalize,
+  handleFileInputChange,
 } from "@utils/index";
 import {
   APPLICATIONS_URL,
@@ -251,14 +252,34 @@ const Applications = () => {
   };
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setSelectedApplication({
-      ...selectedApplication!,
-      application: {
-        ...selectedApplication!.application,
-        [name]: value,
-      },
-    });
+    const {
+      target: { name, value, type },
+    } = event;
+    if (type === "file") {
+      handleFileInputChange(event, (base64String) => {
+        setSelectedApplication((prevApplication) => {
+          if (!prevApplication) return null;
+          return {
+            ...prevApplication,
+            application: {
+              ...prevApplication.application,
+              ...(base64String ? { document: base64String || "" } : {}),
+            },
+          };
+        });
+      });
+    } else {
+      setSelectedApplication((prevApplication) => {
+        if (!prevApplication) return null;
+        return {
+          ...prevApplication,
+          application: {
+            ...prevApplication!.application,
+            [name]: value,
+          },
+        };
+      });
+    }
   };
 
   const OnStatusChange = (
