@@ -9,7 +9,7 @@ type TablePropsTypes = {
   tableClassName?: string;
   stickyHeader?: boolean;
   pagination?: boolean;
-  getData: (pagination: boolean, page?: number, searchText?: string) => void;
+  getData?: (pagination: boolean, page?: number, searchText?: string) => void;
   isLoading: boolean;
   rowCount?: number;
   paginationModel?: {
@@ -38,7 +38,8 @@ const TableComponent = ({
   searchText = "",
 }: TablePropsTypes) => {
   useEffect(() => {
-    if (pagination) getData(pagination, paginationModel!.page, searchText);
+    if (pagination && getData)
+      getData(pagination, paginationModel!.page, searchText);
   }, [paginationModel]);
 
   return (

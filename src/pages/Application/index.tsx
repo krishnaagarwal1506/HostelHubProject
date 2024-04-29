@@ -1,4 +1,10 @@
-import { useState, MouseEvent, useContext, ChangeEvent } from "react";
+import {
+  useState,
+  MouseEvent,
+  useContext,
+  ChangeEvent,
+  useEffect,
+} from "react";
 import {
   Box,
   Typography,
@@ -29,11 +35,8 @@ import useAlert from "@src/hooks/useAlert";
 import { AuthContext } from "@context/AuthContext";
 import {
   dateFormat,
-  sendData,
-  fetchData,
   catchErrorMessage,
   extractArrayFromApiData,
-  deleteData,
   capitalize,
   handleFileInputChange,
 } from "@utils/index";
@@ -53,61 +56,17 @@ import {
 } from "@src/constant";
 import {
   ApplicationsType,
-  SeverityType,
   ApplicationStateType,
   ApplicationStatusType,
 } from "@ts/types";
+import {
+  useDeleteApplicationData,
+  useFetchApplicationListData,
+  useSaveApplicationData,
+} from "@src/queryHooks/query";
 
 type SearchStatusType = ApplicationStatusType | "all";
 const { PUT, POST } = METHOD;
-
-const updateApplicationsStatus = async (
-  application: ApplicationsType,
-  handleAlert: (
-    isOpen: boolean,
-    message: string,
-    serverity: SeverityType
-  ) => void
-) => {
-  const { id } = application;
-  const url = `${APPLICATIONS_URL}/${id}`;
-
-  try {
-    const isDataUpdated = await sendData({
-      url,
-      method: PUT,
-      content: application,
-    });
-    const message = isDataUpdated
-      ? "Status saved Successfully"
-      : "Error in updating status";
-    const severity = isDataUpdated ? SUCCESS : ERROR;
-    handleAlert(true, message, severity);
-  } catch (error) {
-    handleAlert(true, catchErrorMessage(error), ERROR);
-  }
-};
-
-const deleteApplication = async (
-  { id }: ApplicationsType,
-  handleAlert: (
-    isOpen: boolean,
-    message: string,
-    serverity: SeverityType
-  ) => void
-) => {
-  const url = `${APPLICATIONS_URL}/${id}`;
-  try {
-    const isDataDeleted = await deleteData(url);
-    const message = isDataDeleted
-      ? "Application Deleted Successfully"
-      : "Error in deleting application";
-    const severity = isDataDeleted ? SUCCESS : ERROR;
-    handleAlert(true, message, severity);
-  } catch (error) {
-    handleAlert(true, catchErrorMessage(error), ERROR);
-  }
-};
 
 const isMenuItemVisible = (optionStatus: string, status: string) => {
   if (optionStatus === PENDING) return true;
@@ -134,7 +93,6 @@ const Applications = () => {
   const [applicationData, setApplicationData] = useState<
     ApplicationsType[] | null
   >(null);
-  const [loading, setLoading] = useState<boolean>(false);
   const [selectedApplication, setSelectedApplication] =
     useState<ApplicationStateType | null>(null);
   const [searchStatus, setSearchStatus] = useState<SearchStatusType>("all");
@@ -150,20 +108,93 @@ const Applications = () => {
   const theme = useTheme();
   const isScreenSizeMdOrLarger = useMediaQuery(theme.breakpoints.up("md"));
   const isRoleStudent = role === STUDENT;
+  const [applicationDataUrl, setApplicationDataUrl] = useState<string>(
+    isRoleStudent
+      ? `${APPLICATIONS_URL}?populate=*&sort=createdAt:desc&filters[student][id][$eq]=${studentInfo?.id}&pagination[page]=1&pagination[pageSize]=10`
+      : `${APPLICATIONS_URL}?populate=*&sort=createdAt:desc&pagination[page]=1&pagination[pageSize]=10`
+  );
   const { status: seletedApplicationStatus } =
     selectedApplication?.application || {};
+
+  const { alert, handleAlert } = useAlert();
+  const {
+    data: applicationApiData,
+    isLoading: isLoadingApplicationData,
+    isError: applicationDataError,
+    error: applicationDataErrorMessage,
+  } = useFetchApplicationListData(applicationDataUrl);
+  const { mutate: saveOrEditApplicationData } = useSaveApplicationData();
+  const { mutate: deleteApplicationData } = useDeleteApplicationData();
+
+  const updateApplicationsStatus = () => {
+    const { id } = selectedApplication!.application;
+    const url = `${APPLICATIONS_URL}/${id}`;
+    saveOrEditApplicationData(
+      {
+        url,
+        method: PUT,
+        content: selectedApplication!.application,
+      },
+      {
+        onSuccess: () => {
+          handleAlert(true, "Status saved Successfully", SUCCESS);
+          setSelectedApplication(null);
+        },
+        onError: (error) => {
+          handleAlert(true, catchErrorMessage(error), ERROR);
+          setSelectedApplication(null);
+        },
+      }
+    );
+  };
+
+  const deleteApplication = () => {
+    const url = `${APPLICATIONS_URL}/${selectedApplication!.application.id}`;
+
+    deleteApplicationData(url, {
+      onSuccess: () => {
+        handleAlert(true, "Application Deleted Successfully", SUCCESS);
+        setSelectedApplication(null);
+      },
+      onError: (error) => {
+        handleAlert(true, catchErrorMessage(error), ERROR);
+        setSelectedApplication(null);
+      },
+    });
+  };
+
   const { open, handleDialogClick, handleDialogSubmit } = useDialog(
     async () => {
-      action === DELETE
-        ? await deleteApplication(selectedApplication!.application, handleAlert)
-        : await updateApplicationsStatus(
-            selectedApplication!.application,
-            handleAlert
-          );
-      getApplicationsData(true, paginationModel.page, searchStatus);
+      action === DELETE ? deleteApplication() : updateApplicationsStatus();
     }
   );
-  const { alert, handleAlert } = useAlert();
+
+  useEffect(() => {
+    if (applicationApiData) {
+      const data = extractArrayFromApiData<ApplicationsType>(
+        applicationApiData.data
+      );
+      setApplicationData(data);
+      setRowCount(applicationApiData.meta.pagination.total);
+    }
+  }, [applicationApiData]);
+
+  useEffect(() => {
+    let url = `${APPLICATIONS_URL}?populate=*&sort=createdAt:desc`;
+    if (isRoleStudent) url += `&filters[student][id][$eq]=${studentInfo?.id}`;
+    if (searchStatus !== ALL) url += `&filters[status][$eq]=${searchStatus}`;
+    setApplicationDataUrl(
+      `${url}&pagination[page]=${
+        paginationModel.page + 1
+      }&pagination[pageSize]=10`
+    );
+  }, [paginationModel, searchStatus]);
+
+  useEffect(() => {
+    if (applicationDataError)
+      handleAlert(true, catchErrorMessage(applicationDataErrorMessage), ERROR);
+  }, [applicationDataError]);
+
   const selectMenuItems = [
     { status: PENDING, text: capitalize(PENDING), icon: STATUS_ICONS.pending },
     {
@@ -181,61 +212,6 @@ const Applications = () => {
     description: "",
     status: PENDING,
     student: studentInfo?.id,
-  };
-  async function getApplicationsData(
-    pagination: boolean,
-    page = 0,
-    searchStatus?: string
-  ) {
-    try {
-      setLoading(true);
-      const url = isRoleStudent
-        ? `${APPLICATIONS_URL}?populate=*&filters[student][id][$eq]=${studentInfo?.id}&sort=createdAt:desc`
-        : `${APPLICATIONS_URL}?populate=*&sort=createdAt:desc`;
-      const searchUrl =
-        searchStatus === "all"
-          ? url
-          : `${url}&filters[status][$eq]=${searchStatus}`;
-      const response = await fetchData(
-        pagination
-          ? `${searchUrl}&pagination[page]=${page + 1}&pagination[pageSize]=10`
-          : searchUrl
-      );
-      const data = extractArrayFromApiData<ApplicationsType>(response.data);
-      setApplicationData(data);
-      setRowCount(data.length);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      handleAlert(true, catchErrorMessage(error), "error");
-    }
-  }
-
-  const addNewApplication = async (
-    application: ApplicationsType,
-    handleAlert: (
-      isOpen: boolean,
-      message: string,
-      serverity: SeverityType
-    ) => void
-  ) => {
-    try {
-      const isApplicationAdded = await sendData({
-        url: APPLICATIONS_URL,
-        method: POST,
-        content: { ...application, student: studentInfo?.id },
-      });
-      const message = isApplicationAdded
-        ? "Application added Successfully"
-        : "Error in adding application";
-      const severity = isApplicationAdded ? SUCCESS : ERROR;
-      handleAlert(true, message, severity);
-      isApplicationAdded &&
-        getApplicationsData(true, paginationModel.page, searchStatus);
-      setSelectedApplication(null);
-    } catch (error) {
-      handleAlert(true, catchErrorMessage(error), ERROR);
-    }
   };
 
   const handleOpenModal = (
@@ -477,7 +453,7 @@ const Applications = () => {
               onClick={() => {
                 setSearchStatus(status as SearchStatusType);
                 setPaginationModel({ page: 0, pageSize: 10 });
-                getApplicationsData(true, paginationModel.page, status);
+                // getApplicationsData(true, paginationModel.page, status);
               }}
             />
           );
@@ -504,11 +480,11 @@ const Applications = () => {
       <Box className="w-[96%] h-[85vh] md:h-full my-4 xl:my-6  mx-auto overflow-hidden rounded-xl">
         <TableComponent
           columns={columns}
-          isLoading={loading}
+          isLoading={isLoadingApplicationData}
           rows={applicationData || []}
           tableClassName="max-h-full bg-white rounded-xl"
           pagination={true}
-          getData={getApplicationsData}
+          // getData={getApplicationsData}
           rowCount={rowCount}
           paginationModel={paginationModel}
           setPaginationModel={setPaginationModel}
@@ -548,7 +524,30 @@ const Applications = () => {
             handleClose={() => setSelectedApplication(null)}
             handleChange={handleInputChange}
             handleAdd={() => {
-              addNewApplication(selectedApplication!.application, handleAlert);
+              saveOrEditApplicationData(
+                {
+                  url: APPLICATIONS_URL,
+                  method: POST,
+                  content: {
+                    ...selectedApplication!.application,
+                    student: studentInfo?.id,
+                  },
+                },
+                {
+                  onSuccess: () => {
+                    handleAlert(
+                      true,
+                      "Application added Successfully",
+                      SUCCESS
+                    );
+                    setSelectedApplication(null);
+                  },
+                  onError: (error) => {
+                    handleAlert(true, catchErrorMessage(error), ERROR);
+                    setSelectedApplication(null);
+                  },
+                }
+              );
             }}
           />
         )}

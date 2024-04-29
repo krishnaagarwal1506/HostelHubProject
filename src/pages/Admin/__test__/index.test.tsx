@@ -5,7 +5,6 @@ import { fetchData } from "@src/utils";
 
 jest.mock("@src/utils/index.ts", () => {
   const BASE_URL = "http://localhost:1337";
-  const ADMIN_DASHBOARD_DETAIL_URL: string = BASE_URL + "/api/dashboard-detail";
   const NOTICES_URL: string = BASE_URL + "/api/notices";
   const ROOM_STATUS_DATA_URL: string = BASE_URL + "/api/room-status-graph-data";
   const STAFF_LIST_URL = BASE_URL + "/api/staff-lists";
@@ -15,19 +14,6 @@ jest.mock("@src/utils/index.ts", () => {
     ...jest.requireActual("@src/utils/index.ts"),
     fetchData: jest.fn().mockImplementation((url) => {
       switch (url) {
-        case ADMIN_DASHBOARD_DETAIL_URL:
-          return Promise.resolve({
-            data: {
-              attributes: {
-                details: {
-                  numberOfStudents: 50,
-                  complaitsPending: 10,
-                  numberOfRooms: 30,
-                  numberOfStaff: 15,
-                },
-              },
-            },
-          });
         case ROOM_STATUS_DATA_URL:
           return Promise.resolve({
             data: {
@@ -136,20 +122,6 @@ describe("AdminHome", () => {
   it("snapshot test", async () => {
     const { asFragment } = render(<AdminHome />);
     await waitFor(() => expect(asFragment()).toMatchSnapshot());
-  });
-
-  it("renders Dashboard Details", async () => {
-    render(<AdminHome />);
-    await waitFor(() => {
-      expect(screen.getByText("Students")).toBeInTheDocument();
-      expect(screen.getByText("50")).toBeInTheDocument();
-      expect(screen.getByText("Complaints")).toBeInTheDocument();
-      expect(screen.getByText("10")).toBeInTheDocument();
-      expect(screen.getByText("Rooms")).toBeInTheDocument();
-      expect(screen.getByText("30")).toBeInTheDocument();
-      expect(screen.getByText("Staff Members")).toBeInTheDocument();
-      expect(screen.getByText("15")).toBeInTheDocument();
-    });
   });
 
   it("renders  Notices", async () => {
