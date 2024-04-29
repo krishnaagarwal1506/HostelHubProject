@@ -130,6 +130,7 @@ const Login = () => {
             src={image.src}
             className={image.className}
             alt={`background image ${index + 1}`}
+            loading="lazy"
           />
         ))}
       </Paper>

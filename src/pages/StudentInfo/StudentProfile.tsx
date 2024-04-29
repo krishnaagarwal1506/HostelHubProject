@@ -225,6 +225,7 @@ const StudentProfile = ({
               className={"w-auto h-44 m-auto"}
               src={govIdImage}
               alt="gov-id-img"
+              loading="lazy"
             />
           </Grid>
         </Grid>
