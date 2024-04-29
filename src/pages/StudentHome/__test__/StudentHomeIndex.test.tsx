@@ -7,7 +7,6 @@ jest.mock("@src/utils/index.ts", () => {
   const BASE_URL = "http://localhost:1337";
   const NOTICES_URL: string = BASE_URL + "/api/notices";
   const COMPLAINTS_URL = BASE_URL + "/api/complaints";
-  const TODAY_MENU_URL = BASE_URL + "/api/todaymenu";
   const ROOM_INFO_URL = BASE_URL + "/api/room-info";
 
   return {
@@ -89,28 +88,6 @@ jest.mock("@src/utils/index.ts", () => {
               },
             ],
           });
-        case TODAY_MENU_URL:
-          return Promise.resolve({
-            data: {
-              id: 1,
-              attributes: {
-                data: [
-                  {
-                    name: "Breakfast",
-                    value: "Idli, Vada, Sambar, Chutney",
-                  },
-                  {
-                    name: "Lunch",
-                    value: "Rice, Sambar, Rasam, Poriyal, Appalam",
-                  },
-                  {
-                    name: "Dinner",
-                    value: "Chapathi, Dal, Poriyal, Curd, Pickle",
-                  },
-                ],
-              },
-            },
-          });
 
         default:
           return Promise.reject(new Error("not found"));
@@ -142,18 +119,6 @@ describe("StudentHome", () => {
       expect(screen.getByText("Complaint 1")).toBeInTheDocument();
       expect(screen.getByText("Complaint 2")).toBeInTheDocument();
       expect(screen.getByText("Complaint 3")).toBeInTheDocument();
-    });
-  });
-
-  it("renders  Today's Menu", async () => {
-    render(<StudentHome />);
-    await waitFor(() => {
-      expect(screen.getByText("Breakfast")).toBeInTheDocument();
-      expect(screen.getByText("Lunch")).toBeInTheDocument();
-      expect(screen.getByText("Dinner")).toBeInTheDocument();
-      expect(screen.getByText("Idli")).toBeInTheDocument();
-      expect(screen.getByText("Rice")).toBeInTheDocument();
-      expect(screen.getByText("Chapathi")).toBeInTheDocument();
     });
   });
 

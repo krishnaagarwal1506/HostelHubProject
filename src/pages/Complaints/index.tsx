@@ -1,4 +1,10 @@
-import { useState, MouseEvent, useContext, ChangeEvent } from "react";
+import {
+  useState,
+  MouseEvent,
+  useContext,
+  ChangeEvent,
+  useEffect,
+} from "react";
 import {
   Box,
   Typography,
@@ -28,12 +34,9 @@ import useDialog from "@src/hooks/useDialog";
 import useAlert from "@src/hooks/useAlert";
 import { AuthContext } from "@context/AuthContext";
 import {
-  sendData,
-  fetchData,
   catchErrorMessage,
   extractArrayFromApiData,
   todayDate,
-  deleteData,
   capitalize,
 } from "@utils/index";
 import {
@@ -52,61 +55,17 @@ import {
 } from "@src/constant";
 import {
   ComplaintType,
-  SeverityType,
   ComplaintStateType,
   ComplaintStatusType,
 } from "@ts/types";
+import {
+  useDeleteComplaintData,
+  useFetchComplaintListData,
+  useSaveComplaintData,
+} from "@src/queryHooks/query";
 
 type SearchStatusType = ComplaintStatusType | "all";
 const { PUT, POST } = METHOD;
-
-const updateComplaintsStatus = async (
-  complaint: ComplaintType,
-  handleAlert: (
-    isOpen: boolean,
-    message: string,
-    serverity: SeverityType
-  ) => void
-) => {
-  const { id } = complaint;
-  const url = `${COMPLAINTS_URL}/${id}`;
-
-  try {
-    const isDataUpdated = await sendData({
-      url,
-      method: PUT,
-      content: complaint,
-    });
-    const message = isDataUpdated
-      ? "Status saved Successfully"
-      : "Error in updating status";
-    const severity = isDataUpdated ? SUCCESS : ERROR;
-    handleAlert(true, message, severity);
-  } catch (error) {
-    handleAlert(true, catchErrorMessage(error), ERROR);
-  }
-};
-
-const deleteComplaint = async (
-  { id }: ComplaintType,
-  handleAlert: (
-    isOpen: boolean,
-    message: string,
-    serverity: SeverityType
-  ) => void
-) => {
-  const url = `${COMPLAINTS_URL}/${id}`;
-  try {
-    const isDataDeleted = await deleteData(url);
-    const message = isDataDeleted
-      ? "Complaint Deleted Successfully"
-      : "Error in deleting complaint";
-    const severity = isDataDeleted ? SUCCESS : ERROR;
-    handleAlert(true, message, severity);
-  } catch (error) {
-    handleAlert(true, catchErrorMessage(error), ERROR);
-  }
-};
 
 const isMenuItemVisible = (optionStatus: string, status: string) => {
   if (optionStatus === PENDING) return true;
@@ -133,7 +92,6 @@ const Complaints = () => {
   const [complaintData, setComplaintData] = useState<ComplaintType[] | null>(
     null
   );
-  const [loading, setLoading] = useState<boolean>(false);
   const [selectedComplaint, setSelectedComplaint] =
     useState<ComplaintStateType | null>(null);
   const [searchStatus, setSearchStatus] = useState<SearchStatusType>("all");
@@ -146,22 +104,94 @@ const Complaints = () => {
   const {
     user: { role, name, studentInfo },
   } = useContext(AuthContext);
+  const isRoleStudent = role === STUDENT;
+  const [commplaintUrl, setComplaintUrl] = useState<string>(
+    isRoleStudent
+      ? `${COMPLAINTS_URL}?populate=*&filters[student][id][$eq]=${studentInfo?.id}&sort=createdAt:desc`
+      : `${COMPLAINTS_URL}?sort=createdAt:desc`
+  );
   const theme = useTheme();
   const isScreenSizeMdOrLarger = useMediaQuery(theme.breakpoints.up("md"));
-  const isRoleStudent = role === STUDENT;
   const { status: seletedComplaintStatus } = selectedComplaint?.complaint || {};
+
+  const { alert, handleAlert } = useAlert();
+
+  const {
+    data: complaintsData,
+    isLoading: isLoadingComplaintData,
+    isError: complaintDataError,
+    error: complaintDataErrorMessage,
+  } = useFetchComplaintListData(commplaintUrl);
+  const { mutate: saveOrUpdateComplaint } = useSaveComplaintData();
+  const { mutate: deleteComplaint } = useDeleteComplaintData();
+
+  const updateComplaintsStatus = () => {
+    const { id } = selectedComplaint!.complaint;
+    const url = `${COMPLAINTS_URL}/${id}`;
+    saveOrUpdateComplaint(
+      {
+        url,
+        method: PUT,
+        content: selectedComplaint!.complaint,
+      },
+      {
+        onSuccess: () => {
+          handleAlert(true, "Status saved Successfully", SUCCESS);
+        },
+        onError: (error) => {
+          handleAlert(true, catchErrorMessage(error), ERROR);
+        },
+      }
+    );
+  };
+
+  const handleDeleteComplaint = () => {
+    const url = `${COMPLAINTS_URL}/${selectedComplaint!.complaint.id}`;
+    deleteComplaint(url, {
+      onSuccess: () => {
+        handleAlert(true, "Complaint Deleted Successfully", SUCCESS);
+      },
+      onError: (error) => {
+        handleAlert(true, catchErrorMessage(error), ERROR);
+      },
+    });
+  };
+
   const { open, handleDialogClick, handleDialogSubmit } = useDialog(
     async () => {
-      action === DELETE
-        ? await deleteComplaint(selectedComplaint!.complaint, handleAlert)
-        : await updateComplaintsStatus(
-            selectedComplaint!.complaint,
-            handleAlert
-          );
-      getComplaintsData(true, paginationModel.page, searchStatus);
+      action === DELETE ? handleDeleteComplaint() : updateComplaintsStatus();
     }
   );
-  const { alert, handleAlert } = useAlert();
+
+  useEffect(() => {
+    if (complaintsData) {
+      const data = extractArrayFromApiData<ComplaintType>(complaintsData.data);
+      setComplaintData(data);
+      setRowCount(complaintsData.meta.pagination.total);
+    }
+  }, [complaintsData]);
+
+  useEffect(() => {
+    const url = isRoleStudent
+      ? `${COMPLAINTS_URL}?populate=*&filters[student][id][$eq]=${studentInfo?.id}&sort=createdAt:desc`
+      : `${COMPLAINTS_URL}?sort=createdAt:desc`;
+    const searchUrl =
+      searchStatus === "all"
+        ? url
+        : `${url}&filters[status][$eq]=${searchStatus}`;
+    setComplaintUrl(
+      `${searchUrl}&pagination[page]=${
+        paginationModel.page + 1
+      }&pagination[pageSize]=10`
+    );
+  }, [paginationModel, searchStatus]);
+
+  useEffect(() => {
+    if (complaintDataError) {
+      handleAlert(true, catchErrorMessage(complaintDataErrorMessage), ERROR);
+    }
+  }, [complaintDataError]);
+
   const selectMenuItems = [
     { status: PENDING, text: capitalize(PENDING), icon: STATUS_ICONS.pending },
     {
@@ -177,61 +207,6 @@ const Complaints = () => {
     description: "",
     status: PENDING,
     studentName: name,
-  };
-  async function getComplaintsData(
-    pagination: boolean,
-    page = 0,
-    searchStatus?: string
-  ) {
-    try {
-      setLoading(true);
-      const url = isRoleStudent
-        ? `${COMPLAINTS_URL}?populate=*&filters[student][id][$eq]=${studentInfo?.id}&sort=createdAt:desc`
-        : `${COMPLAINTS_URL}?sort=createdAt:desc`;
-      const searchUrl =
-        searchStatus === "all"
-          ? url
-          : `${url}&filters[status][$eq]=${searchStatus}`;
-      const response = await fetchData(
-        pagination
-          ? `${searchUrl}&pagination[page]=${page + 1}&pagination[pageSize]=10`
-          : searchUrl
-      );
-      const data = extractArrayFromApiData<ComplaintType>(response.data);
-      setComplaintData(data);
-      setRowCount(response.meta.pagination.total);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      handleAlert(true, catchErrorMessage(error), "error");
-    }
-  }
-
-  const addNewComplaint = async (
-    complaint: ComplaintType,
-    handleAlert: (
-      isOpen: boolean,
-      message: string,
-      serverity: SeverityType
-    ) => void
-  ) => {
-    try {
-      const isComplaintAdded = await sendData({
-        url: COMPLAINTS_URL,
-        method: POST,
-        content: { ...complaint, student: studentInfo?.id },
-      });
-      const message = isComplaintAdded
-        ? "Complaint added Successfully"
-        : "Error in adding complaint";
-      const severity = isComplaintAdded ? SUCCESS : ERROR;
-      handleAlert(true, message, severity);
-      isComplaintAdded &&
-        getComplaintsData(true, paginationModel.page, searchStatus);
-      setSelectedComplaint(null);
-    } catch (error) {
-      handleAlert(true, catchErrorMessage(error), ERROR);
-    }
   };
 
   const handleOpenModal = (
@@ -462,7 +437,6 @@ const Complaints = () => {
               onClick={() => {
                 setSearchStatus(status as SearchStatusType);
                 setPaginationModel({ page: 0, pageSize: 10 });
-                getComplaintsData(true, paginationModel.page, status);
               }}
             />
           );
@@ -489,11 +463,10 @@ const Complaints = () => {
       <Box className="w-[96%] h-[85vh] md:h-full my-4 xl:my-6  mx-auto overflow-hidden rounded-xl">
         <TableComponent
           columns={columns}
-          isLoading={loading}
+          isLoading={isLoadingComplaintData}
           rows={complaintData || []}
-          tableClassName="max-h-full rounded-xl"
+          tableClassName="max-h-full bg-white rounded-xl"
           pagination={true}
-          getData={getComplaintsData}
           rowCount={rowCount}
           paginationModel={paginationModel}
           setPaginationModel={setPaginationModel}
@@ -534,7 +507,26 @@ const Complaints = () => {
             handleChange={handleInputChange}
             handleAutoCompleteChange={handleAutoCompleteChange}
             handleAdd={() => {
-              addNewComplaint(selectedComplaint!.complaint, handleAlert);
+              saveOrUpdateComplaint(
+                {
+                  url: COMPLAINTS_URL,
+                  method: POST,
+                  content: {
+                    ...selectedComplaint!.complaint,
+                    student: studentInfo?.id,
+                  },
+                },
+                {
+                  onSuccess: () => {
+                    handleAlert(true, "Complaint added Successfully", SUCCESS);
+                    setSelectedComplaint(null);
+                  },
+                  onError: (error) => {
+                    handleAlert(true, catchErrorMessage(error), ERROR);
+                    setSelectedComplaint(null);
+                  },
+                }
+              );
             }}
           />
         )}

@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Typography, Paper, Skeleton } from "@mui/material";
 import {
@@ -14,43 +14,39 @@ import ChipComponent from "@components/Chip";
 
 import { AuthContext } from "@src/context/AuthContext";
 
-import { NoticeDataType, ErrorType } from "@ts/types";
-import { fetchData, extractArrayFromApiData, dateFormat } from "@utils/index";
+import { NoticeDataType, ApplicationsType } from "@ts/types";
+import {
+  fetchData,
+  extractArrayFromApiData,
+  dateFormat,
+  catchErrorMessage,
+} from "@utils/index";
 import {
   NOTICES_URL,
   COMPLAINTS_URL,
-  TODAY_MENU_URL,
   ROOM_INFO_URL,
   STUDENT_ROOM_DETAILS,
+  ERROR,
+  APPLICATIONS_URL,
 } from "@constant/index";
 import { ComplaintType } from "@ts/types";
+import {
+  useFetchApplicationListData,
+  useFetchComplaintListData,
+  useFetchNoticeData,
+} from "@src/queryHooks/query";
+import useAlert from "@src/hooks/useAlert";
+import AlertComponent from "@src/components/Alert";
 
 const StudentHome = () => {
-  const [notices, setNotices] = useState<NoticeDataType[]>([]);
-  const [noticeError, setNoticeError] = useState<ErrorType>({
-    isError: false,
-    message: "",
-  });
+  const [notices, setNotices] = useState<NoticeDataType[] | null>(null);
+
   const [complaintData, setComplaintData] = useState<ComplaintType[] | null>(
     null
   );
-  const [complaintDataError, setcomplaintDataError] = useState<ErrorType>({
-    isError: false,
-    message: "",
-  });
-  const [loading, setLoading] = useState<boolean>(false);
-  const [paginationModel, setPaginationModel] = useState({
-    page: 0,
-    pageSize: 10,
-  });
-  const [todaysMenu, setTodaysMenu] = useState<
-    | {
-        name: string;
-        value: string;
-      }[]
-    | null
+  const [applicationData, setApplicationData] = useState<
+    ApplicationsType[] | null
   >(null);
-  const [todaysMenuError, setTodaysMenuError] = useState<boolean>(false);
   const [roomDetails, setRoomDetails] = useState<{
     wing: string;
     floor: string;
@@ -60,41 +56,81 @@ const StudentHome = () => {
   const {
     user: { studentInfo },
   } = useContext(AuthContext);
+  const { alert, handleAlert } = useAlert();
+  const { isOpen, message, severity } = alert;
 
   const navigate = useNavigate();
 
+  const {
+    data: complaintApiData,
+    isLoading: isLoadingComplaintData,
+    isError: compaintDataError,
+    error: complaintDataErrorMessage,
+    refetch: complaintDataRefetch,
+  } = useFetchComplaintListData(
+    `${COMPLAINTS_URL}?populate=*&filters[student][id][$eq]=${studentInfo?.id}&sort=createdAt:desc`
+  );
+
+  const {
+    data: applicationApiData,
+    isLoading: isLoadingApplicationData,
+    isError: applicationDataError,
+    error: applicationDataErrorMessage,
+    refetch: applicationDataRefetch,
+  } = useFetchApplicationListData(
+    `${APPLICATIONS_URL}?populate=*&filters[student][id][$eq]=${studentInfo?.id}&sort=createdAt:desc`
+  );
+
+  const {
+    data: noticeData,
+    isError: noticeDataError,
+    error: noticeDataErrorMessage,
+    refetch: noticeDataRefetch,
+  } = useFetchNoticeData(NOTICES_URL);
+
   useEffect(() => {
-    getNoticesData();
-    getTodayMenu();
     getRoomDetails();
-    getComplaintsData();
   }, []);
 
-  async function getNoticesData(): Promise<void> {
-    try {
-      const response = await fetchData(NOTICES_URL);
-      const data = extractArrayFromApiData<NoticeDataType>(response.data);
-      const formatedData = data.map((value: NoticeDataType) => {
-        return {
-          ...value,
-          date: dateFormat(value.date),
-        };
-      });
-      setNotices(formatedData);
-      setNoticeError({ isError: false, message: "" });
-    } catch (error) {
-      setNoticeError({ isError: true, message: error as string });
+  useEffect(() => {
+    if (complaintApiData) {
+      const data = extractArrayFromApiData<ComplaintType>(
+        complaintApiData.data
+      );
+      setComplaintData(data);
     }
-  }
-  async function getTodayMenu(): Promise<void> {
-    try {
-      const response = await fetchData(TODAY_MENU_URL);
-      setTodaysMenu(response.data.attributes.data);
-      setTodaysMenuError(false);
-    } catch (error) {
-      setTodaysMenuError(true);
+  }, [complaintApiData]);
+
+  useEffect(() => {
+    if (applicationApiData) {
+      const data = extractArrayFromApiData<ApplicationsType>(
+        applicationApiData.data
+      );
+      setApplicationData(data);
     }
-  }
+  }, [applicationApiData]);
+
+  useEffect(() => {
+    if (noticeData) {
+      const data = extractArrayFromApiData<NoticeDataType>(noticeData.data);
+      setNotices(data);
+    }
+  }, [noticeData]);
+
+  const errors = [
+    { error: compaintDataError, errorMessage: complaintDataErrorMessage },
+    { error: applicationDataError, errorMessage: applicationDataErrorMessage },
+    { error: noticeDataError, errorMessage: noticeDataErrorMessage },
+  ];
+
+  useEffect(() => {
+    errors.forEach(({ error, errorMessage }) => {
+      if (error) {
+        handleAlert(true, catchErrorMessage(errorMessage), ERROR);
+      }
+    });
+  }, [compaintDataError, applicationDataError]);
+
   async function getRoomDetails(): Promise<void> {
     try {
       const response = await fetchData(ROOM_INFO_URL);
@@ -103,31 +139,6 @@ const StudentHome = () => {
     } catch (error) {
       console.error(error);
       setRoomDetailsError(true);
-    }
-  }
-
-  async function getComplaintsData() {
-    try {
-      setLoading(true);
-      const response = await fetchData(
-        `${COMPLAINTS_URL}?populate=*&filters[student][id][$eq]=${studentInfo?.id}`
-      );
-      const data = extractArrayFromApiData<ComplaintType>(response.data);
-      const filteredData = data
-        .sort(
-          (a: ComplaintType, b: ComplaintType) =>
-            new Date(b.date).getTime() - new Date(a.date).getTime()
-        )
-        .map((complaint: ComplaintType) => {
-          return { ...complaint, date: dateFormat(complaint.date) };
-        });
-
-      setComplaintData(filteredData);
-      setcomplaintDataError({ isError: false, message: "" });
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      setcomplaintDataError({ isError: true, message: error as string });
     }
   }
 
@@ -145,7 +156,7 @@ const StudentHome = () => {
     },
   };
 
-  const columns: GridColDef[] = [
+  const complaintTablecolumns: GridColDef[] = [
     {
       field: "id",
       headerName: "Id",
@@ -190,9 +201,55 @@ const StudentHome = () => {
     },
   ];
 
+  const applicationTableColumn: GridColDef[] = [
+    {
+      field: "id",
+      headerName: "Id",
+      minWidth: 100,
+      headerClassName: "pl-8",
+      cellClassName: "pl-8 hover:cursor-pointer",
+      ...commonOptions,
+    },
+    {
+      field: "createdAt",
+      headerName: "Created at",
+      minWidth: 150,
+      headerClassName: "pl-8",
+      cellClassName: "pl-8 hover:cursor-pointer",
+      renderCell: ({ row }) => dateFormat(row.createdAt || ""),
+      ...commonOptions,
+    },
+    {
+      field: "subject",
+      headerName: "Subject",
+      minWidth: 170,
+      flex: 1,
+      cellClassName: "hover:cursor-pointer",
+      ...commonOptions,
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      minWidth: 170,
+      flex: 1,
+      cellClassName: "hover:cursor-pointer",
+      ...commonOptions,
+      renderCell({ row }) {
+        const { status } = row as ComplaintType;
+        return (
+          <ChipComponent
+            className="w-20 capitalize"
+            text={status}
+            type={status}
+          />
+        );
+      },
+    },
+  ];
+
   return (
     <Box className="p-4 w-full xl:p-8 flex flex-col min-h-20 flex-grow-0 md:flex-grow md:min-h-1/2 overflow-scroll">
-      <Box className="flex-col gap-y-4 flex md:flex-row justify-around gap-x-6 md:gap-y-0 h-1/2 pb-6">
+      <Box className="flex-col gap-y-4 flex md:flex-row justify-around gap-x-6 md:gap-y-0 h-1/2 pb-4 md:pb-6">
         <ErrorBoundary
           error={roomDetailsError}
           ErrorComponent={
@@ -243,12 +300,12 @@ const StudentHome = () => {
           </Paper>
         </ErrorBoundary>
         <ErrorBoundary
-          error={noticeError.isError}
+          error={noticeDataError}
           ErrorComponent={
             <Paper className="dashboard-paper">
               <ErrorComponent
                 className="w-full h-full"
-                onSubmit={getNoticesData}
+                onSubmit={noticeDataRefetch}
                 message="Error in fetching data"
                 heading="Notices"
                 headingClassName="text-xl md:text-2xl font-medium mx-8 my-4 mb-4"
@@ -261,12 +318,12 @@ const StudentHome = () => {
       </Box>
       <Box className="flex-col gap-y-4 flex md:flex-row justify-around gap-x-6 md:gap-y-0 h-1/2 pb-3">
         <ErrorBoundary
-          error={todaysMenuError}
+          error={applicationDataError}
           ErrorComponent={
             <Paper className="dashboard-paper ">
               <ErrorComponent
                 className="w-full h-full"
-                onSubmit={getTodayMenu}
+                onSubmit={applicationDataRefetch}
                 message="Error in fetching data"
                 heading="Today's Menu"
                 headingClassName="text-xl md:text-2xl font-medium mx-8 my-4 mb-4"
@@ -274,52 +331,29 @@ const StudentHome = () => {
             </Paper>
           }
         >
-          <Paper className="w-full md:w-1/2 h-full  rounded-xl">
+          <Paper className="w-full pb-8 h-[50vh] md:w-[48%] lg:w-1/2 px-0  md:h-full flex-grow overflow-hidden rounded-xl">
             <Typography className="mx-8 my-4 mb-2.5 text-xl md:text-2xl font-medium ">
-              Today's Menu
+              My Application
             </Typography>
-            <Box className="flex justify-evenly mx-4 py-4 gap-4 max-h-fit mt-8 mb-6 border rounded-xl">
-              {todaysMenu ? (
-                <>
-                  {todaysMenu!.map(({ name, value }) => {
-                    const dishItems = value.split(",");
-                    return (
-                      <Fragment key={name}>
-                        <Box className="flex-1 h-full flex flex-col gap-3 items-center border-l">
-                          <Typography className="font-semibold text-base md:text-xl">
-                            {name}
-                          </Typography>
-                          <Box>
-                            {dishItems.map((dish: string) => {
-                              return (
-                                <Typography
-                                  key={dish}
-                                  className="text-center text-sm md:text-base py-0.5"
-                                >
-                                  {dish}
-                                </Typography>
-                              );
-                            })}
-                          </Box>
-                        </Box>
-                      </Fragment>
-                    );
-                  })}
-                </>
-              ) : (
-                <Skeleton variant="rectangular" width="100%" height="100%" />
-              )}
-            </Box>
+            <TableComponent
+              columns={applicationTableColumn}
+              isLoading={isLoadingApplicationData}
+              rows={applicationData || []}
+              tableClassName="px-4 pb-4 h-full border-0"
+              onRowClick={() => {
+                navigate("complaints");
+              }}
+            />
           </Paper>
         </ErrorBoundary>
 
         <ErrorBoundary
-          error={complaintDataError.isError}
+          error={compaintDataError}
           ErrorComponent={
             <Paper className="dashboard-paper ">
               <ErrorComponent
                 className="w-full h-full"
-                onSubmit={getComplaintsData}
+                onSubmit={complaintDataRefetch}
                 message="Error in fetching data"
                 heading="My Compaints"
                 headingClassName="text-xl md:text-2xl font-medium mx-8 my-4 mb-4"
@@ -332,13 +366,10 @@ const StudentHome = () => {
               My Complaints
             </Typography>
             <TableComponent
-              columns={columns}
-              isLoading={loading}
+              columns={complaintTablecolumns}
+              isLoading={isLoadingComplaintData}
               rows={complaintData || []}
               tableClassName="px-4 pb-4 h-full border-0"
-              getData={getComplaintsData}
-              paginationModel={paginationModel}
-              setPaginationModel={setPaginationModel}
               onRowClick={() => {
                 navigate("complaints");
               }}
@@ -346,6 +377,13 @@ const StudentHome = () => {
           </Paper>
         </ErrorBoundary>
       </Box>
+      {isOpen && (
+        <AlertComponent
+          message={message}
+          severity={severity}
+          handleClose={() => handleAlert(false)}
+        />
+      )}
     </Box>
   );
 };

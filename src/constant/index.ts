@@ -3,7 +3,6 @@ import {
   AccountBox as AccountBoxIcon,
   Assessment as AssessmentIcon,
   RestaurantMenu as RestaurantMenuIcon,
-  BedroomParent as BedroomParentIcon,
   AssignmentIndRounded as AssignmentIndRoundedIcon,
   PendingActions,
   DoneAll,
@@ -80,7 +79,7 @@ export const NAVBAR_TITLE_ADMIN: { [key: string]: string } = {
 export const NAVBAR_TITLE_STUDENT: { [key: string]: string } = {
   dashboard: "My Dashboard",
   complaints: "My Complaints",
-  applications: "Applications",
+  applications: "My Applications",
   canteenMenu: "Canteen Menu",
 };
 
@@ -121,9 +120,6 @@ export const BASE_URL: string = import.meta.env.VITE_BASE_URL;
 
 export const USER_DATA_URL: string = "/api/users/me";
 
-export const ADMIN_DASHBOARD_DETAIL_URL: string =
-  BASE_URL + "/api/dashboard-detail";
-
 export const NOTICES_URL: string = BASE_URL + "/api/notices";
 
 export const ROOM_STATUS_DATA_URL: string =
@@ -149,8 +145,6 @@ export const CANTEEN_MENU_URL = BASE_URL + "/api/menu-links/1";
 
 export const STRAPI_FILE_UPLOAD_URL = BASE_URL + "/api/upload";
 
-export const TODAY_MENU_URL = BASE_URL + "/api/todaymenu";
-
 export const ROOM_INFO_URL = BASE_URL + "/api/room-info";
 
 export const APPLICATIONS_URL = BASE_URL + "/api/applications";
@@ -172,11 +166,11 @@ export const ADMIN_DASHBOARD_DETAIL: AdminDashboardDetailsTypes[] = [
   },
 
   {
-    label: "Rooms",
-    icon: BedroomParentIcon,
-    field: "numberOfRooms",
+    label: "Applications",
+    icon: Mail,
+    field: "applicationPending",
     color: "bg-success-light",
-    path: "",
+    path: "applications",
   },
   {
     label: "Staff",

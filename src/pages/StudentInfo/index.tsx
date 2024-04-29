@@ -26,11 +26,8 @@ import AddStudent from "./addStudent";
 import useDialog from "@src/hooks/useDialog";
 import useAlert from "@src/hooks/useAlert";
 import {
-  sendData,
-  deleteData,
   catchErrorMessage,
   deleteLocalStorage,
-  fetchData,
   extractArrayFromApiData,
   getLocalStorage,
 } from "@utils/index";
@@ -46,127 +43,17 @@ import {
 import {
   StudentInfoType,
   StudentInfoStateType,
-  SeverityType,
   AddStudentStateType,
 } from "@ts/types";
+import {
+  useDeleteStudentData,
+  useDeleteUserData,
+  useFetchStudentListData,
+  useSaveStudentData,
+  useSaveUser,
+} from "@src/queryHooks/query";
 
 const { POST, PUT } = METHOD;
-
-const handleDelete = async (
-  studentInfo: StudentInfoType,
-  handleAlert: (
-    isOpen: boolean,
-    message: string,
-    serverity: SeverityType
-  ) => void
-) => {
-  const { id } = studentInfo;
-  try {
-    if (!id) {
-      throw new Error("Student do not exist");
-    }
-    const response = await fetchData(`${STUDENT_INFO_URL}/${id}?populate=*`);
-    if (!response) throw new Error("Error, data not found");
-    const studentUserId = response.data.attributes.user.data.id;
-    const isStudentDeleted = await deleteData(
-      `${STRAPI_USER_URL}/${studentUserId}`
-    );
-    if (!isStudentDeleted) throw new Error("Student not deleted");
-    const isDataDeleted = await deleteData(`${STUDENT_INFO_URL}/${id}`);
-    const message = isDataDeleted
-      ? "Data deleted successfully"
-      : "Error, data not deleted";
-    const severity = isDataDeleted ? SUCCESS : ERROR;
-    handleAlert(true, message, severity);
-  } catch (error) {
-    handleAlert(true, catchErrorMessage(error), ERROR);
-  }
-};
-
-const saveStudentData = async (
-  studentInfo: StudentInfoType,
-  handleAlert: (
-    isOpen: boolean,
-    message: string,
-    serverity: SeverityType
-  ) => void
-) => {
-  const { id } = studentInfo;
-  const url = `${STUDENT_INFO_URL}/${id}`;
-  try {
-    const response = await fetchData(`${STUDENT_INFO_URL}/${id}?populate=*`);
-    if (!response) throw new Error("Error, data not found");
-    const studentUserId = response.data.attributes.user.data.id;
-    const userUrl = `${STRAPI_USER_URL}/${studentUserId}`;
-    const user = {
-      username: studentInfo.email,
-      email: studentInfo.email,
-    };
-    const isUserDataUpdated = await sendData({
-      url: userUrl,
-      method: PUT,
-      content: user,
-      wrapper: false,
-    });
-    if (!isUserDataUpdated) throw new Error("Error, data not updated");
-    const isDataUpdated = await sendData({
-      url,
-      method: PUT,
-      content: studentInfo,
-    });
-    const message = isDataUpdated
-      ? "Data updated successfully"
-      : "Data not updated";
-    const severity = isDataUpdated ? SUCCESS : ERROR;
-    handleAlert(true, message, severity);
-  } catch (error) {
-    handleAlert(true, catchErrorMessage(error), ERROR);
-  }
-};
-
-const addStudentData = async (
-  { confirmPassword, ...studentData }: AddStudentStateType, //eslint-disable-line
-  handleAlert: (
-    isOpen: boolean,
-    message: string,
-    serverity: SeverityType
-  ) => void
-) => {
-  try {
-    const isDataSent = await sendData({
-      url: STUDENT_INFO_URL,
-      method: POST,
-      content: studentData,
-    });
-    if (!isDataSent) throw new Error("Data not saved");
-    const {
-      data: {
-        data: { id },
-      },
-    } = isDataSent;
-    const { email, password } = studentData;
-    const userData = {
-      username: email,
-      email,
-      password,
-      role: 4,
-      student: id,
-    };
-    const isUserCreated = await sendData({
-      url: `${STRAPI_USER_URL}`,
-      method: POST,
-      content: userData,
-      wrapper: false,
-    });
-    const message = isUserCreated
-      ? "Data saved successfully"
-      : "Data not saved";
-    const severity = isUserCreated ? SUCCESS : ERROR;
-    handleAlert(true, message, severity);
-  } catch (error) {
-    handleAlert(true, catchErrorMessage(error), ERROR);
-  }
-};
 
 const commonOptions: {
   sortable: boolean;
@@ -186,7 +73,6 @@ const StudentInfo = () => {
   const [studentsData, setStudentsData] = useState<StudentInfoType[] | null>(
     null
   );
-  const [loading, setLoading] = useState<boolean>(false);
   const [rowCount, setRowCount] = useState<number>(100);
   const [seletedStudent, setSelectedStudent] =
     useState<StudentInfoStateType | null>(null);
@@ -196,28 +82,85 @@ const StudentInfo = () => {
   });
   const { alert, handleAlert } = useAlert();
   const { isOpen, message, severity } = alert;
-  const { open, handleDialogClick, handleDialogSubmit } = useDialog(
-    async () => {
-      await handleDelete(seletedStudent!.studentInfo, handleAlert);
-      getStudentInfoData(true, paginationModel.page);
-    }
-  );
   const [isAddStudentModalOpen, setIsAddStudentModalOpen] =
     useState<boolean>(false);
   const [searchText, setSearchText] = useState<string | null>(null);
   const [confirmAddStudent, setConfirmAddStudent] = useState<boolean>(false);
   const theme = useTheme();
   const isScreenSizeMdOrLarger = useMediaQuery(theme.breakpoints.up("md"));
+  const [studentInfoUrl, setStudentInfoUrl] = useState(
+    `${STUDENT_INFO_URL}?populate=*&sort=id:desc&pagination[page]=1&pagination[pageSize]=10`
+  );
+  const {
+    data: studentInfoData,
+    isLoading: studentInfoLoading,
+    isError: studentInfoError,
+    error: studentInfoErrorMessage,
+  } = useFetchStudentListData(studentInfoUrl);
+
+  const { mutate: saveOrUpdateStudentData } = useSaveStudentData();
+  const { mutate: deleteStudentData } = useDeleteStudentData();
+  const { mutate: deleteUserData } = useDeleteUserData();
+  const { mutate: saveOrUpdateuser } = useSaveUser();
+
+  const { open, handleDialogClick, handleDialogSubmit } = useDialog(
+    async () => {
+      const { id } = seletedStudent!.studentInfo;
+      const studentUrl = `${STUDENT_INFO_URL}/${id}`;
+
+      const studentUserId = seletedStudent!.studentInfo.user?.data.id;
+      const userUrl = `${STRAPI_USER_URL}/${studentUserId}`;
+      deleteUserData(userUrl, {
+        onSuccess: () => {
+          deleteStudentData(studentUrl, {
+            onSuccess: () => {
+              const message = "Student deleted successfully";
+              handleAlert(true, message, SUCCESS);
+            },
+            onError: () => handleAlert(true, "Error, data not deleted", ERROR),
+          });
+        },
+        onError: () => handleAlert(true, "Error, user data not deleted", ERROR),
+      });
+    }
+  );
+
+  useEffect(() => {
+    if (studentInfoData) {
+      const data = extractArrayFromApiData<StudentInfoType>(
+        studentInfoData.data
+      );
+      setStudentsData(data);
+      setRowCount(studentInfoData.meta.pagination.total);
+    }
+  }, [studentInfoData]);
 
   useEffect(() => {
     if (searchText !== null) {
       const getData = setTimeout(() => {
         setPaginationModel({ ...paginationModel, page: 0 });
-        getStudentInfoData(true, 0, searchText);
+        setStudentInfoUrl(
+          `${STUDENT_INFO_URL}?populate=*&sort=id:desc&pagination[page]=1&pagination[pageSize]=10&filters[studentName][$containsi]=${searchText}`
+        );
       }, 300);
       return () => clearTimeout(getData);
     }
   }, [searchText]);
+
+  useEffect(() => {
+    const paginatedUrl = `${STUDENT_INFO_URL}?populate=*&sort=id:desc&pagination[page]=${
+      paginationModel.page + 1
+    }&pagination[pageSize]=10&filters[studentName][$containsi]=${
+      searchText || ""
+    }`;
+    setStudentInfoUrl(paginatedUrl);
+  }, [paginationModel]);
+
+  useEffect(() => {
+    if (studentInfoError) {
+      handleAlert(true, catchErrorMessage(studentInfoErrorMessage), ERROR);
+    }
+  }, [studentInfoError]);
 
   const actions = (
     <>
@@ -340,33 +283,6 @@ const StudentInfo = () => {
     },
   ];
 
-  async function getStudentInfoData(
-    pagination: boolean,
-    page?: number,
-    searchText?: string
-  ) {
-    try {
-      setLoading(true);
-      const response = await fetchData(`${STUDENT_INFO_URL}`);
-      let data = extractArrayFromApiData<StudentInfoType>(response.data);
-      data = data.reverse();
-      const filteredData = searchText
-        ? data.filter((student: StudentInfoType) =>
-            student.studentName.toLowerCase().includes(searchText.toLowerCase())
-          )
-        : data;
-      if (!pagination) setStudentsData(filteredData);
-      else {
-        setStudentsData(filteredData.slice(page! * 10, page! * 10 + 10));
-      }
-      setRowCount(filteredData.length);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      handleAlert(true, catchErrorMessage(error), ERROR);
-    }
-  }
-
   const handleModalOpen = (
     event: MouseEvent<Element>,
     studentInfo: StudentInfoType,
@@ -393,11 +309,49 @@ const StudentInfo = () => {
     });
   };
 
-  const handleAddNewStudent = async (studentInfo: AddStudentStateType) => {
-    await addStudentData(studentInfo, handleAlert);
-    deleteLocalStorage("studentInfo");
-    handleAddStudentModal(false);
-    getStudentInfoData(true, paginationModel.page);
+  const handleAddNewStudent = async ({
+    confirmPassword, //eslint-disable-line
+    ...studentData
+  }: AddStudentStateType) => {
+    const { email, password } = studentData;
+    const userData = {
+      username: email,
+      email,
+      password,
+      role: 4,
+    };
+    saveOrUpdateuser(
+      {
+        url: `${STRAPI_USER_URL}`,
+        method: POST,
+        content: userData,
+        wrapper: false,
+      },
+      {
+        onSuccess: (data) => {
+          const user = data.data.id;
+          const params = {
+            url: STUDENT_INFO_URL,
+            method: POST,
+            content: { ...studentData, user },
+          };
+          saveOrUpdateStudentData(params, {
+            onSuccess: () => {
+              const message = "Student Added successfully";
+              handleAlert(true, message, SUCCESS);
+              deleteLocalStorage("studentInfo");
+              handleAddStudentModal(false);
+            },
+            onError: (error) => {
+              handleAlert(true, error.message, ERROR);
+            },
+          });
+        },
+        onError: (error) => {
+          handleAlert(true, error.message, ERROR);
+        },
+      }
+    );
   };
 
   const handleSubmit = async (studentInfo: StudentInfoType) => {
@@ -406,10 +360,44 @@ const StudentInfo = () => {
       handleAlert(true, "Email already exists", ERROR);
       return;
     }
-    await saveStudentData(studentInfo, handleAlert);
+    const url = `${STUDENT_INFO_URL}/${id}`;
+    const userUrl = `${STRAPI_USER_URL}/${studentInfo.user?.data.id}`;
+    const user = {
+      username: studentInfo.email,
+      email: studentInfo.email,
+    };
+    saveOrUpdateuser(
+      {
+        url: userUrl,
+        method: PUT,
+        content: user,
+        wrapper: false,
+      },
+      {
+        onSuccess: () => {
+          const params = {
+            url,
+            method: PUT,
+            content: studentInfo,
+          };
+          saveOrUpdateStudentData(params, {
+            onSuccess: () => {
+              const message = "Student data updated successfully";
+              handleAlert(true, message, SUCCESS);
+            },
+            onError(error) {
+              handleAlert(true, error.message, ERROR);
+            },
+          });
+          handleAlert(true, message, severity);
+        },
+        onError(error) {
+          handleAlert(true, error.message, ERROR);
+        },
+      }
+    );
     handleModalClose();
     setSelectedStudent(null);
-    getStudentInfoData(true, paginationModel.page);
   };
 
   const checkStudentInfoAndExecute = () => {
@@ -441,11 +429,10 @@ const StudentInfo = () => {
       <Box className="w-[96%] h-[85vh] md:h-full my-4 xl:my-6 mx-auto overflow-hidden rounded-xl">
         <TableComponent
           columns={columns}
-          isLoading={loading}
+          isLoading={studentInfoLoading}
           rows={studentsData || []}
           tableClassName="max-h-full bg-white rounded-xl"
           pagination={true}
-          getData={getStudentInfoData}
           rowCount={rowCount}
           paginationModel={paginationModel}
           setPaginationModel={setPaginationModel}

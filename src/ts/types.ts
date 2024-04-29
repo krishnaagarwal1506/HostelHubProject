@@ -6,6 +6,13 @@ export type ErrorType = {
   message: string;
 };
 
+export interface paginationType {
+  page: number;
+  pageCount: number;
+  pageSize: number;
+  total: number;
+}
+
 export type SidebarValueType = {
   field: string;
   icon: FC<SvgIconProps>;
@@ -21,10 +28,10 @@ export type UserDetailsType = {
 };
 
 export type AdminDashboardDataTypes = {
-  numberOfStudents: number;
-  complaitsPending: number;
-  numberOfRooms: number;
-  numberOfStaff: number;
+  numberOfStudents: number | undefined;
+  complaitsPending: number | undefined;
+  applicationPending: number | undefined;
+  numberOfStaff: number | undefined;
 };
 
 export type AdminDashboardDetailsTypes = {
@@ -75,6 +82,16 @@ export type StudentInfoType = {
   password: string;
   govId: string;
   govIdImage: string;
+  user?: {
+    data: {
+      id: number;
+      attributes: {
+        username: string;
+        email: string;
+        provider: string;
+      };
+    };
+  };
 };
 export type AddStudentStateType = StudentInfoType & {
   confirmPassword: string;
@@ -144,15 +161,6 @@ export type ApplicationStateType = {
 
 export type StaffStatusType = "Present" | "Absent" | "All";
 
-export interface FetchAdminDashboardData {
-  data: {
-    id: string;
-    attributes: {
-      details: AdminDashboardDataTypes;
-    };
-  };
-}
-
 export interface FetchgraphData {
   data: {
     id: string;
@@ -173,4 +181,34 @@ export interface fetchStaffListData {
     id: number;
     attributes: StaffMembersType;
   }[];
+}
+
+export interface fetchStudentListData {
+  data: {
+    id: number;
+    attributes: StudentInfoType;
+  }[];
+  meta: {
+    pagination: paginationType;
+  };
+}
+
+export interface fetchComplaintListData {
+  data: {
+    id: number;
+    attributes: ComplaintType;
+  }[];
+  meta: {
+    pagination: paginationType;
+  };
+}
+
+export interface fetchApplicationListData {
+  data: {
+    id: number;
+    attributes: ApplicationsType;
+  }[];
+  meta: {
+    pagination: paginationType;
+  };
 }

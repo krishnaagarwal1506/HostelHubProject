@@ -29,21 +29,25 @@ import {
 } from "@ts/types";
 import {
   ADMIN_DASHBOARD_DETAIL,
-  ADMIN_DASHBOARD_DETAIL_URL,
   COMPLAINTS_STATS_URL,
   NOTICES_URL,
   ROOM_STATUS_DATA_URL,
   STAFF_LIST_URL,
   ERROR,
   DEFAULT_ERROR_MESSAGE,
+  STUDENT_INFO_URL,
+  COMPLAINTS_URL,
+  APPLICATIONS_URL,
 } from "@constant/index";
 import colors from "@src/themes/colors";
 import {
-  useFetchAdminDashboardDetails,
+  useFetchApplicationListData,
+  useFetchComplaintListData,
   useFetchComplaintStatusGraphChart,
   useFetchNoticeData,
   useFetchRoomStatusGraphChart,
   useFetchStaffListData,
+  useFetchStudentListData,
 } from "@src/queryHooks/query";
 
 const pieChartLegend = [
@@ -147,11 +151,31 @@ const AdminHome = () => {
   const { isOpen, message, severity } = alert;
 
   const {
-    data: adminDashboardDetailData,
-    isError: adminDashboardDetailDataError,
-    refetch: refetchAdminDashboardDetailData,
-    error: admindashboardError,
-  } = useFetchAdminDashboardDetails(ADMIN_DASHBOARD_DETAIL_URL);
+    data: studenInfo,
+    isError: studentInfoError,
+    refetch: studentInfoRefetch,
+    error: studentInfoErrorMessage,
+  } = useFetchStudentListData(
+    `${STUDENT_INFO_URL}?populate=*&sort=id:desc&pagination[page]=1&pagination[pageSize]=10`
+  );
+
+  const {
+    data: complaintsData,
+    isError: comoplaintDataError,
+    refetch: complaintDataRefetch,
+    error: complaintDataErrorMessage,
+  } = useFetchComplaintListData(
+    `${COMPLAINTS_URL}?sort=createdAt:desc&filters[status][$eq]=pending&populate=*&pagination[page]=1&pagination[pageSize]=10`
+  );
+
+  const {
+    data: applicationsData,
+    isError: applicationDataError,
+    refetch: applicationDataRefetch,
+    error: applicationDataErrorMessage,
+  } = useFetchApplicationListData(
+    `${APPLICATIONS_URL}?sort=createdAt:desc&filters[status][$eq]=pending&populate=*&pagination[page]=1&pagination[pageSize]=10`
+  );
 
   const {
     data: roomStatusGraphData,
@@ -182,7 +206,6 @@ const AdminHome = () => {
   } = useFetchStaffListData(staffListurl);
 
   const errors = [
-    { error: adminDashboardDetailDataError, message: admindashboardError },
     {
       error: roomStatusGraphDataError,
       message: roomStatusGraphDataErrorMessage,
@@ -190,6 +213,9 @@ const AdminHome = () => {
     { error: complaintGraphDataError, message: complaintGraphDataErrorMessage },
     { error: noticeDataError, message: noticeDataErrorMessage },
     { error: staffListError, message: staffListDataErrorMessage },
+    { error: studentInfoError, message: studentInfoErrorMessage },
+    { error: comoplaintDataError, message: complaintDataErrorMessage },
+    { error: applicationDataError, message: applicationDataErrorMessage },
   ];
 
   useEffect(() => {
@@ -202,11 +228,13 @@ const AdminHome = () => {
         );
     });
   }, [
-    adminDashboardDetailDataError,
     roomStatusGraphDataError,
     complaintGraphDataError,
     noticeDataError,
     staffListError,
+    studentInfoError,
+    comoplaintDataError,
+    applicationDataError,
   ]);
 
   useEffect(() => {
@@ -220,6 +248,36 @@ const AdminHome = () => {
       getStaffListData(staffListData);
     }
   }, [staffListData]);
+
+  const dashboardDetailData = {
+    complaitsPending: complaintsData
+      ? complaintsData.meta.pagination.total
+      : undefined,
+    applicationPending: applicationsData
+      ? applicationsData.meta.pagination.total
+      : undefined,
+    numberOfStudents: studenInfo ? studenInfo.meta.pagination.total : undefined,
+    numberOfStaff: 15,
+  };
+
+  const dashboardDataErrorhandling = {
+    numberOfStudents: {
+      isError: studentInfoError,
+      refetch: studentInfoRefetch,
+    },
+    complaitsPending: {
+      isError: comoplaintDataError,
+      refetch: complaintDataRefetch,
+    },
+    applicationPending: {
+      isError: applicationDataError,
+      refetch: applicationDataRefetch,
+    },
+    numberOfStaff: {
+      isError: false,
+      refetch: () => {},
+    },
+  };
 
   const getNoticesData = (noticeData: fetchNoticeData) => {
     const data = extractArrayFromApiData<NoticeDataType>(noticeData.data);
@@ -256,31 +314,18 @@ const AdminHome = () => {
 
   return (
     <Box className="p-4 w-full xl:p-8 flex flex-col  min-h-20 flex-grow-0 md:flex-grow md:min-h-1/2 overflow-scroll">
-      <ErrorBoundary
-        error={adminDashboardDetailDataError}
-        ErrorComponent={
-          <ErrorComponent
-            className="w-full"
-            boxClassName="h-40"
-            onSubmit={refetchAdminDashboardDetailData}
-            message="Error in fetching data"
-          />
-        }
-      >
-        <Box className="gap-4 flex-wrap flex w-full lg:flex-nowrap justify-center lg:justify-around xl:gap-8">
-          {ADMIN_DASHBOARD_DETAIL.map((value) => {
-            return (
-              <DashboardDetail
-                key={value.label}
-                dashboardData={
-                  adminDashboardDetailData?.data?.attributes["details"] || null
-                }
-                detail={value}
-              />
-            );
-          })}
-        </Box>
-      </ErrorBoundary>
+      <Box className="gap-4 flex-wrap flex w-full lg:flex-nowrap justify-center lg:justify-around xl:gap-8">
+        {ADMIN_DASHBOARD_DETAIL.map((value) => {
+          return (
+            <DashboardDetail
+              key={value.label}
+              dashboardData={dashboardDetailData || null}
+              detail={value}
+              dashboardDataErrorhandling={dashboardDataErrorhandling}
+            />
+          );
+        })}
+      </Box>
       <Box className="gap-4 mt-4  flex-grow flex-wrap h-screen flex justify-around lg:flex-nowrap xl:gap-8 md:min-h-[66%] lg:min-h-[75%]  xl:mt-8">
         <ErrorBoundary
           error={noticeDataError}
