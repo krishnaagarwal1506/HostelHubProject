@@ -299,6 +299,38 @@ const StudentHome = () => {
             </Box>
           </Paper>
         </ErrorBoundary>
+
+        <ErrorBoundary
+          error={applicationDataError}
+          ErrorComponent={
+            <Paper className="dashboard-paper ">
+              <ErrorComponent
+                className="w-full h-full"
+                onSubmit={applicationDataRefetch}
+                message="Error in fetching data"
+                heading="Today's Menu"
+                headingClassName="text-xl md:text-2xl font-medium mx-8 my-4 mb-4"
+              />
+            </Paper>
+          }
+        >
+          <Paper className="w-full pb-8 md:w-[48%] lg:w-1/2 px-0 h-1/2 md:h-full flex-grow overflow-hidden rounded-xl">
+            <Typography className="mx-8 my-4 mb-2.5 text-xl md:text-2xl font-medium ">
+              My Application
+            </Typography>
+            <TableComponent
+              columns={applicationTableColumn}
+              isLoading={isLoadingApplicationData}
+              rows={applicationData || []}
+              tableClassName="px-4 pb-4 h-full border-0"
+              onRowClick={() => {
+                navigate("complaints");
+              }}
+            />
+          </Paper>
+        </ErrorBoundary>
+      </Box>
+      <Box className="flex-col gap-y-4 flex md:flex-row justify-around gap-x-6 md:gap-y-0 h-1/2 pb-3">
         <ErrorBoundary
           error={noticeDataError}
           ErrorComponent={
@@ -314,37 +346,6 @@ const StudentHome = () => {
           }
         >
           <NoticeList notices={notices} />
-        </ErrorBoundary>
-      </Box>
-      <Box className="flex-col gap-y-4 flex md:flex-row justify-around gap-x-6 md:gap-y-0 h-1/2 pb-3">
-        <ErrorBoundary
-          error={applicationDataError}
-          ErrorComponent={
-            <Paper className="dashboard-paper ">
-              <ErrorComponent
-                className="w-full h-full"
-                onSubmit={applicationDataRefetch}
-                message="Error in fetching data"
-                heading="Today's Menu"
-                headingClassName="text-xl md:text-2xl font-medium mx-8 my-4 mb-4"
-              />
-            </Paper>
-          }
-        >
-          <Paper className="w-full pb-8 h-[50vh] md:w-[48%] lg:w-1/2 px-0  md:h-full flex-grow overflow-hidden rounded-xl">
-            <Typography className="mx-8 my-4 mb-2.5 text-xl md:text-2xl font-medium ">
-              My Application
-            </Typography>
-            <TableComponent
-              columns={applicationTableColumn}
-              isLoading={isLoadingApplicationData}
-              rows={applicationData || []}
-              tableClassName="px-4 pb-4 h-full border-0"
-              onRowClick={() => {
-                navigate("complaints");
-              }}
-            />
-          </Paper>
         </ErrorBoundary>
 
         <ErrorBoundary
