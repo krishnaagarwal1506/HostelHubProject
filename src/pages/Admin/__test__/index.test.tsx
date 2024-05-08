@@ -1,13 +1,13 @@
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import AdminHome from "../index";
 import { fetchData } from "@src/utils";
+import "@testing-library/jest-dom";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import AdminHome from "../index";
 
 jest.mock("@src/utils/index.ts", () => {
   const BASE_URL = "http://localhost:1337";
   const NOTICES_URL: string = BASE_URL + "/api/notices";
   const ROOM_STATUS_DATA_URL: string = BASE_URL + "/api/room-status-graph-data";
-  const STAFF_LIST_URL = BASE_URL + "/api/staff-lists";
+  const GYM_LIST_URL = BASE_URL + "/api/Gyms";
   const COMPLAINTS_STATS_URL = BASE_URL + "/api/complaint-stats";
 
   return {
@@ -69,7 +69,7 @@ jest.mock("@src/utils/index.ts", () => {
               },
             ],
           });
-        case STAFF_LIST_URL:
+        case GYM_LIST_URL:
           return Promise.resolve({
             data: [
               {

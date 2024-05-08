@@ -1,20 +1,20 @@
 import {
-  Dashboard as DashboardIcon,
   AccountBox as AccountBoxIcon,
+  Apartment,
   Assessment as AssessmentIcon,
-  RestaurantMenu as RestaurantMenuIcon,
   AssignmentIndRounded as AssignmentIndRoundedIcon,
-  PendingActions,
+  BedroomParent,
+  Dashboard as DashboardIcon,
   DoneAll,
   Error,
-  ViewList,
-  Apartment,
   HouseSiding,
-  BedroomParent,
   Mail,
+  PendingActions,
+  RestaurantMenu as RestaurantMenuIcon,
+  ViewList,
 } from "@mui/icons-material";
 
-import { SidebarValueType, AdminDashboardDetailsTypes } from "@ts/types";
+import { AdminDashboardDetailsTypes, SidebarValueType } from "@ts/types";
 
 export const ADMIN = "admin" as const;
 export const STUDENT = "student" as const;
@@ -125,7 +125,7 @@ export const NOTICES_URL: string = BASE_URL + "/api/notices";
 export const ROOM_STATUS_DATA_URL: string =
   BASE_URL + "/api/room-status-graph-data";
 
-export const STAFF_LIST_URL = BASE_URL + "/api/staff-lists";
+export const GYM_LIST_URL = BASE_URL + "/api/gyms?populate=*";
 
 export const COMPLAINTS_STATS_URL = BASE_URL + "/api/complaint-stats";
 

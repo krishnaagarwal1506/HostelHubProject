@@ -1,5 +1,5 @@
-import { FC, ChangeEvent, MouseEventHandler } from "react";
 import { SvgIconProps } from "@mui/material/SvgIcon";
+import { ChangeEvent, FC, MouseEventHandler } from "react";
 
 export type ErrorType = {
   isError: boolean;
@@ -63,11 +63,12 @@ export type graphDataType =
   | [string, string | number][]
   | [string, string | number, string | number][];
 
-export type StaffMembersType = {
+export type GymMembersType = {
   id: number;
-  name: string;
-  position: string;
-  status: "Present" | "Absent";
+  Duration: string;
+  Fees: number;
+  JoiningDate: string;
+  student: { data: { attributes: StudentInfoType } };
 };
 
 export type StudentInfoType = {
@@ -176,10 +177,10 @@ export interface fetchNoticeData {
     attributes: NoticeDataType;
   }[];
 }
-export interface fetchStaffListData {
+export interface fetchGymListData {
   data: {
     id: number;
-    attributes: StaffMembersType;
+    attributes: GymMembersType;
   }[];
 }
 

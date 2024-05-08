@@ -1,25 +1,12 @@
-import { useState } from "react";
-import {
-  Paper,
-  SelectChangeEvent,
-  Typography,
-  Box,
-  Select,
-  MenuItem,
-} from "@mui/material";
-import { GridColDef, GridColumnHeaderParams } from "@mui/x-data-grid";
-
 import TableComponent from "@components/Table";
-import ChipComponent from "@components/Chip";
-import { StaffMembersType, StaffStatusType } from "@src/ts/types";
-import { ABSENT, ALL, PRESENT } from "@src/constant";
-import { capitalize } from "@src/utils";
+import { Add as AddIcon } from "@mui/icons-material";
+import { Box, Button, Paper, Typography } from "@mui/material";
+import { GridColDef, GridColumnHeaderParams } from "@mui/x-data-grid";
+import DialogModal from "@src/components/DialogModal";
+import { GymMembersType } from "@src/ts/types";
+import { dateFormat } from "@src/utils";
+import { useState } from "react";
 
-const menuOptions = [
-  { value: capitalize(ALL) },
-  { value: capitalize(PRESENT) },
-  { value: capitalize(ABSENT) },
-];
 const commonOptions = {
   sortable: false,
   renderHeader({ colDef: { headerName } }: GridColumnHeaderParams) {
@@ -27,8 +14,8 @@ const commonOptions = {
   },
 };
 
-type StaffTablePropsTypes = {
-  staffList: StaffMembersType[] | null;
+type GymTablePropsTypes = {
+  GymList: GymMembersType[] | null;
   getData: () => void;
   paginationModel: {
     page: number;
@@ -38,72 +25,70 @@ type StaffTablePropsTypes = {
     page: number;
     pageSize: number;
   }) => void;
-  handleFilter: (event: SelectChangeEvent<StaffStatusType>) => void;
 };
 
 const columns: GridColDef[] = [
   {
-    field: "name",
-    headerName: "Staff Name",
+    field: "student",
+    headerName: " Name",
     minWidth: 170,
     flex: 2,
-    ...commonOptions,
+    renderCell({ row }) {
+      return (
+        <Typography>{row.student?.data?.attributes?.studentName}</Typography>
+      );
+    },
   },
   {
-    field: "position",
-    headerName: "Position",
+    field: "Duration",
+    headerName: "Duration",
     minWidth: 100,
     flex: 2,
     ...commonOptions,
   },
   {
-    field: "status",
-    headerName: "Status",
+    field: "JoiningDate",
+    headerName: "Joining Date",
     minWidth: 100,
-    flex: 1,
-    headerAlign: "center",
+    flex: 2,
+    renderCell({ value }) {
+      return <Typography>{dateFormat(value)}</Typography>;
+    },
     ...commonOptions,
-    renderCell: ({ value }) => (
-      <ChipComponent className="w-[95%]" text={value} type={value} />
-    ),
   },
 ];
 export default function StaffTable({
-  staffList,
+  GymList: staffList,
   getData,
   paginationModel,
   setPaginationModel,
-  handleFilter,
-}: StaffTablePropsTypes) {
-  const [filter, setFilter] = useState<StaffStatusType>("All");
-
-  const handleChange = (event: SelectChangeEvent<StaffStatusType>) => {
-    setFilter(event.target.value as StaffStatusType);
-    handleFilter(event);
-  };
+}: GymTablePropsTypes) {
+  const [addMember, setAddMember] = useState(false);
 
   return (
     <Paper className="w-full pb-8 md:w-[48%] lg:w-1/2 px-0 h-1/2 md:h-full flex-grow overflow-hidden rounded-xl">
-      <Box className="flex justify-between">
-        <Typography className="mx-8 my-4 mb-2.5 text-xl md:text-2xl font-medium ">
-          Staff Members
+      <Box className="mx-8 my-4 mb-2.5 flex justify-between">
+        <Typography className="text-xl md:text-2xl font-medium">
+          GYM Members
         </Typography>
-        <Select
-          value={filter}
-          className="mx-8 my-4 w-28"
-          onChange={handleChange}
-          size="small"
-          inputProps={{
-            "data-testid": "filter",
-          }}
+        <Button
+          className="hover:bg-primary-dark "
+          variant="contained"
+          endIcon={<AddIcon />}
+          onClick={() => setAddMember(true)}
         >
-          {menuOptions.map(({ value }) => (
-            <MenuItem key={value} value={value}>
-              {value}
-            </MenuItem>
-          ))}
-        </Select>
+          ADD
+        </Button>
       </Box>
+      <DialogModal
+        isOpen={addMember}
+        title={"Add New Member"}
+        handleClose={() => setAddMember(false)}
+      >
+        <Typography variant="h6" className="text-lg md:text-xl padding-t-2 ">
+          Name
+        </Typography>
+      </DialogModal>
       <TableComponent
         columns={columns}
         isLoading={!staffList}

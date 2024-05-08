@@ -1,14 +1,14 @@
-import { type AxiosError } from "axios";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchData, sendData, deleteData } from "@src/utils";
 import {
-  FetchgraphData,
-  fetchNoticeData,
-  fetchStaffListData,
-  fetchStudentListData,
-  fetchComplaintListData,
   fetchApplicationListData,
+  fetchComplaintListData,
+  FetchgraphData,
+  fetchGymListData,
+  fetchNoticeData,
+  fetchStudentListData,
 } from "@src/ts/types";
+import { deleteData, fetchData, sendData } from "@src/utils";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { type AxiosError } from "axios";
 
 export interface ErrorResponse {
   statusCode: number;
@@ -47,10 +47,22 @@ export const useFetchNoticeData = (url: string) => {
   });
 };
 
-export const useFetchStaffListData = (url: string) => {
-  return useQuery<fetchStaffListData | null, AxiosError<ErrorResponse>>({
-    queryKey: ["FetchStaffListData", url],
+export const useFetchGymListData = (url: string) => {
+  return useQuery<fetchGymListData | null, AxiosError<ErrorResponse>>({
+    queryKey: ["FetchGymListData", url],
     queryFn: async () => await fetchData(url),
+  });
+};
+
+export const useSaveGymMember = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: sendData,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["fetchGymfListData"],
+      });
+    },
   });
 };
 

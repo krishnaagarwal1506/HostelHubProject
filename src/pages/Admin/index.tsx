@@ -1,54 +1,47 @@
-import { useState, useEffect } from "react";
-import {
-  Box,
-  Paper,
-  Typography,
-  Skeleton,
-  SelectChangeEvent,
-} from "@mui/material";
-import { ChartWrapperOptions } from "react-google-charts";
 import AlertComponent from "@components/Alert";
 import Chart from "@components/Chart";
-import ErrorComponent from "@components/ErrorComponent";
 import ErrorBoundary from "@components/ErrorBoundry";
-import DashboardDetail from "./DashboardDetail";
-import NoticeList from "./notice/NoticeList";
-import StaffTable from "./StaffTable";
-import useAlert from "@src/hooks/useAlert";
-import {
-  dateFormat,
-  extractArrayFromApiData,
-  catchErrorMessage,
-} from "@utils/index";
-import {
-  NoticeDataType,
-  StaffMembersType,
-  StaffStatusType,
-  fetchNoticeData,
-  fetchStaffListData,
-} from "@ts/types";
+import ErrorComponent from "@components/ErrorComponent";
 import {
   ADMIN_DASHBOARD_DETAIL,
+  APPLICATIONS_URL,
   COMPLAINTS_STATS_URL,
+  COMPLAINTS_URL,
+  DEFAULT_ERROR_MESSAGE,
+  ERROR,
+  GYM_LIST_URL,
   NOTICES_URL,
   ROOM_STATUS_DATA_URL,
-  STAFF_LIST_URL,
-  ERROR,
-  DEFAULT_ERROR_MESSAGE,
   STUDENT_INFO_URL,
-  COMPLAINTS_URL,
-  APPLICATIONS_URL,
 } from "@constant/index";
-import colors from "@src/themes/colors";
+import { Box, Paper, Skeleton, Typography } from "@mui/material";
+import useAlert from "@src/hooks/useAlert";
 import {
   useFetchApplicationListData,
   useFetchComplaintListData,
   useFetchComplaintStatusGraphChart,
+  useFetchGymListData,
   useFetchNoticeData,
   useFetchRoomStatusGraphChart,
-  useFetchStaffListData,
   useFetchStudentListData,
 } from "@src/queryHooks/query";
+import colors from "@src/themes/colors";
+import {
+  GymMembersType,
+  NoticeDataType,
+  fetchGymListData,
+  fetchNoticeData,
+} from "@ts/types";
+import {
+  catchErrorMessage,
+  dateFormat,
+  extractArrayFromApiData,
+} from "@utils/index";
+import { useEffect, useState } from "react";
+import { ChartWrapperOptions } from "react-google-charts";
+import DashboardDetail from "./DashboardDetail";
+import NoticeList from "./notice/NoticeList";
+import StaffTable from "./StaffTable";
 
 const pieChartLegend = [
   { label: "Empty", color: colors.success.light },
@@ -141,8 +134,7 @@ const LineChartSkeleton = () => {
 
 const AdminHome = () => {
   const [notices, setNotices] = useState<NoticeDataType[] | null>(null);
-  const [staffList, setStaffList] = useState<StaffMembersType[] | null>(null);
-  const [staffListurl, setStaffListurl] = useState<string>(STAFF_LIST_URL);
+  const [gymList, setGymList] = useState<GymMembersType[] | null>(null);
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 10,
@@ -199,11 +191,11 @@ const AdminHome = () => {
   } = useFetchNoticeData(NOTICES_URL);
 
   const {
-    data: staffListData,
-    isError: staffListError,
+    data: gymListData,
+    isError: gymListError,
     refetch: refetchStaffListData,
-    error: staffListDataErrorMessage,
-  } = useFetchStaffListData(staffListurl);
+    error: gymListDataErrorMessage,
+  } = useFetchGymListData(GYM_LIST_URL);
 
   const errors = [
     {
@@ -212,7 +204,7 @@ const AdminHome = () => {
     },
     { error: complaintGraphDataError, message: complaintGraphDataErrorMessage },
     { error: noticeDataError, message: noticeDataErrorMessage },
-    { error: staffListError, message: staffListDataErrorMessage },
+    { error: gymListError, message: gymListDataErrorMessage },
     { error: studentInfoError, message: studentInfoErrorMessage },
     { error: comoplaintDataError, message: complaintDataErrorMessage },
     { error: applicationDataError, message: applicationDataErrorMessage },
@@ -231,7 +223,7 @@ const AdminHome = () => {
     roomStatusGraphDataError,
     complaintGraphDataError,
     noticeDataError,
-    staffListError,
+    gymListError,
     studentInfoError,
     comoplaintDataError,
     applicationDataError,
@@ -244,10 +236,10 @@ const AdminHome = () => {
   }, [noticeData]);
 
   useEffect(() => {
-    if (staffListData) {
-      getStaffListData(staffListData);
+    if (gymListData) {
+      getGymListData(gymListData);
     }
-  }, [staffListData]);
+  }, [gymListData]);
 
   const dashboardDetailData = {
     complaitsPending: complaintsData
@@ -295,21 +287,9 @@ const AdminHome = () => {
     setNotices(formatedData);
   };
 
-  const getStaffListData = (staffListData: fetchStaffListData) => {
-    const data = extractArrayFromApiData<StaffMembersType>(staffListData.data);
-    setStaffList(data);
-  };
-
-  const handleSaffListFilter = async (
-    event: SelectChangeEvent<StaffStatusType>
-  ) => {
-    const filter = event.target.value;
-    if (filter === "All") {
-      setStaffListurl(STAFF_LIST_URL);
-      return;
-    }
-    const url = `${STAFF_LIST_URL}?filters[status][$eq]=${filter}`;
-    setStaffListurl(url);
+  const getGymListData = (gymListData: fetchGymListData) => {
+    const data = extractArrayFromApiData<GymMembersType>(gymListData.data);
+    setGymList(data);
   };
 
   return (
@@ -386,25 +366,24 @@ const AdminHome = () => {
       </Box>
       <Box className="gap-4 mt-4 py-4 flex-grow flex-wrap h-screen flex justify-around lg:py-0 lg:flex-nowrap xl:gap-8 md:min-h-[66%] lg:min-h-[75%]  xl:mt-8">
         <ErrorBoundary
-          error={staffListError}
+          error={gymListError}
           ErrorComponent={
             <Paper className="dashboard-paper ">
               <ErrorComponent
                 className="w-full h-full"
                 onSubmit={refetchStaffListData}
                 message="Error in fetching data"
-                heading="Staff Members"
+                heading=" Members"
                 headingClassName="mx-8 mt-4"
               />
             </Paper>
           }
         >
           <StaffTable
-            staffList={staffList}
+            GymList={gymList}
             getData={refetchStaffListData}
             paginationModel={paginationModel}
             setPaginationModel={setPaginationModel}
-            handleFilter={handleSaffListFilter}
           />
         </ErrorBoundary>
         <Paper className="dashboard-paper ">
