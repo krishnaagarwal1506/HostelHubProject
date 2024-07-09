@@ -78,6 +78,10 @@ VITE_BASE_URL=https://hostelhub-strapi.onrender.com
 
 ![Admin Home Page](./src/assets/screenshots/admin-homepage.png)
 
+##### Mobile preview
+
+  <img src="./src/assets/screenshots/admin-home-mobile-preview.png" alt="Mobile preview" width="200"/>
+
 #### Student Home Page
 
 ![Student Home Page](./src/assets/screenshots/student-homepage.png)
